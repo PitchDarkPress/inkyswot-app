@@ -617,6 +617,9 @@ body.light {
 @keyframes isClockM { to { transform: rotate(360deg); } }
 @keyframes isClockS { to { transform: rotate(360deg); } }   
 .ai-loading { display: inline-block; animation: spin 1s linear infinite; }
+.ai-clock { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--gold); border-radius: 50%; position: relative; vertical-align: middle; }
+.ai-clock::before { content: ''; position: absolute; top: 50%; left: 50%; width: 1px; height: 6px; background: var(--ink); transform-origin: bottom center; transform: translateX(-50%) translateY(-100%); animation: isClockM 2s linear infinite; }
+.ai-clock::after { content: ''; position: absolute; top: 50%; left: 50%; width: 1px; height: 7px; background: var(--gold); transform-origin: bottom center; transform: translateX(-50%) translateY(-100%); animation: isClockS 1s linear infinite; }   
 
 /* =====================
    PLACEHOLDER SCREENS
