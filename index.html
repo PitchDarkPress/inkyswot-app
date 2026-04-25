@@ -1539,7 +1539,7 @@ function setBtnUsed(btn) {
 
 async function aiAutofill(fieldId, fieldName, btn) {
   if (!aiEnabled) return;
-  btn.innerHTML = '◌';
+  btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 680 680" style="vertical-align:middle"><circle cx="340" cy="340" r="320" fill="#0f0d0a" stroke="#c9923a" stroke-width="6"/><circle cx="340" cy="340" r="300" fill="none" stroke="#c9923a" stroke-width="2"/><text x="340" y="420" font-family="JetBrains Mono,monospace" font-size="90" fill="#8a7860" letter-spacing="8" text-anchor="middle">IS</text><g style="transform-origin:340px 340px;animation:isClockH 120s linear infinite"><line x1="340" y1="340" x2="340" y2="140" stroke="#e8e0d0" stroke-width="12" stroke-linecap="round"/></g><g style="transform-origin:340px 340px;animation:isClockM 10s linear infinite"><line x1="340" y1="340" x2="340" y2="80" stroke="#e8e0d0" stroke-width="8" stroke-linecap="round"/></g><g style="transform-origin:340px 340px;animation:isClockS 1s linear infinite"><line x1="340" y1="390" x2="340" y2="60" stroke="#c9923a" stroke-width="4" stroke-linecap="round"/></g><circle cx="340" cy="340" r="16" fill="#c9923a"/><circle cx="340" cy="340" r="8" fill="#0f0d0a"/></svg>';
   btn.disabled = true;
 
   const p = currentProject || {};
