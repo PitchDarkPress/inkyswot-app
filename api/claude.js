@@ -1,41 +1,32 @@
 // =====================
 // INKYSWOT — VERCEL API PROXY
 // =====================
-
 export default async function handler(req, res) {
-
   // CORS — allow all InkySwot origins
   const allowedOrigins = [
     'https://app.inkyswot.com',
     'https://inkyswot-app.vercel.app',
     'https://pitchdarkpress.github.io',
   ];
-
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   } else {
     res.setHeader('Access-Control-Allow-Origin', 'https://app.inkyswot.com');
   }
-
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
   // Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
-
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-
   const { model, max_tokens, system, messages } = req.body;
-
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: 'Invalid request body' });
   }
-
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -45,16 +36,14 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: model || 'claude-sonnet-4-20250514',
+        model: model || 'claude-haiku-4-5-20251001',
         max_tokens: max_tokens || 400,
         system: system || '',
         messages,
       }),
     });
-
     const data = await response.json();
     return res.status(response.status).json(data);
-
   } catch (err) {
     console.error('Proxy error:', err);
     return res.status(500).json({ error: 'Internal server error' });
