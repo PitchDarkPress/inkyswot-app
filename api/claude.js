@@ -1,20 +1,34 @@
 // =====================
 // INKYSWOT — VERCEL API PROXY
-// Secure bridge between the app and Anthropic API
-// API key lives here on Vercel, never in the browser
 // =====================
 
 export default async function handler(req, res) {
 
-  // Only allow POST requests
+  // CORS — allow all InkySwot origins
+  const allowedOrigins = [
+    'https://app.inkyswot.com',
+    'https://inkyswot-app.vercel.app',
+    'https://pitchdarkpress.github.io',
+  ];
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', 'https://app.inkyswot.com');
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Handle preflight
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
-
-  // CORS — allow requests from InkySwot domains
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   const { model, max_tokens, system, messages } = req.body;
 
