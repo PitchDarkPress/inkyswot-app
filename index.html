@@ -510,7 +510,7 @@ body.light {
   white-space: nowrap; align-self: flex-start; height: 42px;
 }
 .ai-btn:hover { background: var(--gold); color: var(--btn-text); }
-.ai-btn:disabled { opacity: 1; cursor: not-allowed; background: transparent; }
+.ai-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .ai-btn.used { border-color: var(--ink3); color: var(--ink3); }
 .ai-btn.used:hover { background: var(--ink3); color: var(--btn-text); }
 
@@ -613,13 +613,7 @@ body.light {
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .screen.active { animation: fadeIn 0.3s ease; }
 @keyframes spin { to { transform: rotate(360deg); } }
-@keyframes isClockH { to { transform: rotate(360deg); } }
-@keyframes isClockM { to { transform: rotate(360deg); } }
-@keyframes isClockS { to { transform: rotate(360deg); } }   
 .ai-loading { display: inline-block; animation: spin 1s linear infinite; }
-.ai-clock { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--gold); border-radius: 50%; position: relative; vertical-align: middle; }
-.ai-clock::before { content: ''; position: absolute; top: 50%; left: 50%; width: 1px; height: 6px; background: var(--ink); transform-origin: bottom center; transform: translateX(-50%) translateY(-100%); animation: isClockM 2s linear infinite; }
-.ai-clock::after { content: ''; position: absolute; top: 50%; left: 50%; width: 1px; height: 7px; background: var(--gold); transform-origin: bottom center; transform: translateX(-50%) translateY(-100%); animation: isClockS 1s linear infinite; }   
 
 /* =====================
    PLACEHOLDER SCREENS
@@ -1542,7 +1536,7 @@ function setBtnUsed(btn) {
 
 async function aiAutofill(fieldId, fieldName, btn) {
   if (!aiEnabled) return;
-  btn.innerHTML = btn.innerHTML = '<span class="ai-clock"></span>'; viewBox="0 0 680 680" style="vertical-align:middle"><circle cx="340" cy="340" r="320" fill="none" stroke="#c9923a" stroke-width="6"/><text x="340" y="420" font-family="JetBrains Mono,monospace" font-size="90" fill="#8a7860" letter-spacing="8" text-anchor="middle">IS</text><g style="transform-origin:340px 340px;animation:isClockH 120s linear infinite"><line x1="340" y1="340" x2="340" y2="140" stroke="#e8e0d0" stroke-width="12" stroke-linecap="round"/></g><g style="transform-origin:340px 340px;animation:isClockM 10s linear infinite"><line x1="340" y1="340" x2="340" y2="80" stroke="#e8e0d0" stroke-width="8" stroke-linecap="round"/></g><g style="transform-origin:340px 340px;animation:isClockS 1s linear infinite"><line x1="340" y1="390" x2="340" y2="60" stroke="#c9923a" stroke-width="4" stroke-linecap="round"/></g><circle cx="340" cy="340" r="16" fill="#c9923a"/><circle cx="340" cy="340" r="8" fill="#0f0d0a"/></svg>';
+  btn.innerHTML = '◌';
   btn.disabled = true;
 
   const p = currentProject || {};
