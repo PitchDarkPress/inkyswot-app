@@ -932,7 +932,7 @@ body.light {
               <div class="field">
                 <div class="field-label">Image / AI Image Prompt</div>
                 <div class="field-ai-row">
-                  <input type="text" class="field-input" id="ch-imageprompt" placeholder="AI image prompt for this character..." oninput="saveCharacter()"/>
+                  <textarea class="field-textarea" id="ch-imageprompt" placeholder="AI image prompt for this character..." oninput="saveCharacter()"></textarea>
                   <button class="ai-btn" id="ai-ch-imageprompt" onclick="aiCharFill('ch-imageprompt', 'detailed image generation prompt for this character', this)">✦ AI Generate</button>
                 </div>
               </div>
