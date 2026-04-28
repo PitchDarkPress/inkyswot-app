@@ -1922,7 +1922,7 @@ async function callAI(system, userContent, maxTokens = 400) {
   return data.content?.[0]?.text || null;
 }
 
-const CLOCK_SVG = `<span class="ai-clock"><svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><circle class="clock-face" cx="9" cy="9" r="8"/><line class="hand-hour" x1="9" y1="9" x2="9" y2="4.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/><line class="hand-min" x1="9" y1="9" x2="9" y2="3" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/><line class="hand-sec" x1="9" y1="9" x2="9" y2="2.5" stroke="#ff2020" stroke-width="1.4" stroke-linecap="round"/><circle class="clock-centre" cx="9" cy="9" r="1" fill="#ffffff"/></svg></span>`;
+const CLOCK_SVG = `<span class="ai-clock"><svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="none" stroke="#ffffff" stroke-width="1.5"/><line class="hand-hour" x1="9" y1="9" x2="9" y2="4.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/><line class="hand-min" x1="9" y1="9" x2="9" y2="3" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/><line class="hand-sec" x1="9" y1="9" x2="9" y2="2.5" stroke="#ff2020" stroke-width="1.4" stroke-linecap="round"/><circle cx="9" cy="9" r="1" fill="#ffffff"/></svg></span>`;
 
 function setBtnLoading(btn) { btn.innerHTML = CLOCK_SVG; btn.disabled = true; }
 function setBtnUsed(btn) { btn.classList.add('used'); btn.innerHTML = '↺ Regenerate'; btn.disabled = false; }
