@@ -1902,9 +1902,10 @@ function handleCoverUpload(input) {
 // =====================
 
 async function callAI(system, userContent, maxTokens = 400) {
-  if (!aiEnabled) return null;
+if (!aiEnabled) return null;
   if (getAICallsToday() >= AI_DAILY_LIMIT) {
     alert('You have used all 20 AI calls for today. Your allowance resets at midnight.');
+    document.querySelectorAll('.ai-btn').forEach(b => { if (b.disabled) { b.disabled = false; b.innerHTML = '✦ AI Generate'; }});
     return null;
   }
   const response = await fetch(API_PROXY, {
