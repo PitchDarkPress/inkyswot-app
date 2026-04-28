@@ -281,11 +281,11 @@ body.light {
 
 .ai-clock { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; flex-shrink: 0; }
 .ai-clock svg { width: 26px; height: 26px; }
-.ai-clock .clock-face   { fill: none; stroke: #ffffff; stroke-width: 1.5; }
+.ai-clock .clock-face   { fill: none; stroke-width: 1.5; }
 .ai-clock .clock-centre { fill: #ffffff; }
-.ai-clock .hand-hour    { stroke: #ffffff; stroke-width: 2.5; stroke-linecap: round; transform-origin: 9px 9px; animation: clock-hour 12s linear infinite; }
-.ai-clock .hand-min     { stroke: #ffffff; stroke-width: 2; stroke-linecap: round; transform-origin: 9px 9px; animation: clock-min  6s linear infinite; }
-.ai-clock .hand-sec     { stroke: #ff2020; stroke-width: 1.4; stroke-linecap: round; transform-origin: 9px 9px; animation: clock-sec  2s linear infinite; }
+.ai-clock .hand-hour    { stroke-width: 2.5; stroke-linecap: round; transform-box: fill-box; transform-origin: 50% 100%; animation: clock-hour 12s linear infinite; }
+.ai-clock .hand-min     { stroke-width: 2; stroke-linecap: round; transform-box: fill-box; transform-origin: 50% 100%; animation: clock-min  6s linear infinite; }
+.ai-clock .hand-sec     { stroke-width: 1.4; stroke-linecap: round; transform-box: fill-box; transform-origin: 50% 100%; animation: clock-sec  2s linear infinite; }
 
 /* =====================
    PLACEHOLDER SCREENS
