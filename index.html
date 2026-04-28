@@ -1944,11 +1944,11 @@ async function aiAutofill(fieldId, fieldName, btn) {
     if (suggestion) {
       const el = document.getElementById(fieldId);
       el.value = suggestion;
-   el.style.borderColor = 'var(--gold)';
-autoGrow(el);
-setTimeout(() => { el.style.borderColor = ''; }, 2000);
-autoSave();
-setBtnUsed(btn);
+      el.style.borderColor = 'var(--gold)';
+      autoGrow(el);
+      setTimeout(() => { el.style.borderColor = ''; }, 2000);
+      autoSave();
+      setBtnUsed(btn);
     }
   } catch (err) { console.error('AI error:', err); }
   btn.disabled = false;
