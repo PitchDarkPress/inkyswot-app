@@ -23,17 +23,17 @@ body {
   padding: 40px 24px;
 }
 
-/* PANEL */
+/* PANEL — fixed size always */
 .panel {
-  width: 100%;
-  max-width: 820px;
+  width: 820px;
+  max-width: 100%;
   border: 1px solid #221709;
   background: #0f0d0a;
   opacity: 0;
   animation: fadeIn 1.2s ease 0.3s forwards;
 }
 
-/* FIXED HEADER — never moves */
+/* FIXED HEADER */
 .panel-header {
   padding: 70px 80px 0;
 }
@@ -97,13 +97,24 @@ body {
 .tab.active { color: #c9923a; border-bottom-color: #c9923a; }
 .tab:hover:not(.active) { color: #8a7860; }
 
-/* BODY — expands with content */
+/* BODY — fixed height, always the same */
 .panel-body {
   padding: 36px 80px 70px;
+  height: 420px;
+  position: relative;
 }
 
-/* FORMS */
-.form { display: none; flex-direction: column; gap: 28px; }
+/* FORMS — both occupy the same fixed space */
+.form {
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+  position: absolute;
+  top: 36px;
+  left: 80px;
+  right: 80px;
+  bottom: 70px;
+}
 .form.active { display: flex; }
 
 .field-label {
@@ -112,7 +123,7 @@ body {
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #c9923a;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   display: block;
 }
 
@@ -120,7 +131,7 @@ body {
   width: 100%;
   background: #0a0806;
   border: 1px solid #2a2010;
-  padding: 16px 18px;
+  padding: 14px 18px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 15px;
   color: #e8e0d0;
@@ -133,8 +144,7 @@ body {
 
 .btn-enter {
   width: 100%;
-  margin-top: 8px;
-  padding: 18px;
+  padding: 16px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
   letter-spacing: 0.3em;
@@ -144,6 +154,7 @@ body {
   color: #0a0806;
   cursor: pointer;
   transition: background 0.3s ease, border-color 0.3s ease;
+  margin-top: auto;
 }
 .btn-enter:hover { background: #e8b060; border-color: #e8b060; }
 
@@ -153,7 +164,7 @@ body {
   letter-spacing: 0.1em;
   color: #c9923a;
   text-align: center;
-  min-height: 16px;
+  min-height: 14px;
 }
 
 .form-note {
@@ -179,7 +190,8 @@ body {
 
 @media (max-width: 860px) {
   .panel-header { padding: 50px 32px 0; }
-  .panel-body { padding: 32px 32px 50px; }
+  .panel-body { height: auto; min-height: 420px; padding: 32px 32px 50px; position: static; }
+  .form { position: static; }
   .wordmark { font-size: 42px; }
 }
 
@@ -189,7 +201,7 @@ body {
 
 <div class="panel">
 
-  <!-- FIXED HEADER -->
+  <!-- FIXED HEADER — never moves -->
   <div class="panel-header">
     <div class="wordmark">InkySwot</div>
     <div class="publish">PUBLISH AND BE DAMNED</div>
@@ -201,7 +213,7 @@ body {
     </div>
   </div>
 
-  <!-- EXPANDING BODY -->
+  <!-- FIXED HEIGHT BODY -->
   <div class="panel-body">
 
     <!-- LOG IN FORM -->
@@ -256,7 +268,6 @@ function handleLogin() {
   const err   = document.getElementById('login-error');
   err.textContent = '';
   if (!email || !pass) { err.textContent = 'Please enter your email and password.'; return; }
-  // To be wired to Supabase in Step 4
   window.location.href = 'index.html';
 }
 
@@ -269,7 +280,6 @@ function handleSignup() {
   if (!email || !pass || !confirm) { err.textContent = 'Please complete all fields.'; return; }
   if (pass !== confirm) { err.textContent = 'Passwords do not match.'; return; }
   if (pass.length < 8)  { err.textContent = 'Password must be at least 8 characters.'; return; }
-  // To be wired to Supabase in Step 4
   window.location.href = 'index.html';
 }
 
