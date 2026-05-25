@@ -10,116 +10,122 @@
 <style>
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; height: 100%; overflow: hidden; }
+html, body { width: 100%; height: 100%; }
 
 body {
   font-family: 'Crimson Pro', Georgia, serif;
   background: #0a0806;
   color: #e8e0d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-/* BACKGROUND */
-.bg {
-  position: fixed; inset: 0;
-background: #0a0806;
-  z-index: 0;
-}
-
-/* OVERLAY — subtle darkening to help form legibility */
-.bg-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  z-index: 1;
-}
-
-/* FORM PANEL — positioned over the brass plate */
+/* PANEL */
 .panel {
-  position: fixed;
-  z-index: 10;
-  left: 50%;
-  top: 50%;
-  width: 560px;
-  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 640px;
+  padding: 60px;
+  border: 1px solid #221709;
+  background: #0f0d0a;
   opacity: 0;
-  animation: fadeIn 1.2s ease 0.5s forwards;
+  animation: fadeIn 1.2s ease 0.3s forwards;
 }
 
-/* TABS — Log In / Sign Up */
+/* WORDMARK */
+.wordmark {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 42px;
+  font-weight: 900;
+  color: #e8e0d0;
+  text-align: center;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.members-access {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #c9923a;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.gold-rule {
+  width: 40px;
+  height: 1px;
+  background: #c9923a;
+  margin: 0 auto 40px;
+}
+
+/* TABS */
 .tabs {
   display: flex;
-  margin-bottom: 18px;
-  gap: 2px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #221709;
 }
 
 .tab {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  padding: 7px 18px;
+  padding: 10px 24px;
   cursor: pointer;
-  border: 1px solid rgba(201, 146, 58, 0.3);
-  background: rgba(10, 8, 6, 0.6);
-  color: #8a7860;
+  color: #4a3a28;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
   transition: all 0.3s ease;
 }
 
 .tab.active {
-  background: rgba(201, 146, 58, 0.15);
-  border-color: #c9923a;
   color: #c9923a;
+  border-bottom-color: #c9923a;
 }
 
-.tab:hover:not(.active) {
-  border-color: rgba(201, 146, 58, 0.5);
-  color: #b0a090;
-}
+.tab:hover:not(.active) { color: #8a7860; }
 
 /* FORM */
-.form {
-  display: none;
-  flex-direction: column;
-  gap: 14px;
-}
+.form { display: none; flex-direction: column; gap: 24px; }
 .form.active { display: flex; }
 
 .field-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #c9923a;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   display: block;
 }
 
 .field-input {
   width: 100%;
-  background: rgba(10, 8, 6, 0.75);
-  border: 1px solid rgba(201, 146, 58, 0.4);
-  border-radius: 1px;
-  padding: 9px 12px;
+  background: #0a0806;
+  border: 1px solid #2a2010;
+  padding: 14px 16px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: 14px;
   color: #e8e0d0;
   outline: none;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  transition: border-color 0.3s ease;
+  border-radius: 0;
 }
-.field-input:focus {
-  border-color: #c9923a;
-  background: rgba(10, 8, 6, 0.9);
-}
-.field-input::placeholder { color: #4a3a28; }
+.field-input:focus { border-color: #c9923a; }
+.field-input::placeholder { color: #2a2010; }
 
 .btn-enter {
   width: 100%;
-  margin-top: 4px;
-  padding: 11px;
+  margin-top: 8px;
+  padding: 16px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  background: rgba(201, 146, 58, 0.9);
+  background: #c9923a;
   border: 1px solid #c9923a;
   color: #0a0806;
   cursor: pointer;
@@ -127,13 +133,21 @@ background: #0a0806;
 }
 .btn-enter:hover { background: #e8b060; border-color: #e8b060; }
 
+.error-msg {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #c9923a;
+  text-align: center;
+  min-height: 16px;
+}
+
 .form-note {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.1em;
+  font-size: 10px;
+  letter-spacing: 0.08em;
   color: #4a3a28;
   text-align: center;
-  margin-top: 2px;
 }
 
 .form-note a {
@@ -144,47 +158,35 @@ background: #0a0806;
 }
 .form-note a:hover { color: #c9923a; border-bottom-color: #c9923a; }
 
-/* ERROR MESSAGE */
-.error-msg {
+/* FOOTER */
+.panel-footer {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.1em;
-  color: #c9923a;
+  color: #221709;
   text-align: center;
-  min-height: 14px;
+  margin-top: 40px;
 }
 
-/* ANIMATION */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-46%) perspective(600px) rotateX(4deg); }
-  to   { opacity: 1; transform: translateY(-50%) perspective(600px) rotateX(4deg); }
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* RESPONSIVE */
-@media (max-width: 1100px) {
-  .panel { left: 24%; width: 32%; }
-}
-@media (max-width: 800px) {
-  .panel {
-    left: 50%; top: 50%;
-    width: 88%;
-    transform: translate(-50%, -50%);
-    animation: fadeInCenter 1.2s ease 0.5s forwards;
-  }
-  @keyframes fadeInCenter {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
+@media (max-width: 680px) {
+  .panel { padding: 40px 24px; }
+  .wordmark { font-size: 32px; }
 }
 
 </style>
 </head>
 <body>
 
-<div class="bg"></div>
-<div class="bg-overlay"></div>
-
 <div class="panel">
+
+  <div class="wordmark">InkySwot</div>
+  <div class="members-access">Members Access</div>
+  <div class="gold-rule"></div>
 
   <!-- TABS -->
   <div class="tabs">
@@ -204,7 +206,7 @@ background: #0a0806;
     </div>
     <div class="error-msg" id="login-error"></div>
     <button class="btn-enter" onclick="handleLogin()">Enter</button>
-    <div class="form-note"><a href="#" onclick="showForgot()">Forgot your passphrase?</a></div>
+    <div class="form-note"><a href="#" onclick="showForgot()">Forgot your password?</a></div>
   </div>
 
   <!-- SIGN UP FORM -->
@@ -226,6 +228,8 @@ background: #0a0806;
     <div class="form-note">By joining you agree to our <a href="#">terms</a> and <a href="#">privacy policy</a>.</div>
   </div>
 
+  <div class="panel-footer">PUBLISH AND BE DAMNED</div>
+
 </div>
 
 <script>
@@ -243,8 +247,7 @@ function handleLogin() {
   const err   = document.getElementById('login-error');
   err.textContent = '';
   if (!email || !pass) { err.textContent = 'Please enter your email and password.'; return; }
-  // Authentication to be wired to Supabase in Step 4
-  // For now — forward to app
+  // To be wired to Supabase in Step 4
   window.location.href = 'index.html';
 }
 
@@ -257,8 +260,7 @@ function handleSignup() {
   if (!email || !pass || !confirm) { err.textContent = 'Please complete all fields.'; return; }
   if (pass !== confirm) { err.textContent = 'Passwords do not match.'; return; }
   if (pass.length < 8)  { err.textContent = 'Password must be at least 8 characters.'; return; }
-  // Signup to be wired to Supabase in Step 4
-  // For now — forward to app
+  // To be wired to Supabase in Step 4
   window.location.href = 'index.html';
 }
 
