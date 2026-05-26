@@ -1,1 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InkySwot — Sign Up</title>
+<meta name="description" content="InkySwot Members Access">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
 
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; min-height: 100vh; }
+
+body {
+  font-family: 'Crimson Pro', Georgia, serif;
+  background: #0a0806;
+  color: #e8e0d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 24px;
+}
+
+.panel {
+  width: 820px;
+  max-width: 100%;
+  border: 1px solid #221709;
+  background: #0f0d0a;
+  opacity: 0;
+  animation: fadeIn 1.2s ease 0.3s forwards;
+}
+
+.panel-header {
+  padding: 70px 80px 0;
+}
+
+.wordmark {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 56px;
+  font-weight: 900;
+  color: #e8e0d0;
+  text-align: center;
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+}
+
+.publish {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #c9923a;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.members-access {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #8a7860;
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.gold-rule {
+  width: 40px;
+  height: 1px;
+  background: #c9923a;
+  margin: 0 auto 36px;
+}
+
+.panel-body {
+  padding: 36px 80px 70px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.field-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #c9923a;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.field-input {
+  width: 100%;
+  background: #0a0806;
+  border: 1px solid #2a2010;
+  padding: 14px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  color: #e8e0d0;
+  outline: none;
+  transition: border-color 0.3s ease;
+  border-radius: 0;
+}
+.field-input:focus { border-color: #c9923a; }
+.field-input::placeholder { color: #2a2010; }
+
+.btn-enter {
+  width: 100%;
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  background: #c9923a;
+  border: 1px solid #c9923a;
+  color: #0a0806;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease;
+  margin-top: auto;
+}
+.btn-enter:hover { background: #e8b060; border-color: #e8b060; }
+
+.error-msg {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #c9923a;
+  text-align: center;
+  min-height: 14px;
+}
+
+.form-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #4a3a28;
+  text-align: center;
+}
+
+.form-note a {
+  color: #8a7860;
+  text-decoration: none;
+  border-bottom: 1px solid #4a3a28;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+.form-note a:hover { color: #c9923a; border-bottom-color: #c9923a; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 860px) {
+  .panel-header { padding: 50px 32px 0; }
+  .panel-body { padding: 32px 32px 50px; }
+  .wordmark { font-size: 42px; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="panel">
+
+  <div class="panel-header">
+    <div class="wordmark">InkySwot</div>
+    <div class="publish">PUBLISH AND BE DAMNED</div>
+    <div class="members-access">Sign Up</div>
+    <div class="gold-rule"></div>
+  </div>
+
+  <div class="panel-body">
+    <div class="form">
+      <div>
+        <label class="field-label" for="signup-email">Email</label>
+        <input class="field-input" type="email" id="signup-email" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div>
+        <label class="field-label" for="signup-password">Password</label>
+        <input class="field-input" type="password" id="signup-password" placeholder="••••••••" autocomplete="new-password">
+      </div>
+      <div>
+        <label class="field-label" for="signup-confirm">Confirm Password</label>
+        <input class="field-input" type="password" id="signup-confirm" placeholder="••••••••" autocomplete="new-password">
+      </div>
+      <div class="error-msg" id="signup-error"></div>
+      <button class="btn-enter" onclick="handleSignup()">Request Admission</button>
+      <div class="form-note">By joining you agree to our <a href="#">terms</a> and <a href="#">privacy policy</a>.</div>
+      <div class="form-note">Already a member? <a href="login.html">Log In</a></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+function handleSignup() {
+  const email   = document.getElementById('signup-email').value.trim();
+  const pass    = document.getElementById('signup-password').value;
+  const confirm = document.getElementById('signup-confirm').value;
+  const err     = document.getElementById('signup-error');
+  err.textContent = '';
+  if (!email || !pass || !confirm) { err.textContent = 'Please complete all fields.'; return; }
+  if (pass !== confirm) { err.textContent = 'Passwords do not match.'; return; }
+  if (pass.length < 8)  { err.textContent = 'Password must be at least 8 characters.'; return; }
+  window.location.href = 'index.html';
+}
+
+</script>
+</body>
+</html>
