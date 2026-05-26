@@ -136,7 +136,7 @@ body.light {
 .sidebar-icon { font-size: 15px; width: 16px; text-align: center; flex-shrink: 0; }
 .sidebar-bottom { margin-top: auto; padding: 16px; border-top: 1px solid var(--rule); }
 
-/* What's New pulse — active when there is something new */
+/* What's New pulse */
 @keyframes whatsnew-pulse {
   0%, 100% { color: var(--ink2); }
   50% { color: var(--gold); }
@@ -244,7 +244,6 @@ body.light {
 .field-ai-btn-stack .ai-btn { display: block; width: 100%; }
 .field-ai-row .field-input { flex: 1; min-width: 0; }
 .field-ai-row .field-textarea { flex: 1; min-width: 0; }
-
 
 .ai-btn { padding: 0 14px; background: transparent; border: 2px solid var(--gold); border-radius: 0; color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; display: flex; align-items: center; justify-content: center; white-space: nowrap; align-self: flex-start; height: 42px; }
 .ai-btn:hover { background: var(--gold); color: var(--btn-text); }
@@ -499,10 +498,6 @@ body.light {
    CUSTOM TEXTAREA RESIZE HANDLE
    ===================== */
 
-.field-textarea {
-  position: relative;
-}
-
 .field-textarea::-webkit-resizer {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cline x1='2' y1='15' x2='15' y2='2' stroke='white' stroke-width='1.5' stroke-linecap='round' opacity='0.6'/%3E%3Cline x1='7' y1='15' x2='15' y2='7' stroke='white' stroke-width='1.5' stroke-linecap='round' opacity='0.6'/%3E%3Cline x1='12' y1='15' x2='15' y2='12' stroke='white' stroke-width='1.5' stroke-linecap='round' opacity='0.6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -537,38 +532,11 @@ body.light {
    READ ALOUD & VOICE SELECTOR
    ===================== */
 
-.read-aloud-btn {
-  padding: 4px 10px;
-  background: transparent;
-  border: 1px solid var(--rule2);
-  border-radius: 3px;
-  color: var(--ink2);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
+.read-aloud-btn { padding: 4px 10px; background: transparent; border: 1px solid var(--rule2); border-radius: 3px; color: var(--ink2); font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; }
 .read-aloud-btn:hover { border-color: var(--gold); color: var(--gold); }
 .read-aloud-btn.speaking { border-color: var(--gold); color: var(--gold); background: var(--bg3); }
 
-.voice-select {
-  padding: 4px 8px;
-  background: var(--toggle-bg);
-  border: 1px solid var(--toggle-border);
-  border-radius: 3px;
-  color: var(--ink2);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  cursor: pointer;
-  outline: none;
-  max-width: 155px;
-  letter-spacing: 0.03em;
-}
+.voice-select { padding: 4px 8px; background: var(--toggle-bg); border: 1px solid var(--toggle-border); border-radius: 3px; color: var(--ink2); font-family: 'JetBrains Mono', monospace; font-size: 11px; cursor: pointer; outline: none; max-width: 155px; letter-spacing: 0.03em; }
 .voice-select option { background: var(--bg2); color: var(--ink); }
 
 </style>
@@ -599,6 +567,7 @@ body.light {
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
+
     <div class="sidebar-section">
       <div class="sidebar-section-title">Navigate</div>
       <div class="sidebar-item active" id="nav-projects" onclick="showScreen('projects')">
@@ -611,9 +580,11 @@ body.light {
 
     <div class="sidebar-section" id="projectNav" style="display:none">
       <div class="sidebar-section-title" id="projectNavTitle">Project</div>
+
       <div class="sidebar-item" id="nav-overview" onclick="showScreen('project-overview')">
         <span class="sidebar-icon">◈</span> Overview
       </div>
+
       <div class="sidebar-group-label">
         <span class="sidebar-icon">♟</span> Cast
       </div>
@@ -629,6 +600,7 @@ body.light {
       <div class="sidebar-item sub" id="nav-language" onclick="showScreen('language')">
         <span class="sidebar-icon">·</span> Language & Dialogue
       </div>
+
       <div class="sidebar-group-label">
         <span class="sidebar-icon">◎</span> World
       </div>
@@ -644,18 +616,56 @@ body.light {
       <div class="sidebar-item sub" id="nav-rules" onclick="showScreen('coming-soon', 'Rules & Lore')">
         <span class="sidebar-icon">·</span> Rules & Lore
       </div>
-      <div class="sidebar-item" id="nav-plot" onclick="showScreen('coming-soon', 'Plot')">
+
+      <div class="sidebar-group-label">
         <span class="sidebar-icon">⟁</span> Plot
       </div>
-      <div class="sidebar-item" id="nav-library" onclick="showScreen('coming-soon', 'Library')">
+      <div class="sidebar-item sub" id="nav-plotthreads" onclick="showScreen('coming-soon', 'Plot Threads')">
+        <span class="sidebar-icon">·</span> Plot Threads
+      </div>
+      <div class="sidebar-item sub" id="nav-subplots" onclick="showScreen('coming-soon', 'Subplots')">
+        <span class="sidebar-icon">·</span> Subplots
+      </div>
+      <div class="sidebar-item sub" id="nav-themes" onclick="showScreen('coming-soon', 'Themes & Motifs')">
+        <span class="sidebar-icon">·</span> Themes & Motifs
+      </div>
+      <div class="sidebar-item sub" id="nav-events" onclick="showScreen('coming-soon', 'Events & Timeline')">
+        <span class="sidebar-icon">·</span> Events & Timeline
+      </div>
+
+      <div class="sidebar-group-label">
         <span class="sidebar-icon">▣</span> Library
       </div>
-      <div class="sidebar-item" id="nav-chapters" onclick="showScreen('coming-soon', 'Chapters')">
+      <div class="sidebar-item sub" id="nav-research" onclick="showScreen('coming-soon', 'Research & Reference')">
+        <span class="sidebar-icon">·</span> Research & Reference
+      </div>
+      <div class="sidebar-item sub" id="nav-notes" onclick="showScreen('coming-soon', 'Notes & Scratchpad')">
+        <span class="sidebar-icon">·</span> Notes & Scratchpad
+      </div>
+      <div class="sidebar-item sub" id="nav-sandbox" onclick="showScreen('coming-soon', 'Sandbox')">
+        <span class="sidebar-icon">·</span> Sandbox
+      </div>
+
+      <div class="sidebar-group-label">
         <span class="sidebar-icon">≡</span> Chapters
       </div>
-      <div class="sidebar-item" id="nav-dcw" onclick="showScreen('coming-soon', 'DCW')">
+      <div class="sidebar-item sub" id="nav-chapters" onclick="showScreen('coming-soon', 'Chapters')">
+        <span class="sidebar-icon">·</span> Chapters
+      </div>
+      <div class="sidebar-item sub" id="nav-treatment" onclick="showScreen('coming-soon', 'The Treatment')">
+        <span class="sidebar-icon">·</span> The Treatment
+      </div>
+
+      <div class="sidebar-group-label">
         <span class="sidebar-icon">⬡</span> DCW
       </div>
+      <div class="sidebar-item sub" id="nav-timeline" onclick="showScreen('coming-soon', 'Timeline')">
+        <span class="sidebar-icon">·</span> Timeline
+      </div>
+      <div class="sidebar-item sub" id="nav-storyboard" onclick="showScreen('coming-soon', 'Storyboard')">
+        <span class="sidebar-icon">·</span> Storyboard
+      </div>
+
     </div>
 
     <div class="sidebar-section">
@@ -677,6 +687,7 @@ body.light {
     <div class="sidebar-bottom">
       <button class="new-project-btn" onclick="openNewProjectModal()">+ New Project</button>
     </div>
+
   </aside>
 
   <!-- CONTENT -->
@@ -1109,71 +1120,26 @@ body.light {
             </div>
             <div class="field-group">
               <div class="field-group-title">Identity</div>
-              <div class="field">
-                <div class="field-label">Name</div>
-                <input type="text" class="field-input" id="fac-name" placeholder="Name of this faction or organisation..." oninput="saveFaction(); updateFacName()"/>
-              </div>
-              <div class="field">
-                <div class="field-label">Type</div>
-                <select class="field-select" id="fac-type" onchange="saveFaction()">
-                  <option value="">— None —</option>
-                  <option>Political</option><option>Government</option><option>Military</option>
-                  <option>Criminal</option><option>Secret Society</option><option>Religious</option>
-                  <option>Corporation</option><option>Guild</option><option>Nobility</option>
-                  <option>Rebel</option><option>Law Enforcement</option><option>Intelligence</option>
-                  <option>Family Dynasty</option><option>Club</option><option>Other</option>
-                </select>
-              </div>
-              <div class="field">
-                <div class="field-label">Headquarters / Base</div>
-                <input type="text" class="field-input" id="fac-hq" placeholder="Where do they operate from?" oninput="saveFaction()"/>
-              </div>
-              <div class="field">
-                <div class="field-label">Symbols / Insignia</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="fac-symbols" placeholder="Colours, emblems, mottos, signs..." oninput="saveFaction()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-symbols" onclick="aiFacFill('fac-symbols', 'symbols and insignia', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-symbols', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
+              <div class="field"><div class="field-label">Name</div><input type="text" class="field-input" id="fac-name" placeholder="Name of this faction or organisation..." oninput="saveFaction(); updateFacName()"/></div>
+              <div class="field"><div class="field-label">Type</div><select class="field-select" id="fac-type" onchange="saveFaction()"><option value="">— None —</option><option>Political</option><option>Government</option><option>Military</option><option>Criminal</option><option>Secret Society</option><option>Religious</option><option>Corporation</option><option>Guild</option><option>Nobility</option><option>Rebel</option><option>Law Enforcement</option><option>Intelligence</option><option>Family Dynasty</option><option>Club</option><option>Other</option></select></div>
+              <div class="field"><div class="field-label">Headquarters / Base</div><input type="text" class="field-input" id="fac-hq" placeholder="Where do they operate from?" oninput="saveFaction()"/></div>
+              <div class="field"><div class="field-label">Symbols / Insignia</div><div class="field-ai-row"><textarea class="field-textarea" id="fac-symbols" placeholder="Colours, emblems, mottos, signs..." oninput="saveFaction()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-symbols" onclick="aiFacFill('fac-symbols', 'symbols and insignia', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-symbols', this)" title="Expand this field">⟳ Expand</button></div></div></div>
             </div>
             <div class="field-group">
               <div class="field-group-title">Purpose & Origin</div>
-              <div class="field">
-                <div class="field-label">Purpose</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="fac-purpose" placeholder="What does this faction exist to do?" oninput="saveFaction()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-purpose" onclick="aiFacFill('fac-purpose', 'faction purpose', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-purpose', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Origin</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="fac-origin" placeholder="How and when did this faction come to be?" oninput="saveFaction()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-origin" onclick="aiFacFill('fac-origin', 'faction origin', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-origin', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
+              <div class="field"><div class="field-label">Purpose</div><div class="field-ai-row"><textarea class="field-textarea" id="fac-purpose" placeholder="What does this faction exist to do?" oninput="saveFaction()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-purpose" onclick="aiFacFill('fac-purpose', 'faction purpose', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-purpose', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Origin</div><div class="field-ai-row"><textarea class="field-textarea" id="fac-origin" placeholder="How and when did this faction come to be?" oninput="saveFaction()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-origin" onclick="aiFacFill('fac-origin', 'faction origin', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-origin', this)" title="Expand this field">⟳ Expand</button></div></div></div>
             </div>
             <div class="field-group">
               <div class="field-group-title">Leadership</div>
-              <div class="field">
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="fac-leadership" placeholder="Who leads this faction? How is power structured?" oninput="saveFaction()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-leadership" onclick="aiFacFill('fac-leadership', 'leadership structure', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-leadership', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
+              <div class="field"><div class="field-ai-row"><textarea class="field-textarea" id="fac-leadership" placeholder="Who leads this faction? How is power structured?" oninput="saveFaction()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-leadership" onclick="aiFacFill('fac-leadership', 'leadership structure', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-leadership', this)" title="Expand this field">⟳ Expand</button></div></div></div>
             </div>
             <div class="field-group">
               <div class="field-group-title">Members</div>
               <div class="field">
                 <div class="tag-field" id="fac-members-tags"></div>
-                <div class="tag-add-row">
-                  <select class="tag-add-select" id="fac-members-select"><option value="">— Add from Cast —</option></select>
-                  <button class="tag-add-btn" onclick="addMemberFromSelect()">+ Add</button>
-                </div>
-                <div class="tag-add-row" style="margin-top:6px;">
-                  <input type="text" class="tag-add-input" id="fac-members-free" placeholder="Or type a name not yet in Cast..."/>
-                  <button class="tag-add-btn" onclick="addMemberFreeText()">+ Add</button>
-                </div>
+                <div class="tag-add-row"><select class="tag-add-select" id="fac-members-select"><option value="">— Add from Cast —</option></select><button class="tag-add-btn" onclick="addMemberFromSelect()">+ Add</button></div>
+                <div class="tag-add-row" style="margin-top:6px;"><input type="text" class="tag-add-input" id="fac-members-free" placeholder="Or type a name not yet in Cast..."/><button class="tag-add-btn" onclick="addMemberFreeText()">+ Add</button></div>
                 <div class="tag-hint">Members listed in Cast are linked. Others are noted as free text.</div>
               </div>
             </div>
@@ -1181,53 +1147,29 @@ body.light {
               <div class="field-group-title">Allies</div>
               <div class="field">
                 <div class="tag-field" id="fac-allies-tags"></div>
-                <div class="tag-add-row">
-                  <select class="tag-add-select" id="fac-allies-select"><option value="">— Add from Factions —</option></select>
-                  <button class="tag-add-btn" onclick="addAllyFromSelect()">+ Add</button>
-                </div>
-                <div class="tag-add-row" style="margin-top:6px;">
-                  <input type="text" class="tag-add-input" id="fac-allies-free" placeholder="Or type a faction not yet added..."/>
-                  <button class="tag-add-btn" onclick="addAllyFreeText()">+ Add</button>
-                </div>
+                <div class="tag-add-row"><select class="tag-add-select" id="fac-allies-select"><option value="">— Add from Factions —</option></select><button class="tag-add-btn" onclick="addAllyFromSelect()">+ Add</button></div>
+                <div class="tag-add-row" style="margin-top:6px;"><input type="text" class="tag-add-input" id="fac-allies-free" placeholder="Or type a faction not yet added..."/><button class="tag-add-btn" onclick="addAllyFreeText()">+ Add</button></div>
               </div>
             </div>
             <div class="field-group">
               <div class="field-group-title">Enemies</div>
               <div class="field">
                 <div class="tag-field" id="fac-enemies-tags"></div>
-                <div class="tag-add-row">
-                  <select class="tag-add-select" id="fac-enemies-select"><option value="">— Add from Factions —</option></select>
-                  <button class="tag-add-btn" onclick="addEnemyFromSelect()">+ Add</button>
-                </div>
-                <div class="tag-add-row" style="margin-top:6px;">
-                  <input type="text" class="tag-add-input" id="fac-enemies-free" placeholder="Or type a faction not yet added..."/>
-                  <button class="tag-add-btn" onclick="addEnemyFreeText()">+ Add</button>
-                </div>
+                <div class="tag-add-row"><select class="tag-add-select" id="fac-enemies-select"><option value="">— Add from Factions —</option></select><button class="tag-add-btn" onclick="addEnemyFromSelect()">+ Add</button></div>
+                <div class="tag-add-row" style="margin-top:6px;"><input type="text" class="tag-add-input" id="fac-enemies-free" placeholder="Or type a faction not yet added..."/><button class="tag-add-btn" onclick="addEnemyFreeText()">+ Add</button></div>
               </div>
             </div>
             <div class="field-group">
               <div class="field-group-title">History</div>
-              <div class="field">
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="fac-history" placeholder="The story of this faction over time..." oninput="saveFaction()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-history" onclick="aiFacFill('fac-history', 'faction history', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-history', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
+              <div class="field"><div class="field-ai-row"><textarea class="field-textarea" id="fac-history" placeholder="The story of this faction over time..." oninput="saveFaction()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-history" onclick="aiFacFill('fac-history', 'faction history', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-history', this)" title="Expand this field">⟳ Expand</button></div></div></div>
             </div>
             <div class="field-group">
               <div class="field-group-title">Secrets</div>
-              <div class="field">
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="fac-secrets" placeholder="What does this faction hide?" oninput="saveFaction()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-secrets" onclick="aiFacFill('fac-secrets', 'faction secrets', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-secrets', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
+              <div class="field"><div class="field-ai-row"><textarea class="field-textarea" id="fac-secrets" placeholder="What does this faction hide?" oninput="saveFaction()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-fac-secrets" onclick="aiFacFill('fac-secrets', 'faction secrets', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('fac-secrets', this)" title="Expand this field">⟳ Expand</button></div></div></div>
             </div>
             <div class="field-group">
               <div class="field-group-title">Notes</div>
-              <div class="field">
-                <textarea class="field-textarea" id="fac-notes" placeholder="Anything else about this faction..." oninput="saveFaction()"></textarea>
-              </div>
+              <div class="field"><textarea class="field-textarea" id="fac-notes" placeholder="Anything else about this faction..." oninput="saveFaction()"></textarea></div>
             </div>
             <div class="save-row">
               <div class="saved-indicator" id="facSavedIndicator" style="display:none">✓ Saved</div>
@@ -1241,15 +1183,9 @@ body.light {
     <div class="screen" id="screen-language">
       <div class="lang-layout">
         <div class="lang-list">
-          <div class="lang-list-header">
-            <div class="lang-list-title">Character Voice</div>
-          </div>
+          <div class="lang-list-header"><div class="lang-list-title">Character Voice</div></div>
           <div class="lang-list-items" id="langListItems">
-            <div class="cast-empty">
-              <div class="cast-empty-icon">❝</div>
-              <div class="cast-empty-text">No characters yet.</div>
-              <div class="cast-empty-sub">Add characters in Cast first.</div>
-            </div>
+            <div class="cast-empty"><div class="cast-empty-icon">❝</div><div class="cast-empty-text">No characters yet.</div><div class="cast-empty-sub">Add characters in Cast first.</div></div>
           </div>
         </div>
         <div class="lang-detail" id="langDetail">
@@ -1264,49 +1200,17 @@ body.light {
             </div>
             <div class="field-group">
               <div class="field-group-title">Speech & Voice</div>
-              <div class="field">
-                <div class="field-label">Speech Patterns</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="lang-speech" placeholder="How do they speak? Rhythm, sentence length, verbal habits..." oninput="saveLangChar()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-speech" onclick="aiLangFill('lang-speech', 'speech patterns', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-speech', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Vocabulary</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="lang-vocabulary" placeholder="Words they favour, their register, formal or informal..." oninput="saveLangChar()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-vocabulary" onclick="aiLangFill('lang-vocabulary', 'vocabulary and register', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-vocabulary', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Accent & Dialect</div>
-                <textarea class="field-textarea" id="lang-accent" placeholder="Regional accent, dialect features, non-native patterns..." oninput="saveLangChar()"></textarea>
-              </div>
+              <div class="field"><div class="field-label">Speech Patterns</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-speech" placeholder="How do they speak? Rhythm, sentence length, verbal habits..." oninput="saveLangChar()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-speech" onclick="aiLangFill('lang-speech', 'speech patterns', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-speech', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Vocabulary</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-vocabulary" placeholder="Words they favour, their register, formal or informal..." oninput="saveLangChar()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-vocabulary" onclick="aiLangFill('lang-vocabulary', 'vocabulary and register', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-vocabulary', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Accent & Dialect</div><textarea class="field-textarea" id="lang-accent" placeholder="Regional accent, dialect features, non-native patterns..." oninput="saveLangChar()"></textarea></div>
             </div>
             <div class="field-group">
               <div class="field-group-title">Signature Language</div>
-              <div class="field">
-                <div class="field-label">Catchphrases & Recurring Expressions</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="lang-catchphrases" placeholder="Lines they return to, expressions that define them..." oninput="saveLangChar()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-catchphrases" onclick="aiLangFill('lang-catchphrases', 'catchphrases and recurring expressions', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-catchphrases', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Forbidden Words / Things They Never Say</div>
-                <textarea class="field-textarea" id="lang-forbidden" placeholder="Words, topics, or phrases this character avoids..." oninput="saveLangChar()"></textarea>
-              </div>
-              <div class="field">
-                <div class="field-label">Emotional Speech</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="lang-emotional" placeholder="How does their language change under stress, grief, anger, joy..." oninput="saveLangChar()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-emotional" onclick="aiLangFill('lang-emotional', 'emotional speech patterns', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-emotional', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
+              <div class="field"><div class="field-label">Catchphrases & Recurring Expressions</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-catchphrases" placeholder="Lines they return to, expressions that define them..." oninput="saveLangChar()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-catchphrases" onclick="aiLangFill('lang-catchphrases', 'catchphrases and recurring expressions', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-catchphrases', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Forbidden Words / Things They Never Say</div><textarea class="field-textarea" id="lang-forbidden" placeholder="Words, topics, or phrases this character avoids..." oninput="saveLangChar()"></textarea></div>
+              <div class="field"><div class="field-label">Emotional Speech</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-emotional" placeholder="How does their language change under stress, grief, anger, joy..." oninput="saveLangChar()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-emotional" onclick="aiLangFill('lang-emotional', 'emotional speech patterns', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-emotional', this)" title="Expand this field">⟳ Expand</button></div></div></div>
             </div>
-            <div class="save-row">
-              <div class="saved-indicator" id="langCharSavedIndicator" style="display:none">✓ Saved</div>
-            </div>
+            <div class="save-row"><div class="saved-indicator" id="langCharSavedIndicator" style="display:none">✓ Saved</div></div>
           </div>
 
           <div id="langWorldSection" style="display:none">
@@ -1314,66 +1218,22 @@ body.light {
               <div class="lang-world-title">World Language</div>
               <div class="lang-world-sub">Vocabulary, rules and invented language that belong to this story's world.</div>
               <div class="field-group">
-                <div class="field">
-                  <div class="field-label">Invented Words & Phrases</div>
-                  <div class="field-ai-row">
-                    <textarea class="field-textarea" id="lang-invented" placeholder="Words, terms, or phrases unique to your story world..." oninput="saveWorldLanguage()"></textarea>
-                    <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-invented" onclick="aiWorldLangFill('lang-invented', 'invented words and phrases', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-invented', this)" title="Expand this field">⟳ Expand</button></div>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="field-label">Period Vocabulary</div>
-                  <div class="field-ai-row">
-                    <textarea class="field-textarea" id="lang-period" placeholder="Words or phrases specific to the era or setting..." oninput="saveWorldLanguage()"></textarea>
-                    <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-period" onclick="aiWorldLangFill('lang-period', 'period vocabulary', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-period', this)" title="Expand this field">⟳ Expand</button></div>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="field-label">Linguistic Rules</div>
-                  <textarea class="field-textarea" id="lang-rules" placeholder="Grammar patterns, naming conventions, language rules in this world..." oninput="saveWorldLanguage()"></textarea>
-                </div>
+                <div class="field"><div class="field-label">Invented Words & Phrases</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-invented" placeholder="Words, terms, or phrases unique to your story world..." oninput="saveWorldLanguage()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-invented" onclick="aiWorldLangFill('lang-invented', 'invented words and phrases', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-invented', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+                <div class="field"><div class="field-label">Period Vocabulary</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-period" placeholder="Words or phrases specific to the era or setting..." oninput="saveWorldLanguage()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-period" onclick="aiWorldLangFill('lang-period', 'period vocabulary', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-period', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+                <div class="field"><div class="field-label">Linguistic Rules</div><textarea class="field-textarea" id="lang-rules" placeholder="Grammar patterns, naming conventions, language rules in this world..." oninput="saveWorldLanguage()"></textarea></div>
               </div>
-              <div class="save-row">
-                <div class="saved-indicator" id="worldLangSavedIndicator" style="display:none">✓ Saved</div>
-              </div>
+              <div class="save-row"><div class="saved-indicator" id="worldLangSavedIndicator" style="display:none">✓ Saved</div></div>
             </div>
-
             <div class="lang-world-section">
               <div class="lang-world-title">Narrative Voice</div>
               <div class="lang-world-sub">The voice of the story itself — how it is told, not just what happens.</div>
               <div class="field-group">
-                <div class="field">
-                  <div class="field-label">Point of View Style</div>
-                  <div class="field-ai-row">
-                    <textarea class="field-textarea" id="lang-pov" placeholder="First person, third limited, omniscient, unreliable narrator..." oninput="saveNarrativeVoice()"></textarea>
-                    <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-pov" onclick="aiNarrFill('lang-pov', 'point of view style', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-pov', this)" title="Expand this field">⟳ Expand</button></div>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="field-label">Tense</div>
-                  <select class="field-select" id="lang-tense" onchange="saveNarrativeVoice()">
-                    <option value="">— None —</option>
-                    <option>Past tense</option><option>Present tense</option><option>Mixed</option><option>Other</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <div class="field-label">Tone & Register</div>
-                  <div class="field-ai-row">
-                    <textarea class="field-textarea" id="lang-register" placeholder="The overall narrative tone — sardonic, lyrical, sparse, gothic..." oninput="saveNarrativeVoice()"></textarea>
-                    <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-register" onclick="aiNarrFill('lang-register', 'narrative tone and register', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-register', this)" title="Expand this field">⟳ Expand</button></div>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="field-label">Style Notes</div>
-                  <div class="field-ai-row">
-                    <textarea class="field-textarea" id="lang-style" placeholder="Sentence length, prose rhythm, use of metaphor, anything defining the style..." oninput="saveNarrativeVoice()"></textarea>
-                    <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-style" onclick="aiNarrFill('lang-style', 'narrative style notes', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-style', this)" title="Expand this field">⟳ Expand</button></div>
-                  </div>
-                </div>
+                <div class="field"><div class="field-label">Point of View Style</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-pov" placeholder="First person, third limited, omniscient, unreliable narrator..." oninput="saveNarrativeVoice()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-pov" onclick="aiNarrFill('lang-pov', 'point of view style', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-pov', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+                <div class="field"><div class="field-label">Tense</div><select class="field-select" id="lang-tense" onchange="saveNarrativeVoice()"><option value="">— None —</option><option>Past tense</option><option>Present tense</option><option>Mixed</option><option>Other</option></select></div>
+                <div class="field"><div class="field-label">Tone & Register</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-register" placeholder="The overall narrative tone — sardonic, lyrical, sparse, gothic..." oninput="saveNarrativeVoice()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-register" onclick="aiNarrFill('lang-register', 'narrative tone and register', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-register', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+                <div class="field"><div class="field-label">Style Notes</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-style" placeholder="Sentence length, prose rhythm, use of metaphor, anything defining the style..." oninput="saveNarrativeVoice()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-lang-style" onclick="aiNarrFill('lang-style', 'narrative style notes', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-style', this)" title="Expand this field">⟳ Expand</button></div></div></div>
               </div>
-              <div class="save-row">
-                <div class="saved-indicator" id="narrVoiceSavedIndicator" style="display:none">✓ Saved</div>
-              </div>
+              <div class="save-row"><div class="saved-indicator" id="narrVoiceSavedIndicator" style="display:none">✓ Saved</div></div>
             </div>
           </div>
         </div>
@@ -1384,134 +1244,44 @@ body.light {
     <div class="screen" id="screen-locations">
       <div class="loc-layout">
         <div class="loc-list">
-          <div class="loc-list-header">
-            <div class="loc-list-title">Locations</div>
-            <button class="loc-add-btn" onclick="newLocation()">+ Add</button>
-          </div>
+          <div class="loc-list-header"><div class="loc-list-title">Locations</div><button class="loc-add-btn" onclick="newLocation()">+ Add</button></div>
           <div class="loc-list-items" id="locListItems">
-            <div class="cast-empty">
-              <div class="cast-empty-icon">◎</div>
-              <div class="cast-empty-text">No locations yet.</div>
-              <div class="cast-empty-sub">Every story happens somewhere.</div>
-            </div>
+            <div class="cast-empty"><div class="cast-empty-icon">◎</div><div class="cast-empty-text">No locations yet.</div><div class="cast-empty-sub">Every story happens somewhere.</div></div>
           </div>
         </div>
         <div class="loc-detail">
-          <div class="loc-no-selection" id="locNoSelection">
-            <div class="cast-empty-icon" style="font-size:36px; opacity:0.2;">◎</div>
-            <div class="cast-empty-text" style="margin-top:12px;">Select a location or add a new one.</div>
-          </div>
+          <div class="loc-no-selection" id="locNoSelection"><div class="cast-empty-icon" style="font-size:36px; opacity:0.2;">◎</div><div class="cast-empty-text" style="margin-top:12px;">Select a location or add a new one.</div></div>
           <div class="loc-form" id="locForm" style="display:none">
-            <div class="loc-form-header">
-              <div class="loc-name-display" id="locNameDisplay">New Location</div>
-              <button class="loc-delete-btn" onclick="deleteLocation()">✕</button>
-            </div>
-
+            <div class="loc-form-header"><div class="loc-name-display" id="locNameDisplay">New Location</div><button class="loc-delete-btn" onclick="deleteLocation()">✕</button></div>
             <div class="field-group">
               <div class="field-group-title">Identity</div>
-              <div class="field">
-                <div class="field-label">Name</div>
-                <input type="text" class="field-input" id="loc-name" placeholder="Name of this location..." oninput="saveLocation(); updateLocName()"/>
-              </div>
+              <div class="field"><div class="field-label">Name</div><input type="text" class="field-input" id="loc-name" placeholder="Name of this location..." oninput="saveLocation(); updateLocName()"/></div>
               <div class="field-row">
-                <div class="field">
-                  <div class="field-label">Type</div>
-                  <select class="field-select" id="loc-type" onchange="saveLocation()">
-                    <option value="">— None —</option>
-                    <option>City / Town</option><option>Village / Settlement</option>
-                    <option>Wilderness / Landscape</option><option>Building / Structure</option>
-                    <option>Region / Territory</option><option>Country / Nation</option>
-                    <option>Ocean / Sea / Lake</option><option>Island</option>
-                    <option>Underground</option><option>Space Station</option>
-                    <option>Planet</option><option>Moon</option>
-                    <option>Parallel Universe</option><option>Afterlife</option>
-                    <option>Mythological</option><option>Other</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <div class="field-label">Status</div>
-                  <select class="field-select" id="loc-status" onchange="saveLocation()">
-                    <option value="">— None —</option>
-                    <option>Real</option><option>Fictionalised</option><option>Fictional</option>
-                    <option>Historical</option><option>Future</option><option>Other</option>
-                  </select>
-                </div>
+                <div class="field"><div class="field-label">Type</div><select class="field-select" id="loc-type" onchange="saveLocation()"><option value="">— None —</option><option>City / Town</option><option>Village / Settlement</option><option>Wilderness / Landscape</option><option>Building / Structure</option><option>Region / Territory</option><option>Country / Nation</option><option>Ocean / Sea / Lake</option><option>Island</option><option>Underground</option><option>Space Station</option><option>Planet</option><option>Moon</option><option>Parallel Universe</option><option>Afterlife</option><option>Mythological</option><option>Other</option></select></div>
+                <div class="field"><div class="field-label">Status</div><select class="field-select" id="loc-status" onchange="saveLocation()"><option value="">— None —</option><option>Real</option><option>Fictionalised</option><option>Fictional</option><option>Historical</option><option>Future</option><option>Other</option></select></div>
               </div>
             </div>
-
             <div class="field-group">
               <div class="field-group-title">Images</div>
               <div class="image-upload-row">
-                <div class="loc-image-upload" onclick="document.getElementById('locImageInput').click()">
-                  <div class="loc-image-upload-icon" id="locImageIcon">🖼</div>
-                  <span id="locImageLabel">Location Image</span>
-                  <input type="file" id="locImageInput" accept="image/*" style="display:none" onchange="handleLocImageUpload(this, 'image')"/>
-                </div>
-                <div class="loc-image-upload" onclick="document.getElementById('locMapInput').click()">
-                  <div class="loc-image-upload-icon" id="locMapIcon">🗺</div>
-                  <span id="locMapLabel">Map / Plan</span>
-                  <input type="file" id="locMapInput" accept="image/*" style="display:none" onchange="handleLocImageUpload(this, 'map')"/>
-                </div>
+                <div class="loc-image-upload" onclick="document.getElementById('locImageInput').click()"><div class="loc-image-upload-icon" id="locImageIcon">🖼</div><span id="locImageLabel">Location Image</span><input type="file" id="locImageInput" accept="image/*" style="display:none" onchange="handleLocImageUpload(this, 'image')"/></div>
+                <div class="loc-image-upload" onclick="document.getElementById('locMapInput').click()"><div class="loc-image-upload-icon" id="locMapIcon">🗺</div><span id="locMapLabel">Map / Plan</span><input type="file" id="locMapInput" accept="image/*" style="display:none" onchange="handleLocImageUpload(this, 'map')"/></div>
               </div>
             </div>
-
             <div class="field-group">
               <div class="field-group-title">Description</div>
-              <div class="field">
-                <div class="field-label">Geography & Landscape</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="loc-geography" placeholder="The physical landscape, terrain, geography..." oninput="saveLocation()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-geography" onclick="aiLocFill('loc-geography', 'geography and landscape', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-geography', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Climate & Weather</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="loc-climate" placeholder="The climate, seasons, typical weather..." oninput="saveLocation()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-climate" onclick="aiLocFill('loc-climate', 'climate and weather', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-climate', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Population</div>
-                <input type="text" class="field-input" id="loc-population" placeholder="Who lives here? How many?" oninput="saveLocation()"/>
-              </div>
+              <div class="field"><div class="field-label">Geography & Landscape</div><div class="field-ai-row"><textarea class="field-textarea" id="loc-geography" placeholder="The physical landscape, terrain, geography..." oninput="saveLocation()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-geography" onclick="aiLocFill('loc-geography', 'geography and landscape', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-geography', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Climate & Weather</div><div class="field-ai-row"><textarea class="field-textarea" id="loc-climate" placeholder="The climate, seasons, typical weather..." oninput="saveLocation()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-climate" onclick="aiLocFill('loc-climate', 'climate and weather', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-climate', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Population</div><input type="text" class="field-input" id="loc-population" placeholder="Who lives here? How many?" oninput="saveLocation()"/></div>
             </div>
-
             <div class="field-group">
               <div class="field-group-title">Character & Significance</div>
-              <div class="field">
-                <div class="field-label">Culture & Society</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="loc-culture" placeholder="The customs, social structures, way of life..." oninput="saveLocation()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-culture" onclick="aiLocFill('loc-culture', 'culture and society', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-culture', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">History</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="loc-history" placeholder="The history of this place — what happened here..." oninput="saveLocation()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-history" onclick="aiLocFill('loc-history', 'history of this location', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-history', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Significance to the Story</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="loc-significance" placeholder="Why does this location matter? What role does it play?" oninput="saveLocation()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-significance" onclick="aiLocFill('loc-significance', 'significance to the story', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-significance', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
+              <div class="field"><div class="field-label">Culture & Society</div><div class="field-ai-row"><textarea class="field-textarea" id="loc-culture" placeholder="The customs, social structures, way of life..." oninput="saveLocation()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-culture" onclick="aiLocFill('loc-culture', 'culture and society', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-culture', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">History</div><div class="field-ai-row"><textarea class="field-textarea" id="loc-history" placeholder="The history of this place — what happened here..." oninput="saveLocation()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-history" onclick="aiLocFill('loc-history', 'history of this location', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-history', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Significance to the Story</div><div class="field-ai-row"><textarea class="field-textarea" id="loc-significance" placeholder="Why does this location matter? What role does it play?" oninput="saveLocation()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-loc-significance" onclick="aiLocFill('loc-significance', 'significance to the story', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('loc-significance', this)" title="Expand this field">⟳ Expand</button></div></div></div>
             </div>
-
-            <div class="field-group">
-              <div class="field-group-title">Notes</div>
-              <div class="field">
-                <textarea class="field-textarea" id="loc-notes" placeholder="Anything else about this location..." oninput="saveLocation()"></textarea>
-              </div>
-            </div>
-
-            <div class="save-row">
-              <div class="saved-indicator" id="locSavedIndicator" style="display:none">✓ Saved</div>
-            </div>
+            <div class="field-group"><div class="field-group-title">Notes</div><div class="field"><textarea class="field-textarea" id="loc-notes" placeholder="Anything else about this location..." oninput="saveLocation()"></textarea></div></div>
+            <div class="save-row"><div class="saved-indicator" id="locSavedIndicator" style="display:none">✓ Saved</div></div>
           </div>
         </div>
       </div>
@@ -1521,129 +1291,44 @@ body.light {
     <div class="screen" id="screen-buildings">
       <div class="bld-layout">
         <div class="bld-list">
-          <div class="bld-list-header">
-            <div class="bld-list-title">Buildings</div>
-            <button class="bld-add-btn" onclick="newBuilding()">+ Add</button>
-          </div>
+          <div class="bld-list-header"><div class="bld-list-title">Buildings</div><button class="bld-add-btn" onclick="newBuilding()">+ Add</button></div>
           <div class="bld-list-items" id="bldListItems">
-            <div class="cast-empty">
-              <div class="cast-empty-icon">⌂</div>
-              <div class="cast-empty-text">No buildings yet.</div>
-              <div class="cast-empty-sub">Every story has its structures.</div>
-            </div>
+            <div class="cast-empty"><div class="cast-empty-icon">⌂</div><div class="cast-empty-text">No buildings yet.</div><div class="cast-empty-sub">Every story has its structures.</div></div>
           </div>
         </div>
         <div class="bld-detail">
-          <div class="bld-no-selection" id="bldNoSelection">
-            <div class="cast-empty-icon" style="font-size:36px; opacity:0.2;">⌂</div>
-            <div class="cast-empty-text" style="margin-top:12px;">Select a building or add a new one.</div>
-          </div>
+          <div class="bld-no-selection" id="bldNoSelection"><div class="cast-empty-icon" style="font-size:36px; opacity:0.2;">⌂</div><div class="cast-empty-text" style="margin-top:12px;">Select a building or add a new one.</div></div>
           <div class="bld-form" id="bldForm" style="display:none">
-            <div class="bld-form-header">
-              <div class="bld-name-display" id="bldNameDisplay">New Building</div>
-              <button class="bld-delete-btn" onclick="deleteBuilding()">✕</button>
-            </div>
-
+            <div class="bld-form-header"><div class="bld-name-display" id="bldNameDisplay">New Building</div><button class="bld-delete-btn" onclick="deleteBuilding()">✕</button></div>
             <div class="field-group">
               <div class="field-group-title">Identity</div>
-              <div class="field">
-                <div class="field-label">Name</div>
-                <input type="text" class="field-input" id="bld-name" placeholder="Name of this building or structure..." oninput="saveBuilding(); updateBldName()"/>
-              </div>
+              <div class="field"><div class="field-label">Name</div><input type="text" class="field-input" id="bld-name" placeholder="Name of this building or structure..." oninput="saveBuilding(); updateBldName()"/></div>
               <div class="field-row">
-                <div class="field">
-                  <div class="field-label">Type</div>
-                  <select class="field-select" id="bld-type" onchange="saveBuilding()">
-                    <option value="">— None —</option>
-                    <option>Residential</option><option>Commercial</option><option>Civic</option>
-                    <option>Religious</option><option>Military</option><option>Industrial</option>
-                    <option>Educational</option><option>Medical</option><option>Criminal</option>
-                    <option>Abandoned</option><option>Ruins</option><option>Speculative</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <div class="field-label">Location</div>
-                  <select class="field-select" id="bld-location" onchange="saveBuilding()">
-                    <option value="">— None —</option>
-                  </select>
-                </div>
+                <div class="field"><div class="field-label">Type</div><select class="field-select" id="bld-type" onchange="saveBuilding()"><option value="">— None —</option><option>Residential</option><option>Commercial</option><option>Civic</option><option>Religious</option><option>Military</option><option>Industrial</option><option>Educational</option><option>Medical</option><option>Criminal</option><option>Abandoned</option><option>Ruins</option><option>Speculative</option><option>Other</option></select></div>
+                <div class="field"><div class="field-label">Location</div><select class="field-select" id="bld-location" onchange="saveBuilding()"><option value="">— None —</option></select></div>
               </div>
-              <div class="field">
-                <div class="field-label">Owner / Occupant</div>
-                <input type="text" class="field-input" id="bld-owner" placeholder="Who owns or occupies this building?" oninput="saveBuilding()"/>
-              </div>
+              <div class="field"><div class="field-label">Owner / Occupant</div><input type="text" class="field-input" id="bld-owner" placeholder="Who owns or occupies this building?" oninput="saveBuilding()"/></div>
             </div>
-
             <div class="field-group">
               <div class="field-group-title">Images</div>
               <div class="image-upload-row">
-                <div class="loc-image-upload" onclick="document.getElementById('bldImageInput').click()">
-                  <div class="loc-image-upload-icon" id="bldImageIcon">🖼</div>
-                  <span id="bldImageLabel">Exterior</span>
-                  <input type="file" id="bldImageInput" accept="image/*" style="display:none" onchange="handleBldImageUpload(this, 'image')"/>
-                </div>
-                <div class="loc-image-upload" onclick="document.getElementById('bldFloorplanInput').click()">
-                  <div class="loc-image-upload-icon" id="bldFloorplanIcon">⬚</div>
-                  <span id="bldFloorplanLabel">Floor Plan</span>
-                  <input type="file" id="bldFloorplanInput" accept="image/*" style="display:none" onchange="handleBldImageUpload(this, 'floorplan')"/>
-                </div>
+                <div class="loc-image-upload" onclick="document.getElementById('bldImageInput').click()"><div class="loc-image-upload-icon" id="bldImageIcon">🖼</div><span id="bldImageLabel">Exterior</span><input type="file" id="bldImageInput" accept="image/*" style="display:none" onchange="handleBldImageUpload(this, 'image')"/></div>
+                <div class="loc-image-upload" onclick="document.getElementById('bldFloorplanInput').click()"><div class="loc-image-upload-icon" id="bldFloorplanIcon">⬚</div><span id="bldFloorplanLabel">Floor Plan</span><input type="file" id="bldFloorplanInput" accept="image/*" style="display:none" onchange="handleBldImageUpload(this, 'floorplan')"/></div>
               </div>
             </div>
-
             <div class="field-group">
               <div class="field-group-title">Description</div>
-              <div class="field">
-                <div class="field-label">Physical Description</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="bld-physical" placeholder="How does it look from the outside? Size, materials, condition..." oninput="saveBuilding()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-physical" onclick="aiBldFill('bld-physical', 'physical description', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-physical', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Interior</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="bld-interior" placeholder="Inside — layout, rooms, atmosphere, details..." oninput="saveBuilding()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-interior" onclick="aiBldFill('bld-interior', 'interior description', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-interior', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Atmosphere</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="bld-atmosphere" placeholder="The feel of this place — what does it do to people who enter..." oninput="saveBuilding()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-atmosphere" onclick="aiBldFill('bld-atmosphere', 'atmosphere and feel', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-atmosphere', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
+              <div class="field"><div class="field-label">Physical Description</div><div class="field-ai-row"><textarea class="field-textarea" id="bld-physical" placeholder="How does it look from the outside? Size, materials, condition..." oninput="saveBuilding()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-physical" onclick="aiBldFill('bld-physical', 'physical description', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-physical', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Interior</div><div class="field-ai-row"><textarea class="field-textarea" id="bld-interior" placeholder="Inside — layout, rooms, atmosphere, details..." oninput="saveBuilding()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-interior" onclick="aiBldFill('bld-interior', 'interior description', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-interior', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Atmosphere</div><div class="field-ai-row"><textarea class="field-textarea" id="bld-atmosphere" placeholder="The feel of this place — what does it do to people who enter..." oninput="saveBuilding()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-atmosphere" onclick="aiBldFill('bld-atmosphere', 'atmosphere and feel', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-atmosphere', this)" title="Expand this field">⟳ Expand</button></div></div></div>
             </div>
-
             <div class="field-group">
               <div class="field-group-title">History & Secrets</div>
-              <div class="field">
-                <div class="field-label">History</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="bld-history" placeholder="What happened here? Who built it and why..." oninput="saveBuilding()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-history" onclick="aiBldFill('bld-history', 'history of this building', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-history', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
-              <div class="field">
-                <div class="field-label">Secrets</div>
-                <div class="field-ai-row">
-                  <textarea class="field-textarea" id="bld-secrets" placeholder="Hidden rooms, buried history, things the walls know..." oninput="saveBuilding()"></textarea>
-                  <div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-secrets" onclick="aiBldFill('bld-secrets', 'secrets of this building', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-secrets', this)" title="Expand this field">⟳ Expand</button></div>
-                </div>
-              </div>
+              <div class="field"><div class="field-label">History</div><div class="field-ai-row"><textarea class="field-textarea" id="bld-history" placeholder="What happened here? Who built it and why..." oninput="saveBuilding()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-history" onclick="aiBldFill('bld-history', 'history of this building', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-history', this)" title="Expand this field">⟳ Expand</button></div></div></div>
+              <div class="field"><div class="field-label">Secrets</div><div class="field-ai-row"><textarea class="field-textarea" id="bld-secrets" placeholder="Hidden rooms, buried history, things the walls know..." oninput="saveBuilding()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" id="ai-bld-secrets" onclick="aiBldFill('bld-secrets', 'secrets of this building', this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('bld-secrets', this)" title="Expand this field">⟳ Expand</button></div></div></div>
             </div>
-
-            <div class="field-group">
-              <div class="field-group-title">Notes</div>
-              <div class="field">
-                <textarea class="field-textarea" id="bld-notes" placeholder="Anything else about this building..." oninput="saveBuilding()"></textarea>
-              </div>
-            </div>
-
-            <div class="save-row">
-              <div class="saved-indicator" id="bldSavedIndicator" style="display:none">✓ Saved</div>
-            </div>
+            <div class="field-group"><div class="field-group-title">Notes</div><div class="field"><textarea class="field-textarea" id="bld-notes" placeholder="Anything else about this building..." oninput="saveBuilding()"></textarea></div></div>
+            <div class="save-row"><div class="saved-indicator" id="bldSavedIndicator" style="display:none">✓ Saved</div></div>
           </div>
         </div>
       </div>
@@ -1694,24 +1379,12 @@ body.light {
 
 <script>
 
-// =====================
-// CONFIG
-// =====================
-
 const API_PROXY = 'https://inkyswot-app.vercel.app/api/claude';
 const AI_DAILY_LIMIT = 20;
-
-// =====================
-// STATE
-// =====================
 
 let currentProject = null;
 let aiEnabled = true;
 let isDark = localStorage.getItem('is-tone') !== 'light';
-
-// =====================
-// AI COUNTER
-// =====================
 
 function getAICallsToday() {
   const stored = JSON.parse(localStorage.getItem('is-ai-calls') || '{}');
@@ -1736,10 +1409,6 @@ function updateAICounter() {
   el.classList.toggle('low', remaining <= 5);
 }
 
-// =====================
-// THEME
-// =====================
-
 function setTone(dark) {
   isDark = dark;
   localStorage.setItem('is-tone', dark ? 'dark' : 'light');
@@ -1754,10 +1423,6 @@ document.body.style.transition = 'none';
 setTone(isDark);
 setTimeout(() => { document.body.style.transition = 'background-color 1.5s ease, color 1.5s ease'; }, 100);
 
-// =====================
-// AI TOGGLE
-// =====================
-
 function toggleAI() {
   aiEnabled = !aiEnabled;
   const btn = document.getElementById('aiToggleBtn');
@@ -1766,10 +1431,6 @@ function toggleAI() {
   btn.classList.add(aiEnabled ? 'ai-on' : 'ai-off');
   document.querySelectorAll('.ai-btn').forEach(b => { b.style.display = aiEnabled ? '' : 'none'; });
 }
-
-// =====================
-// SCREEN NAVIGATION
-// =====================
 
 function showScreen(name, label) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1845,10 +1506,6 @@ function showScreen(name, label) {
     if (navEl) navEl.classList.add('active');
   }
 }
-
-// =====================
-// PROJECTS
-// =====================
 
 function getProjects() { return JSON.parse(localStorage.getItem('is-projects') || '[]'); }
 function saveProjects(projects) { localStorage.setItem('is-projects', JSON.stringify(projects)); }
@@ -1929,10 +1586,6 @@ function createProject() {
 document.getElementById('newProjectTitle').addEventListener('keydown', e => { if (e.key === 'Enter') createProject(); });
 document.getElementById('newProjectModal').addEventListener('click', function(e) { if (e.target === this) closeNewProjectModal(); });
 
-// =====================
-// TRASH
-// =====================
-
 function trashProject(index) {
   const projects = getProjects();
   const p = projects[index];
@@ -1993,10 +1646,6 @@ function renderTrash() {
       </div>
     </div>`).join('');
 }
-
-// =====================
-// PROJECT OVERVIEW
-// =====================
 
 function loadProjectHeader() {
   if (!currentProject) return;
@@ -2072,10 +1721,6 @@ function handleCoverUpload(input) {
   reader.readAsDataURL(input.files[0]);
 }
 
-// =====================
-// AI CORE
-// =====================
-
 async function callAI(system, userContent, maxTokens = 400) {
   if (!aiEnabled) return null;
   if (getAICallsToday() >= AI_DAILY_LIMIT) {
@@ -2103,10 +1748,6 @@ const CLOCK_SVG = `<span class="ai-clock"><svg viewBox="0 0 18 18" xmlns="http:/
 function setBtnLoading(btn) { btn.innerHTML = CLOCK_SVG; btn.disabled = true; }
 function setBtnUsed(btn) { btn.classList.add('used'); btn.innerHTML = '↺ Prompt'; btn.disabled = false; }
 
-// =====================
-// AI AUTOFILL — OVERVIEW
-// =====================
-
 async function aiAutofill(fieldId, fieldName, btn) {
   if (!aiEnabled) return;
   setBtnLoading(btn);
@@ -2130,10 +1771,6 @@ async function aiAutofill(fieldId, fieldName, btn) {
   btn.disabled = false;
   if (!btn.classList.contains('used')) btn.innerHTML = '✦ Prompt';
 }
-
-// =====================
-// CHARACTERS
-// =====================
 
 let currentCharacterIndex = null;
 
@@ -2257,10 +1894,6 @@ async function aiCharFill(fieldId, fieldName, btn) {
   btn.disabled = false;
   if (!btn.classList.contains('used')) btn.innerHTML = '✦ Prompt';
 }
-
-// =====================
-// RELATIONSHIPS
-// =====================
 
 let currentRelationshipIndex = null;
 
@@ -2424,10 +2057,6 @@ async function aiRelFill(fieldId, fieldName, btn) {
   btn.disabled = false;
   if (!btn.classList.contains('used')) btn.innerHTML = '✦ Prompt';
 }
-
-// =====================
-// FACTIONS & ORGANISATIONS
-// =====================
 
 let currentFactionIndex = null;
 
@@ -2673,10 +2302,6 @@ async function aiFacFill(fieldId, fieldName, btn) {
   if (!btn.classList.contains('used')) btn.innerHTML = '✦ Prompt';
 }
 
-// =====================
-// LANGUAGE & DIALOGUE
-// =====================
-
 let currentLangCharIndex = null;
 
 function getLangData() {
@@ -2862,10 +2487,6 @@ async function aiNarrFill(fieldId, fieldName, btn) {
   if (!btn.classList.contains('used')) btn.innerHTML = '✦ Prompt';
 }
 
-// =====================
-// WORLD — LOCATIONS
-// =====================
-
 let currentLocationIndex = null;
 
 function getLocations() {
@@ -3011,10 +2632,6 @@ async function aiLocFill(fieldId, fieldName, btn) {
   btn.disabled = false;
   if (!btn.classList.contains('used')) btn.innerHTML = '✦ Prompt';
 }
-
-// =====================
-// WORLD — BUILDINGS
-// =====================
 
 let currentBuildingIndex = null;
 
@@ -3163,10 +2780,6 @@ async function aiBldFill(fieldId, fieldName, btn) {
   if (!btn.classList.contains('used')) btn.innerHTML = '✦ Prompt';
 }
 
-// =====================
-// SHARED UTILS
-// =====================
-
 function flashSaved(id) {
   const ind = document.getElementById(id);
   if (!ind) return;
@@ -3174,10 +2787,6 @@ function flashSaved(id) {
   clearTimeout(ind._timer);
   ind._timer = setTimeout(() => { ind.style.display = 'none'; }, 2000);
 }
-
-// =====================
-// AUTO-GROW TEXTAREAS
-// =====================
 
 function autoGrow(el) {
   el.style.height = '0px';
@@ -3194,11 +2803,6 @@ function autoGrowAll() {
   });
 }
 
-
-// =====================
-// READ ALOUD — ALL TEXTAREAS
-// =====================
-
 let currentReadAloudField = null;
 
 function readFieldAloud(textareaId, btn) {
@@ -3206,40 +2810,23 @@ function readFieldAloud(textareaId, btn) {
   if (!el) return;
   const text = el.value.trim();
   if (!text) return;
-
-  // Capture state BEFORE cancel (cancel can fire onerror synchronously in some browsers)
   const wasThisField = currentReadAloudField === textareaId;
   const wasSpeaking = window.speechSynthesis.speaking || window.speechSynthesis.pending;
-
-  // Always stop and clear everything first
   currentReadAloudField = null;
   window.speechSynthesis.cancel();
   document.querySelectorAll('.read-aloud-btn').forEach(b => b.classList.remove('speaking'));
-
-  // If this was already playing, toggle off — stop here
   if (wasThisField && wasSpeaking) return;
-
-  // Small delay so cancel() fully settles before new utterance (Chrome needs this)
   setTimeout(() => {
     currentReadAloudField = textareaId;
     const utterance = new SpeechSynthesisUtterance(text);
-
     const savedVoice = localStorage.getItem('is-voice');
     if (savedVoice) {
       const voices = window.speechSynthesis.getVoices();
       const match = voices.find(v => v.name === savedVoice);
       if (match) utterance.voice = match;
     }
-
-    utterance.onend = () => {
-      btn.classList.remove('speaking');
-      currentReadAloudField = null;
-    };
-    utterance.onerror = () => {
-      btn.classList.remove('speaking');
-      currentReadAloudField = null;
-    };
-
+    utterance.onend = () => { btn.classList.remove('speaking'); currentReadAloudField = null; };
+    utterance.onerror = () => { btn.classList.remove('speaking'); currentReadAloudField = null; };
     btn.classList.add('speaking');
     window.speechSynthesis.speak(utterance);
   }, 100);
@@ -3284,15 +2871,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
-
-// =====================
-// WHAT'S NEW PULSE
-// =====================
-// =====================
-// AI EXPAND
-// =====================
-
 async function aiExpand(fieldId, btn) {
   if (!aiEnabled) return;
   const el = document.getElementById(fieldId);
@@ -3318,18 +2896,10 @@ async function aiExpand(fieldId, btn) {
   if (!btn.classList.contains('used')) btn.innerHTML = '⟳ Expand';
 }
 
-// =====================
-// WHAT'S NEW PULSE
-// =====================
-
 function stopWhatsNewPulse() {
   const el = document.getElementById('nav-whatsnew');
   if (el) el.classList.remove('has-update');
 }
-
-// =====================
-// INIT
-// =====================
 
 renderProjects();
 updateAICounter();
