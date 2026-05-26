@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>InkySwot — Members Access</title>
+<title>InkySwot — Log In</title>
 <meta name="description" content="InkySwot Members Access">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
@@ -23,7 +23,6 @@ body {
   padding: 40px 24px;
 }
 
-/* PANEL — fixed size always */
 .panel {
   width: 820px;
   max-width: 100%;
@@ -33,7 +32,6 @@ body {
   animation: fadeIn 1.2s ease 0.3s forwards;
 }
 
-/* FIXED HEADER */
 .panel-header {
   padding: 70px 80px 0;
 }
@@ -75,47 +73,15 @@ body {
   margin: 0 auto 36px;
 }
 
-/* TABS */
-.tabs {
-  display: flex;
-  border-bottom: 1px solid #221709;
-}
-
-.tab {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 12px 28px;
-  cursor: pointer;
-  color: #4a3a28;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  transition: all 0.3s ease;
-}
-
-.tab.active { color: #c9923a; border-bottom-color: #c9923a; }
-.tab:hover:not(.active) { color: #8a7860; }
-
-/* BODY — fixed height, always the same */
 .panel-body {
   padding: 36px 80px 70px;
-  height: 420px;
-  position: relative;
 }
 
-/* FORMS — both occupy the same fixed space */
 .form {
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 24px;
-  position: absolute;
-  top: 36px;
-  left: 80px;
-  right: 80px;
-  bottom: 70px;
 }
-.form.active { display: flex; }
 
 .field-label {
   font-family: 'JetBrains Mono', monospace;
@@ -190,8 +156,7 @@ body {
 
 @media (max-width: 860px) {
   .panel-header { padding: 50px 32px 0; }
-  .panel-body { height: auto; min-height: 420px; padding: 32px 32px 50px; position: static; }
-  .form { position: static; }
+  .panel-body { padding: 32px 32px 50px; }
   .wordmark { font-size: 42px; }
 }
 
@@ -201,23 +166,15 @@ body {
 
 <div class="panel">
 
-  <!-- FIXED HEADER — never moves -->
   <div class="panel-header">
     <div class="wordmark">InkySwot</div>
     <div class="publish">PUBLISH AND BE DAMNED</div>
-    <div class="members-access">Members Access</div>
+    <div class="members-access">Log In</div>
     <div class="gold-rule"></div>
-    <div class="tabs">
-      <div class="tab active" onclick="showTab('login')">Log In</div>
-      <div class="tab" onclick="showTab('signup')">Sign Up</div>
-    </div>
   </div>
 
-  <!-- FIXED HEIGHT BODY -->
   <div class="panel-body">
-
-    <!-- LOG IN FORM -->
-    <div class="form active" id="form-login">
+    <div class="form">
       <div>
         <label class="field-label" for="login-email">Email</label>
         <input class="field-input" type="email" id="login-email" placeholder="your@email.com" autocomplete="email">
@@ -229,38 +186,13 @@ body {
       <div class="error-msg" id="login-error"></div>
       <button class="btn-enter" onclick="handleLogin()">Enter</button>
       <div class="form-note"><a href="#" onclick="showForgot()">Forgot your password?</a></div>
+      <div class="form-note">No account yet? <a href="signup.html">Sign Up</a></div>
     </div>
-
-    <!-- SIGN UP FORM -->
-    <div class="form" id="form-signup">
-      <div>
-        <label class="field-label" for="signup-email">Email</label>
-        <input class="field-input" type="email" id="signup-email" placeholder="your@email.com" autocomplete="email">
-      </div>
-      <div>
-        <label class="field-label" for="signup-password">Password</label>
-        <input class="field-input" type="password" id="signup-password" placeholder="••••••••" autocomplete="new-password">
-      </div>
-      <div>
-        <label class="field-label" for="signup-confirm">Confirm Password</label>
-        <input class="field-input" type="password" id="signup-confirm" placeholder="••••••••" autocomplete="new-password">
-      </div>
-      <div class="error-msg" id="signup-error"></div>
-      <button class="btn-enter" onclick="handleSignup()">Request Admission</button>
-      <div class="form-note">By joining you agree to our <a href="#">terms</a> and <a href="#">privacy policy</a>.</div>
-    </div>
-
   </div>
+
 </div>
 
 <script>
-
-function showTab(tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
-  document.querySelector(`.tab[onclick="showTab('${tab}')"]`).classList.add('active');
-  document.getElementById('form-' + tab).classList.add('active');
-}
 
 function handleLogin() {
   const email = document.getElementById('login-email').value.trim();
@@ -271,20 +203,6 @@ function handleLogin() {
   window.location.href = 'index.html';
 }
 
-function handleSignup() {
-  const email   = document.getElementById('signup-email').value.trim();
-  const pass    = document.getElementById('signup-password').value;
-  const confirm = document.getElementById('signup-confirm').value;
-  const err     = document.getElementById('signup-error');
-  err.textContent = '';
-  if (!email || !pass || !confirm) { err.textContent = 'Please complete all fields.'; return; }
-  if (pass !== confirm) { err.textContent = 'Passwords do not match.'; return; }
-  if (pass.length < 8)  { err.textContent = 'Password must be at least 8 characters.'; return; }
-  window.location.href = 'index.html';
-}
-
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('tab') === 'signup') { showTab('signup'); }  
 function showForgot() {
   alert('Password reset coming in Step 9 — Resend.');
 }
