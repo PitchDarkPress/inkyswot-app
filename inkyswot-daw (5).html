@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InkySwot — The Work Area</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Crimson+Pro:wght@400;600&display=swap');
+
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --aged: #e8e0cc;
+    --rust: #c4472a;
+    --gold: #c9923a;
+    --teal: #2a6b6b;
+    --purple: #5c3d7a;
+    --slate: #3a4a5c;
+    --green: #2d6b3a;
+    --track-h: 52px;
+    --ruler-h: 64px;
+    --header-w: 180px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--paper);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: #0f0c09;
+    border-bottom: 1px solid #3a2e20;
+    padding: 0 16px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-shrink: 0;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo span { color: var(--paper); opacity: 0.5; font-size: 12px; }
+
+  .project-name {
+    font-family: 'Crimson Pro', serif;
+    font-size: 15px;
+    color: var(--paper);
+    opacity: 0.7;
+    font-style: italic;
+  }
+
+  .topbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mode-btn {
+    padding: 4px 12px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border: 1px solid #3a2e20;
+    background: transparent;
+    color: var(--paper);
+    opacity: 0.5;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .mode-btn.active {
+    background: var(--gold);
+    color: var(--ink);
+    opacity: 1;
+    border-color: var(--gold);
+  }
+
+  .ai-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    opacity: 0.7;
+    cursor: pointer;
+  }
+
+  .toggle-dot {
+    width: 28px;
+    height: 14px;
+    background: var(--teal);
+    border-radius: 7px;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .toggle-dot::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 16px;
+    transition: left 0.2s;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 200px;
+    background: #0f0c09;
+    border-right: 1px solid #3a2e20;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .sidebar-section {
+    padding: 12px;
+    border-bottom: 1px solid #3a2e20;
+  }
+
+  .sidebar-title {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+
+  .sidebar-item:hover { background: #1a1410; opacity: 1; }
+  .sidebar-item.active { background: #1a1410; opacity: 1; color: var(--gold); }
+
+  .sidebar-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .add-track-btn {
+    margin: 12px;
+    padding: 8px;
+    border: 1px dashed #3a2e20;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  .add-track-btn:hover { opacity: 1; border-color: var(--gold); color: var(--gold); }
+
+  /* DAW AREA */
+  .daw {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #111009;
+  }
+
+  /* RULER */
+  .ruler {
+    height: var(--ruler-h);
+    background: #0f0c09;
+    border-bottom: 2px solid var(--gold);
+    display: flex;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .ruler-corner {
+    width: var(--header-w);
+    flex-shrink: 0;
+    border-right: 1px solid #3a2e20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    gap: 6px;
+  }
+
+  .ruler-chapters {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .chapter-marker {
+    flex-shrink: 0;
+    border-right: 1px solid #3a2e20;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 6px 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .chapter-marker:hover { background: #1a1410; }
+
+  .chapter-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    color: var(--paper);
+    opacity: 0.8;
+    white-space: nowrap;
+  }
+
+  .chapter-status {
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    margin-top: 4px;
+  }
+
+  .ch-draft { background: #3a6bc4; }
+  .ch-revised { background: var(--gold); }
+  .ch-final { background: var(--green); }
+  .ch-planned { background: #5a5a3a; }
+  .ch-none { background: #2a2a2a; }
+
+  /* TRACKS AREA */
+  .tracks-area {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .track-row {
+    display: flex;
+    height: var(--track-h);
+    border-bottom: 1px solid #1a1410;
+    transition: background 0.15s;
+  }
+
+  .track-row:hover { background: rgba(255,255,255,0.01); }
+
+  .track-header {
+    width: var(--header-w);
+    flex-shrink: 0;
+    border-right: 1px solid #3a2e20;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 8px;
+    background: #0f0c09;
+  }
+
+  .track-color-bar {
+    width: 3px;
+    height: 32px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .track-info { flex: 1; min-width: 0; }
+
+  .track-name {
+    font-size: 10px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--paper);
+  }
+
+  .track-type {
+    font-size: 8px;
+    opacity: 0.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .track-controls {
+    display: flex;
+    gap: 4px;
+  }
+
+  .track-btn {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    border: 1px solid #3a2e20;
+    background: transparent;
+    color: var(--paper);
+    font-size: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+    transition: all 0.15s;
+  }
+
+  .track-btn:hover { opacity: 1; border-color: var(--gold); }
+
+  /* TRACK CONTENT */
+  .track-content {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  /* BLOCKS */
+  .block {
+    position: absolute;
+    height: 36px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: filter 0.15s, transform 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    top: 8px;
+  }
+
+  .block:hover {
+    filter: brightness(1.2);
+    transform: scaleY(1.05);
+    z-index: 10;
+  }
+
+  .block.selected {
+    outline: 2px solid var(--gold);
+    outline-offset: 1px;
+  }
+
+  .block-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+
+  /* TENSION TRACK */
+  .tension-track .track-content {
+    background: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 119px,
+      #1a1410 119px,
+      #1a1410 120px
+    );
+  }
+
+  .tension-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* CONNECTIONS PANEL */
+  .connections-panel {
+    width: 240px;
+    background: #0f0c09;
+    border-left: 1px solid #3a2e20;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+
+  .panel-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid #3a2e20;
+  }
+
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .panel-subtitle {
+    font-size: 9px;
+    opacity: 0.4;
+    margin-top: 2px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .panel-section {
+    padding: 12px 16px;
+    border-bottom: 1px solid #1a1410;
+  }
+
+  .panel-section-title {
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 8px;
+  }
+
+  .connection-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 9px;
+    margin: 2px;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.15s;
+  }
+
+  .connection-tag:hover { border-color: var(--gold); color: var(--gold); }
+
+  .panel-field {
+    margin-bottom: 8px;
+  }
+
+  .panel-field-label {
+    font-size: 8px;
+    opacity: 0.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .panel-field-value {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    opacity: 0.8;
+    line-height: 1.4;
+  }
+
+  /* MINIMAP */
+  .minimap {
+    height: 40px;
+    background: #0a0807;
+    border-top: 1px solid #3a2e20;
+    display: flex;
+    align-items: center;
+    padding: 0 var(--header-w) 0 calc(var(--header-w) + 0px);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .minimap-track {
+    height: 4px;
+    width: 100%;
+    background: #1a1410;
+    position: relative;
+    border-radius: 2px;
+    margin: 1px 0;
+  }
+
+  .minimap-block {
+    position: absolute;
+    height: 100%;
+    border-radius: 1px;
+    opacity: 0.6;
+  }
+
+  .minimap-viewport {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    background: rgba(201, 146, 58, 0.1);
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    left: var(--header-w);
+    width: 60%;
+  }
+
+  .minimap-tracks {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 0;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: #0a0807; }
+  ::-webkit-scrollbar-thumb { background: #3a2e20; border-radius: 2px; }
+
+  /* TOOLTIP */
+  .tooltip {
+    position: fixed;
+    background: #0f0c09;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 10px;
+    pointer-events: none;
+    z-index: 100;
+    display: none;
+    max-width: 200px;
+  }
+
+  .tooltip.visible { display: block; }
+
+  /* ZOOM CONTROLS */
+  .zoom-controls {
+    position: absolute;
+    bottom: 48px;
+    right: 248px;
+    display: flex;
+    gap: 4px;
+    z-index: 10;
+  }
+
+  .zoom-btn {
+    width: 24px;
+    height: 24px;
+    background: #0f0c09;
+    border: 1px solid #3a2e20;
+    border-radius: 3px;
+    color: var(--paper);
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: all 0.15s;
+  }
+
+  .zoom-btn:hover { opacity: 1; border-color: var(--gold); }
+
+  /* STATUS BAR */
+  .statusbar {
+    height: 24px;
+    background: #0a0807;
+    border-top: 1px solid #1a1410;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+
+  .status-item {
+    font-size: 9px;
+    opacity: 0.4;
+    letter-spacing: 0.06em;
+  }
+
+  .status-item span { color: var(--gold); opacity: 1; }
+
+  /* DROPDOWN OVERLAY */
+  .dropdown-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+  }
+
+  .dropdown-overlay.visible { display: flex; }
+
+  .dropdown-box {
+    background: #0f0c09;
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 20px;
+    width: 280px;
+  }
+
+  .dropdown-box-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--gold);
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .dropdown-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: background 0.15s;
+    margin-bottom: 2px;
+  }
+
+  .dropdown-option:hover { background: #1a1410; color: var(--gold); }
+
+  .dropdown-cancel {
+    margin-top: 12px;
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    border: 1px solid #3a2e20;
+    border-radius: 4px;
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: all 0.2s;
+  }
+
+  .dropdown-cancel:hover { opacity: 1; }
+
+  /* PULSE ANIMATION */
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--rust);
+    animation: pulse 2s infinite;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">InkySwot <span>/ work area</span></div>
+  <div class="project-name">The Renting</div>
+  <div class="topbar-right">
+    <button class="mode-btn" onclick="alert('Switch to Library mode')">Library</button>
+    <button class="mode-btn active">Work Area</button>
+    <div class="ai-toggle">
+      <div class="toggle-dot"></div>
+      AI On
+    </div>
+    <div class="live-dot"></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Tracks</div>
+      <div class="sidebar-item active" onclick="highlight(this)">
+        <div class="sidebar-dot" style="background:#c4472a"></div> Margaret (Ghost)
+      </div>
+      <div class="sidebar-item" onclick="highlight(this)">
+        <div class="sidebar-dot" style="background:#3a7bc4"></div> Eleanor (Protagonist)
+      </div>
+      <div class="sidebar-item" onclick="highlight(this)">
+        <div class="sidebar-dot" style="background:#2a6b6b"></div> Thornfield House
+      </div>
+      <div class="sidebar-item" onclick="highlight(this)">
+        <div class="sidebar-dot" style="background:#5c3d7a"></div> Main Plot
+      </div>
+      <div class="sidebar-item" onclick="highlight(this)">
+        <div class="sidebar-dot" style="background:#c9923a"></div> The Affair (Subplot)
+      </div>
+      <div class="sidebar-item" onclick="highlight(this)">
+        <div class="sidebar-dot" style="background:#2d6b3a"></div> Key Events
+      </div>
+      <div class="sidebar-item" onclick="highlight(this)">
+        <div class="sidebar-dot" style="background:#8a5a3a"></div> Tension
+      </div>
+    </div>
+    <button class="add-track-btn" onclick="showDropdown()">+ Add Track</button>
+    <div class="sidebar-section" style="margin-top:auto">
+      <div class="sidebar-title">Views</div>
+      <div class="sidebar-item" onclick="highlight(this)">Full Story</div>
+      <div class="sidebar-item" onclick="highlight(this)">By Character</div>
+      <div class="sidebar-item" onclick="highlight(this)">By Chapter</div>
+      <div class="sidebar-item" onclick="highlight(this)">Print View</div>
+    </div>
+  </div>
+
+  <!-- DAW -->
+  <div class="daw">
+
+    <!-- RULER -->
+    <div class="ruler">
+      <div class="ruler-corner">Timeline</div>
+      <div class="ruler-chapters" id="rulerChapters"></div>
+    </div>
+
+    <!-- TRACKS -->
+    <div class="tracks-area" id="tracksArea"></div>
+
+    <!-- MINIMAP -->
+    <div class="minimap">
+      <div style="width:var(--header-w); flex-shrink:0; border-right:1px solid #3a2e20; height:100%; display:flex; align-items:center; justify-content:center; font-size:8px; opacity:0.3; letter-spacing:0.1em;">OVERVIEW</div>
+      <div class="minimap-tracks" id="minimap"></div>
+      <div class="minimap-viewport"></div>
+    </div>
+
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <div class="status-item">Project: <span>The Renting</span></div>
+      <div class="status-item">Chapters: <span>18</span></div>
+      <div class="status-item">Tracks: <span>7</span></div>
+      <div class="status-item">Words: <span>62,400</span></div>
+      <div class="status-item">Status: <span>Draft</span></div>
+    </div>
+
+  </div>
+
+  <!-- CONNECTIONS PANEL -->
+  <div class="connections-panel">
+    <div class="panel-header">
+      <div class="panel-title">Margaret</div>
+      <div class="panel-subtitle">Character · Ghost · Antagonist</div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">Details</div>
+      <div class="panel-field">
+        <div class="panel-field-label">Age at death</div>
+        <div class="panel-field-value">34</div>
+      </div>
+      <div class="panel-field">
+        <div class="panel-field-label">Period</div>
+        <div class="panel-field-value">1923 · Georgian England</div>
+      </div>
+      <div class="panel-field">
+        <div class="panel-field-label">Motivation</div>
+        <div class="panel-field-value">Unresolved betrayal. She will not leave until the truth is spoken aloud.</div>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">Relationships</div>
+      <span class="connection-tag" style="background:rgba(196,71,42,0.15)">
+        <div class="sidebar-dot" style="background:#c4472a; width:6px; height:6px;"></div>
+        Eleanor
+      </span>
+      <span class="connection-tag" style="background:rgba(58,123,196,0.15)">
+        <div class="sidebar-dot" style="background:#3a7bc4; width:6px; height:6px;"></div>
+        Henry (Husband)
+      </span>
+      <span class="connection-tag" style="background:rgba(92,61,122,0.15)">
+        <div class="sidebar-dot" style="background:#5c3d7a; width:6px; height:6px;"></div>
+        The Lover
+      </span>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">Locations</div>
+      <span class="connection-tag" style="background:rgba(42,107,107,0.15)">
+        Thornfield House
+      </span>
+      <span class="connection-tag" style="background:rgba(42,107,107,0.15)">
+        The East Wing
+      </span>
+      <span class="connection-tag" style="background:rgba(42,107,107,0.15)">
+        The Garden
+      </span>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">Objects</div>
+      <span class="connection-tag">Locket (Gold)</span>
+      <span class="connection-tag">The Portrait</span>
+      <span class="connection-tag">Diary (1923)</span>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">Appears in chapters</div>
+      <span class="connection-tag">Ch. 3</span>
+      <span class="connection-tag">Ch. 5</span>
+      <span class="connection-tag">Ch. 8</span>
+      <span class="connection-tag">Ch. 11</span>
+      <span class="connection-tag">Ch. 14</span>
+      <span class="connection-tag">Ch. 18</span>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-section-title">AI Tools</div>
+      <button onclick="alert('Auto-fill would suggest content based on existing entries')" style="width:100%; margin-bottom:6px; padding:6px; background:rgba(201,146,58,0.1); border:1px solid rgba(201,146,58,0.3); border-radius:3px; color:var(--gold); font-family:JetBrains Mono,monospace; font-size:9px; cursor:pointer; letter-spacing:0.06em;">✦ AUTO-FILL</button>
+      <button onclick="alert('AI image prompt generator')" style="width:100%; margin-bottom:6px; padding:6px; background:rgba(42,107,107,0.1); border:1px solid rgba(42,107,107,0.3); border-radius:3px; color:#5ababa; font-family:JetBrains Mono,monospace; font-size:9px; cursor:pointer; letter-spacing:0.06em;">⬡ IMAGE PROMPT</button>
+      <button onclick="alert('Check & Improve text')" style="width:100%; padding:6px; background:rgba(92,61,122,0.1); border:1px solid rgba(92,61,122,0.3); border-radius:3px; color:#9a7aba; font-family:JetBrains Mono,monospace; font-size:9px; cursor:pointer; letter-spacing:0.06em;">✎ CHECK & IMPROVE</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ZOOM CONTROLS -->
+<div class="zoom-controls">
+  <button class="zoom-btn">−</button>
+  <button class="zoom-btn">+</button>
+</div>
+
+<!-- ADD TRACK DROPDOWN -->
+<div class="dropdown-overlay" id="dropdownOverlay">
+  <div class="dropdown-box">
+    <div class="dropdown-box-title">Add Track</div>
+    <div class="dropdown-option" onclick="closeDropdown()">
+      <div class="sidebar-dot" style="background:#c4472a; width:10px; height:10px; border-radius:50%;"></div>
+      Character Track
+    </div>
+    <div class="dropdown-option" onclick="closeDropdown()">
+      <div class="sidebar-dot" style="background:#5c3d7a; width:10px; height:10px; border-radius:50%;"></div>
+      Plot Track
+    </div>
+    <div class="dropdown-option" onclick="closeDropdown()">
+      <div class="sidebar-dot" style="background:#c9923a; width:10px; height:10px; border-radius:50%;"></div>
+      Subplot Track
+    </div>
+    <div class="dropdown-option" onclick="closeDropdown()">
+      <div class="sidebar-dot" style="background:#2d6b3a; width:10px; height:10px; border-radius:50%;"></div>
+      Event Track
+    </div>
+    <div class="dropdown-option" onclick="closeDropdown()">
+      <div class="sidebar-dot" style="background:#2a6b6b; width:10px; height:10px; border-radius:50%;"></div>
+      Location Track
+    </div>
+    <div class="dropdown-option" onclick="closeDropdown()">
+      <div class="sidebar-dot" style="background:#3a4a5c; width:10px; height:10px; border-radius:50%;"></div>
+      Object Track
+    </div>
+    <div class="dropdown-option" onclick="closeDropdown()">
+      <div class="sidebar-dot" style="background:#7a4a2a; width:10px; height:10px; border-radius:50%;"></div>
+      Theme Track
+    </div>
+    <div class="dropdown-option" onclick="closeDropdown()">
+      <div class="sidebar-dot" style="background:#8a5a3a; width:10px; height:10px; border-radius:50%;"></div>
+      Tension Track
+    </div>
+    <div class="dropdown-option" onclick="closeDropdown()">
+      <div class="sidebar-dot" style="background:#4a4a4a; width:10px; height:10px; border-radius:50%;"></div>
+      Notes Track
+    </div>
+    <button class="dropdown-cancel" onclick="closeDropdown()">Cancel</button>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// CHAPTER DATA
+const chapters = [
+  { label: 'Prologue', width: 80, status: 'ch-final' },
+  { label: 'Ch. 1', width: 120, status: 'ch-final' },
+  { label: 'Ch. 2', width: 120, status: 'ch-final' },
+  { label: 'Ch. 3', width: 120, status: 'ch-revised' },
+  { label: 'Ch. 4', width: 120, status: 'ch-revised' },
+  { label: 'Ch. 5', width: 120, status: 'ch-draft' },
+  { label: 'Ch. 6', width: 120, status: 'ch-draft' },
+  { label: 'Ch. 7', width: 120, status: 'ch-draft' },
+  { label: 'Ch. 8', width: 120, status: 'ch-draft' },
+  { label: 'Ch. 9', width: 120, status: 'ch-planned' },
+  { label: 'Ch. 10', width: 120, status: 'ch-planned' },
+  { label: 'Ch. 11', width: 120, status: 'ch-planned' },
+  { label: 'Ch. 12', width: 120, status: 'ch-none' },
+  { label: 'Ch. 13', width: 120, status: 'ch-none' },
+  { label: 'Ch. 14', width: 120, status: 'ch-none' },
+  { label: 'Ch. 15', width: 120, status: 'ch-none' },
+  { label: 'Ch. 16', width: 120, status: 'ch-none' },
+  { label: 'Ch. 17', width: 120, status: 'ch-none' },
+  { label: 'Epilogue', width: 100, status: 'ch-none' },
+];
+
+// Calculate positions
+let positions = [];
+let x = 0;
+chapters.forEach((ch, i) => {
+  positions.push(x);
+  x += ch.width;
+});
+const totalWidth = x;
+
+// TRACK DATA
+const tracks = [
+  {
+    name: 'Margaret', type: 'Character', color: '#c4472a',
+    blocks: [
+      { start: 2, end: 3, label: 'First appearance', color: '#c4472a' },
+      { start: 4, end: 5, label: 'The warning', color: '#c4472a' },
+      { start: 7, end: 9, label: 'Confrontation', color: '#c4472a' },
+      { start: 10, end: 11, label: 'The revelation', color: '#a03020' },
+      { start: 13, end: 14, label: 'Possession attempt', color: '#c4472a' },
+      { start: 17, end: 19, label: 'Resolution', color: '#e05030' },
+    ]
+  },
+  {
+    name: 'Eleanor', type: 'Character', color: '#3a7bc4',
+    blocks: [
+      { start: 0, end: 2, label: 'Arrival', color: '#3a7bc4' },
+      { start: 2, end: 6, label: 'Settling in', color: '#3a7bc4' },
+      { start: 5, end: 8, label: 'Growing unease', color: '#2a5a9a' },
+      { start: 8, end: 12, label: 'Investigation', color: '#3a7bc4' },
+      { start: 12, end: 15, label: 'The affair discovered', color: '#2a5a9a' },
+      { start: 15, end: 19, label: 'Reckoning', color: '#4a8ad4' },
+    ]
+  },
+  {
+    name: 'Thornfield House', type: 'Location', color: '#2a6b6b',
+    blocks: [
+      { start: 0, end: 19, label: 'Thornfield House', color: '#2a6b6b' },
+    ]
+  },
+  {
+    name: 'Main Plot', type: 'Plot', color: '#5c3d7a',
+    blocks: [
+      { start: 0, end: 4, label: 'Act I — Arrival', color: '#5c3d7a' },
+      { start: 4, end: 11, label: 'Act II — Discovery', color: '#4a2a6a' },
+      { start: 11, end: 19, label: 'Act III — Reckoning', color: '#6c4d8a' },
+    ]
+  },
+  {
+    name: 'The Affair', type: 'Subplot', color: '#c9923a',
+    blocks: [
+      { start: 3, end: 5, label: 'Hints', color: '#c9923a' },
+      { start: 7, end: 9, label: 'Letters found', color: '#b07820' },
+      { start: 11, end: 14, label: 'The truth', color: '#c9923a' },
+      { start: 16, end: 18, label: 'Aftermath', color: '#a06820' },
+    ]
+  },
+  {
+    name: 'Key Events', type: 'Events', color: '#2d6b3a',
+    blocks: [
+      { start: 1, end: 2, label: 'Strange sounds begin', color: '#2d6b3a' },
+      { start: 3, end: 4, label: 'Mirror incident', color: '#2d6b3a' },
+      { start: 6, end: 7, label: 'Diary discovered', color: '#2d6b3a' },
+      { start: 9, end: 10, label: 'Henry arrives', color: '#1d5a2a' },
+      { start: 13, end: 14, label: 'The séance', color: '#3d7b4a' },
+      { start: 17, end: 18, label: 'Final confrontation', color: '#2d6b3a' },
+    ]
+  },
+  {
+    name: 'Tension', type: 'Tension', color: '#8a5a3a',
+    blocks: [], // SVG curve
+    isTension: true,
+    points: [0, 20, 30, 45, 35, 55, 65, 70, 60, 75, 80, 72, 85, 78, 88, 90, 95, 85, 70]
+  },
+];
+
+// BUILD RULER
+const rulerEl = document.getElementById('rulerChapters');
+chapters.forEach((ch, i) => {
+  const el = document.createElement('div');
+  el.className = 'chapter-marker';
+  el.style.width = ch.width + 'px';
+  el.innerHTML = `
+    <div class="chapter-label">${ch.label}</div>
+    <div class="chapter-status ${ch.status}"></div>
+  `;
+  el.addEventListener('click', () => {
+    showTooltip(el, `${ch.label} — click to edit`);
+  });
+  rulerEl.appendChild(el);
+});
+
+// BUILD TRACKS
+const tracksArea = document.getElementById('tracksArea');
+tracks.forEach(track => {
+  const row = document.createElement('div');
+  row.className = 'track-row' + (track.isTension ? ' tension-track' : '');
+
+  // Header
+  row.innerHTML = `
+    <div class="track-header">
+      <div class="track-color-bar" style="background:${track.color}"></div>
+      <div class="track-info">
+        <div class="track-name">${track.name}</div>
+        <div class="track-type">${track.type}</div>
+      </div>
+      <div class="track-controls">
+        <button class="track-btn" title="Hide">H</button>
+        <button class="track-btn" title="Lock">L</button>
+      </div>
+    </div>
+    <div class="track-content" style="position:relative; width:${totalWidth}px;">
+    </div>
+  `;
+
+  tracksArea.appendChild(row);
+  const content = row.querySelector('.track-content');
+
+  if (track.isTension) {
+    // Draw SVG tension curve
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'tension-svg');
+    svg.setAttribute('preserveAspectRatio', 'none');
+
+    const pts = track.points;
+    const W = totalWidth;
+    const H = 52;
+
+    let d = '';
+    pts.forEach((p, i) => {
+      const px = (i / (pts.length - 1)) * W;
+      const py = H - (p / 100) * H * 0.8 - H * 0.1;
+      d += (i === 0 ? 'M' : 'L') + `${px},${py} `;
+    });
+
+    // Filled area
+    const fill = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    fill.setAttribute('d', d + `L${W},${H} L0,${H} Z`);
+    fill.setAttribute('fill', 'rgba(138,90,58,0.15)');
+    svg.appendChild(fill);
+
+    // Line
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    line.setAttribute('d', d);
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke', '#8a5a3a');
+    line.setAttribute('stroke-width', '2');
+    svg.appendChild(line);
+
+    // Points
+    pts.forEach((p, i) => {
+      const px = (i / (pts.length - 1)) * W;
+      const py = H - (p / 100) * H * 0.8 - H * 0.1;
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', px);
+      circle.setAttribute('cy', py);
+      circle.setAttribute('r', '4');
+      circle.setAttribute('fill', '#8a5a3a');
+      circle.setAttribute('stroke', '#c4923a');
+      circle.setAttribute('stroke-width', '1');
+      circle.style.cursor = 'pointer';
+      svg.appendChild(circle);
+    });
+
+    content.appendChild(svg);
+  } else {
+    // Draw blocks
+    track.blocks.forEach(block => {
+      const startX = positions[block.start] || 0;
+      const endX = block.end < positions.length ? positions[block.end] : totalWidth;
+      const width = endX - startX - 4;
+
+      const el = document.createElement('div');
+      el.className = 'block';
+      el.style.left = (startX + 2) + 'px';
+      el.style.width = width + 'px';
+      el.style.background = block.color + '33';
+      el.style.borderColor = block.color + '66';
+      el.style.color = block.color;
+      el.innerHTML = `<div class="block-dot"></div>${block.label}`;
+      el.addEventListener('click', function() {
+        document.querySelectorAll('.block').forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+      });
+      content.appendChild(el);
+    });
+  }
+});
+
+// BUILD MINIMAP
+const minimapEl = document.getElementById('minimap');
+tracks.forEach(track => {
+  const row = document.createElement('div');
+  row.className = 'minimap-track';
+  if (!track.isTension) {
+    track.blocks.forEach(block => {
+      const startPct = (positions[block.start] / totalWidth) * 100;
+      const endX = block.end < positions.length ? positions[block.end] : totalWidth;
+      const widthPct = ((endX - positions[block.start]) / totalWidth) * 100;
+      const b = document.createElement('div');
+      b.className = 'minimap-block';
+      b.style.left = startPct + '%';
+      b.style.width = widthPct + '%';
+      b.style.background = track.color;
+      row.appendChild(b);
+    });
+  }
+  minimapEl.appendChild(row);
+});
+
+function showDropdown() {
+  document.getElementById('dropdownOverlay').classList.add('visible');
+}
+
+function closeDropdown() {
+  document.getElementById('dropdownOverlay').classList.remove('visible');
+}
+
+function highlight(el) {
+  el.parentElement.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function showTooltip(el, text) {
+  const tooltip = document.getElementById('tooltip');
+  tooltip.textContent = text;
+  tooltip.classList.add('visible');
+  setTimeout(() => tooltip.classList.remove('visible'), 2000);
+}
+
+document.getElementById('dropdownOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeDropdown();
+});
+</script>
+</body>
+</html>
