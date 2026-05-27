@@ -724,7 +724,50 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   </div>
 </div>
 <!-- END RULES & LORE -->
-
+<!-- PLOT THREADS -->
+<div class="screen" id="screen-plotthreads">
+  <div class="cast-layout">
+    <div class="cast-list">
+      <div class="cast-list-header"><div class="cast-list-title">Plot Threads</div><button class="cast-add-btn" onclick="newPlotThread()">+ Add</button></div>
+      <div class="cast-list-items" id="plotThreadListItems"><div class="cast-empty"><div class="cast-empty-icon">⟁</div><div class="cast-empty-text">No plot threads yet.</div><div class="cast-empty-sub">Every story pulls on a thread.</div></div></div>
+    </div>
+    <div class="cast-detail">
+      <div class="cast-no-selection" id="plotThreadNoSelection"><div class="cast-empty-icon" style="font-size:36px;opacity:0.2;">⟁</div><div class="cast-empty-text" style="margin-top:12px;">Select a thread or add a new one.</div></div>
+      <div class="cast-form" id="plotThreadForm" style="display:none">
+        <div class="cast-form-header"><div class="cast-character-name" id="plotThreadNameDisplay">New Plot Thread</div><button class="cast-delete-btn" onclick="deletePlotThread()">✕</button></div>
+        <div class="field-group"><div class="field-group-title">Identity</div>
+          <div class="field"><div class="field-label">Thread Title</div><div class="field-ai-row"><input type="text" class="field-input" id="pt-title" placeholder="Name this thread..." oninput="savePlotThread();updatePlotThreadName()"/><button class="ai-btn" onclick="aiPlotThreadFill('pt-title','plot thread title',this)">✦ Prompt</button></div></div>
+          <div class="field-row">
+            <div class="field"><div class="field-label">Type</div><select class="field-select" id="pt-type" onchange="savePlotThread()"><option value="">— None —</option><option>Main Plot</option><option>Subplot</option><option>Character Arc</option><option>Mystery</option><option>Romance</option><option>Conflict</option><option>Quest</option><option>Revelation</option><option>Survival</option><option>Redemption</option><option>Revenge</option><option>Other</option></select></div>
+            <div class="field"><div class="field-label">Status</div><select class="field-select" id="pt-status" onchange="savePlotThread()"><option value="">— None —</option><option>Planned</option><option>Active</option><option>Resolved</option><option>Abandoned</option><option>On Hold</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><div class="field-label">Priority</div><select class="field-select" id="pt-priority" onchange="savePlotThread()"><option value="">— None —</option><option>Primary</option><option>Secondary</option><option>Minor</option></select></div>
+            <div class="field"><div class="field-label">POV Character</div><select class="field-select" id="pt-pov" onchange="savePlotThread()"><option value="">— None —</option></select></div>
+          </div>
+        </div>
+        <div class="field-group"><div class="field-group-title">The Thread</div>
+          <div class="field"><div class="field-label">Summary</div><div class="field-ai-row"><textarea class="field-textarea" id="pt-summary" placeholder="What is this thread about?" oninput="savePlotThread()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiPlotThreadFill('pt-summary','plot thread summary',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('pt-summary',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">Opening — Where It Begins</div><div class="field-ai-row"><textarea class="field-textarea" id="pt-opening" placeholder="How does this thread start?" oninput="savePlotThread()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiPlotThreadFill('pt-opening','plot thread opening',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('pt-opening',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">Escalation — How It Develops</div><div class="field-ai-row"><textarea class="field-textarea" id="pt-escalation" placeholder="How does tension build in this thread?" oninput="savePlotThread()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiPlotThreadFill('pt-escalation','plot thread escalation',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('pt-escalation',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">Climax — The Turning Point</div><div class="field-ai-row"><textarea class="field-textarea" id="pt-climax" placeholder="What is the peak of this thread?" oninput="savePlotThread()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiPlotThreadFill('pt-climax','plot thread climax',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('pt-climax',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">Resolution — How It Ends</div><div class="field-ai-row"><textarea class="field-textarea" id="pt-resolution" placeholder="How does this thread resolve?" oninput="savePlotThread()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiPlotThreadFill('pt-resolution','plot thread resolution',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('pt-resolution',this)">⟳ Expand</button></div></div></div>
+        </div>
+        <div class="field-group"><div class="field-group-title">Connections</div>
+          <div class="field"><div class="field-label">Characters Involved</div><div class="tag-field" id="pt-characters-tags"></div><div class="tag-add-row"><select class="tag-add-select" id="pt-characters-select"><option value="">— Add from Cast —</option></select><button class="tag-add-btn" onclick="addPTCharacter()">+ Add</button></div></div>
+          <div class="field"><div class="field-label">Linked Threads</div><div class="tag-field" id="pt-linked-tags"></div><div class="tag-add-row"><select class="tag-add-select" id="pt-linked-select"><option value="">— Link another thread —</option></select><button class="tag-add-btn" onclick="addPTLinked()">+ Add</button></div></div>
+        </div>
+        <div class="field-group"><div class="field-group-title">Stakes & Consequences</div>
+          <div class="field"><div class="field-label">What Is at Stake</div><div class="field-ai-row"><textarea class="field-textarea" id="pt-stakes" placeholder="What does failure or success mean for the story?" oninput="savePlotThread()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiPlotThreadFill('pt-stakes','what is at stake',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('pt-stakes',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">Consequences if Unresolved</div><div class="field-ai-row"><textarea class="field-textarea" id="pt-consequences" placeholder="What happens if this thread is left dangling?" oninput="savePlotThread()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiPlotThreadFill('pt-consequences','consequences if unresolved',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('pt-consequences',this)">⟳ Expand</button></div></div></div>
+        </div>
+        <div class="field-group"><div class="field-group-title">Notes</div><div class="field"><div class="field-ai-row"><textarea class="field-textarea" id="pt-notes" placeholder="Anything else about this thread..." oninput="savePlotThread()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiPlotThreadFill('pt-notes','plot thread notes',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('pt-notes',this)">⟳ Expand</button></div></div></div></div>
+        <div class="save-row"><div class="saved-indicator" id="ptSavedIndicator" style="display:none">✓ Saved</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END PLOT THREADS -->
 </main>
 </div>
 
