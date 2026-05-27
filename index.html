@@ -362,6 +362,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="projects-grid" id="projectsGrid"></div>
   </div>
 </div>
+<!-- END PROJECTS -->
 
 <!-- TRASH -->
 <div class="screen" id="screen-trash">
@@ -371,6 +372,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div id="trashContent"></div>
   </div>
 </div>
+<!-- END TRASH -->
 
 <!-- OVERVIEW -->
 <div class="screen" id="screen-project-overview">
@@ -418,6 +420,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="save-row"><button class="save-btn" onclick="saveProjectHeader()">Save Overview</button><button class="cancel-btn" onclick="showScreen('projects')">Back to Projects</button><div class="saved-indicator" id="savedIndicator">✓ Saved</div></div>
   </div>
 </div>
+<!-- END OVERVIEW -->
 
 <!-- COMING SOON -->
 <div class="screen" id="screen-coming-soon">
@@ -427,6 +430,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="placeholder-text">Check back soon. InkySwot is growing.</div>
   </div>
 </div>
+<!-- END COMING SOON -->
 
 <!-- CHARACTERS -->
 <div class="screen" id="screen-cast">
@@ -467,6 +471,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     </div>
   </div>
 </div>
+<!-- END CHARACTERS -->
 
 <!-- RELATIONSHIPS -->
 <div class="screen" id="screen-relationships">
@@ -495,6 +500,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     </div>
   </div>
 </div>
+<!-- END RELATIONSHIPS -->
 
 <!-- FACTIONS -->
 <div class="screen" id="screen-factions">
@@ -529,6 +535,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     </div>
   </div>
 </div>
+<!-- END FACTIONS -->
 
 <!-- LANGUAGE -->
 <div class="screen" id="screen-language">
@@ -571,7 +578,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
             <div class="field"><div class="field-label">Point of View Style</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-pov" placeholder="First person, third limited, omniscient..." oninput="saveNarrativeVoice()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiNarrFill('lang-pov','point of view style',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-pov',this)">⟳ Expand</button></div></div></div>
             <div class="field"><div class="field-label">Tense</div><select class="field-select" id="lang-tense" onchange="saveNarrativeVoice()"><option value="">— None —</option><option>Past tense</option><option>Present tense</option><option>Mixed</option><option>Other</option></select></div>
             <div class="field"><div class="field-label">Tone & Register</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-register" placeholder="The overall narrative tone..." oninput="saveNarrativeVoice()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiNarrFill('lang-register','narrative tone and register',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-register',this)">⟳ Expand</button></div></div></div>
-            <div class="field"><div class="field-label">Style Notes</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-style" placeholder="Sentence length, prose rhythm, use of metaphor..." oninput="saveNarrativeVoice()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiNarrFill('lang-style','narrative style notes',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-style',this)">⟳ Expand</button></div></div></div>
+            <div class="field"><div class="field-label">Style Notes</div><div class="field-ai-row"><textarea class="field-textarea" id="lang-style" placeholder="Sentence length, prose rhythm..." oninput="saveNarrativeVoice()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiNarrFill('lang-style','narrative style notes',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('lang-style',this)">⟳ Expand</button></div></div></div>
           </div>
           <div class="save-row"><div class="saved-indicator" id="narrVoiceSavedIndicator" style="display:none">✓ Saved</div></div>
         </div>
@@ -579,6 +586,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     </div>
   </div>
 </div>
+<!-- END LANGUAGE -->
 
 <!-- LOCATIONS -->
 <div class="screen" id="screen-locations">
@@ -612,6 +620,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     </div>
   </div>
 </div>
+<!-- END LOCATIONS -->
 
 <!-- BUILDINGS -->
 <div class="screen" id="screen-buildings">
@@ -645,6 +654,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     </div>
   </div>
 </div>
+<!-- END BUILDINGS -->
 
 <!-- OBJECTS & ARTEFACTS -->
 <div class="screen" id="screen-objects">
@@ -676,6 +686,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     </div>
   </div>
 </div>
+<!-- END OBJECTS & ARTEFACTS -->
 
 <!-- RULES & LORE -->
 <div class="screen" id="screen-rules">
@@ -712,6 +723,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="save-row"><button class="save-btn" onclick="saveRules();flashSaved('rulesSavedIndicator')">Save Rules & Lore</button><div class="saved-indicator" id="rulesSavedIndicator">✓ Saved</div></div>
   </div>
 </div>
+<!-- END RULES & LORE -->
 
 </main>
 </div>
