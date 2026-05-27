@@ -329,7 +329,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="sidebar-item sub" id="nav-locations" onclick="showScreen('locations')"><span class="sidebar-icon">·</span> Locations</div>
     <div class="sidebar-item sub" id="nav-buildings" onclick="showScreen('buildings')"><span class="sidebar-icon">·</span> Buildings</div>
     <div class="sidebar-item sub" id="nav-objects" onclick="showScreen('objects')"><span class="sidebar-icon">·</span> Objects & Artefacts</div>
-    <div class="sidebar-item sub" id="nav-rules" onclick="showScreen('coming-soon','Rules & Lore')"><span class="sidebar-icon">·</span> Rules & Lore</div>
+    <div class="sidebar-item sub" id="nav-rules" onclick="showScreen('rules')"><span class="sidebar-icon">·</span> Rules & Lore</div>
 
     <div class="sidebar-group-label"><span class="sidebar-icon">⟁</span> Plot</div>
     <div class="sidebar-item sub" id="nav-plotthreads" onclick="showScreen('coming-soon','Plot Threads')"><span class="sidebar-icon">·</span> Plot Threads</div>
@@ -692,6 +692,60 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
 </main>
 </div>
 
+<!-- RULES & LORE -->
+<div class="screen" id="screen-rules">
+  <div class="project-overview-screen">
+    <div class="screen-title">Rules & Lore</div>
+    <div class="screen-subtitle">The fundamental rules of your story world.</div>
+
+    <div class="field-group">
+      <div class="field-group-title">World Rules</div>
+      <div class="field">
+        <div class="field-label">The Rules</div>
+        <div class="field-ai-row">
+          <textarea class="field-textarea" id="rules-world" placeholder="The fundamental rules of how this world works. Physics, magic, technology, what is possible and what is not." oninput="saveRules()"></textarea>
+          <div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-world','world rules',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('rules-world',this)">⟳ Expand</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Magic & Supernatural Systems</div>
+      <div class="field"><div class="field-label">System Name</div><input type="text" class="field-input" id="rules-magicname" placeholder="What is this system called?" oninput="saveRules()"/></div>
+      <div class="field"><div class="field-label">How It Works</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-magichow" placeholder="The mechanics of this system..." oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-magichow','magic system mechanics',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('rules-magichow',this)">⟳ Expand</button></div></div></div>
+      <div class="field"><div class="field-label">Limitations & Costs</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-magiclimits" placeholder="What are the rules, costs, and constraints?" oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-magiclimits','magic system limitations and costs',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('rules-magiclimits',this)">⟳ Expand</button></div></div></div>
+      <div class="field"><div class="field-label">Who Has Access</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-magicaccess" placeholder="Who can use this system and why?" oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-magicaccess','who has access to this system',this)">✦ Prompt</button></div></div></div>
+      <div class="field"><div class="field-label">Source of Power</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-magicsource" placeholder="Where does this power come from?" oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-magicsource','source of power',this)">✦ Prompt</button></div></div></div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Social & Political Rules</div>
+      <div class="field"><div class="field-label">Power Structure</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-power" placeholder="Who holds power and how?" oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-power','power structure',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('rules-power',this)">⟳ Expand</button></div></div></div>
+      <div class="field"><div class="field-label">Social Hierarchy</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-hierarchy" placeholder="How is society structured?" oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-hierarchy','social hierarchy',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('rules-hierarchy',this)">⟳ Expand</button></div></div></div>
+      <div class="field"><div class="field-label">Laws & Justice</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-laws" placeholder="What are the laws? How is justice administered?" oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-laws','laws and justice',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('rules-laws',this)">⟳ Expand</button></div></div></div>
+      <div class="field"><div class="field-label">Taboos & Forbidden Things</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-taboos" placeholder="What is forbidden, shameful, or unspeakable in this world?" oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-taboos','taboos and forbidden things',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('rules-taboos',this)">⟳ Expand</button></div></div></div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Scientific & Technological Rules</div>
+      <div class="field"><div class="field-label">Technology Level</div><select class="field-select" id="rules-techlevel" onchange="saveRules()"><option value="">— None —</option><option>Stone Age</option><option>Medieval</option><option>Renaissance</option><option>Industrial</option><option>Modern</option><option>Near Future</option><option>Sci-Fi</option><option>Post-Apocalyptic</option><option>Magical</option><option>Mixed</option><option>Other</option></select></div>
+      <div class="field"><div class="field-label">Key Technologies</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-tech" placeholder="What technologies define this world?" oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-tech','key technologies',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('rules-tech',this)">⟳ Expand</button></div></div></div>
+      <div class="field"><div class="field-label">What Doesn't Exist</div><textarea class="field-textarea" id="rules-missing" placeholder="Technologies or things from our world that don't exist here..." oninput="saveRules()"></textarea></div>
+      <div class="field"><div class="field-label">What Is Different From Our World</div><div class="field-ai-row"><textarea class="field-textarea" id="rules-different" placeholder="The key differences between this world and ours..." oninput="saveRules()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiRulesFill('rules-different','what is different from our world',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('rules-different',this)">⟳ Expand</button></div></div></div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-group-title">Notes</div>
+      <div class="field"><textarea class="field-textarea" id="rules-notes" placeholder="Anything else about the rules and lore of this world..." oninput="saveRules()"></textarea></div>
+    </div>
+
+    <div class="save-row">
+      <button class="save-btn" onclick="saveRules(); flashSaved('rulesSavedIndicator')">Save Rules & Lore</button>
+      <div class="saved-indicator" id="rulesSavedIndicator">✓ Saved</div>
+    </div>
+  </div>
+</div>
+
 <!-- NEW PROJECT MODAL -->
 <div class="modal-overlay" id="newProjectModal">
   <div class="modal">
@@ -729,6 +783,7 @@ function showScreen(name,label){
   else if(name==='buildings'){document.getElementById('screen-buildings').classList.add('active');document.getElementById('nav-buildings').classList.add('active');currentBuildingIndex=null;document.getElementById('bldNoSelection').style.display='flex';document.getElementById('bldForm').style.display='none';renderBuildingList();}
   else if(name==='locations'){document.getElementById('screen-locations').classList.add('active');document.getElementById('nav-locations').classList.add('active');currentLocationIndex=null;document.getElementById('locNoSelection').style.display='flex';document.getElementById('locForm').style.display='none';renderLocationList();}
   else if(name==='objects'){document.getElementById('screen-objects').classList.add('active');document.getElementById('nav-objects').classList.add('active');currentObjectIndex=null;document.getElementById('objNoSelection').style.display='flex';document.getElementById('objForm').style.display='none';renderObjectList();}
+  else if(name==='rules'){document.getElementById('screen-rules').classList.add('active');document.getElementById('nav-rules').classList.add('active');loadRules();}
   else if(name==='coming-soon'){document.getElementById('screen-coming-soon').classList.add('active');document.getElementById('placeholderTitle').textContent=(label||'This section')+' is being built.';const navId='nav-'+(label||'').toLowerCase().replace(/[^a-z]/g,'');const navEl=document.getElementById(navId);if(navEl)navEl.classList.add('active');}
 }
 
@@ -861,6 +916,13 @@ function updateBldName(){document.getElementById('bldNameDisplay').textContent=d
 function deleteBuilding(){if(currentBuildingIndex===null)return;if(!confirm('Delete this building? This cannot be undone.'))return;const b=getBuildings();b.splice(currentBuildingIndex,1);saveBuildings(b);currentBuildingIndex=null;document.getElementById('bldNoSelection').style.display='flex';document.getElementById('bldForm').style.display='none';renderBuildingList()}
 function handleBldImageUpload(input,type){if(!input.files||!input.files[0])return;const r=new FileReader();r.onload=e=>{const iconId=type==='image'?'bldImageIcon':'bldFloorplanIcon',labelId=type==='image'?'bldImageLabel':'bldFloorplanLabel';document.getElementById(iconId).textContent='';document.getElementById(iconId).style.backgroundImage=`url(${e.target.result})`;document.getElementById(iconId).style.backgroundSize='cover';document.getElementById(iconId).style.width='100%';document.getElementById(iconId).style.height='80%';document.getElementById(labelId).style.display='none'};r.readAsDataURL(input.files[0])}
 async function aiBldFill(fieldId,fieldName,btn){if(!aiEnabled)return;setBtnLoading(btn);const b=currentBuildingIndex!==null?getBuildings()[currentBuildingIndex]:{},p=currentProject||{};const ctx=`Project: ${p.title||'untitled'}\nGenre: ${p.genre||'unknown'}\nBuilding: ${b.name||'unknown'}\nType: ${b.type||'unknown'}`;try{const s=await callAI(`You are a creative writing assistant in InkySwot. Generate ${fieldName} for this building. Always produce a creative suggestion. Return ONLY plain text.`,`Generate ${fieldName}:\n${ctx}`);if(s){const el=document.getElementById(fieldId);el.value=s;el.style.borderColor='var(--gold)';autoGrow(el);setTimeout(()=>{el.style.borderColor=''},2000);saveBuilding();setBtnUsed(btn)}}catch(e){console.error(e)}btn.disabled=false;if(!btn.classList.contains('used'))btn.innerHTML='✦ Prompt'}
+
+// RULES & LORE
+function getRulesData(){if(!currentProject)return{};return getProjects()[currentProject.index]?.rules||{}}
+function saveRulesData(d){if(!currentProject)return;const p=getProjects();p[currentProject.index].rules=d;saveProjects(p)}
+function loadRules(){const r=getRulesData();['rules-world','rules-magicname','rules-magichow','rules-magiclimits','rules-magicaccess','rules-magicsource','rules-power','rules-hierarchy','rules-laws','rules-taboos','rules-techlevel','rules-tech','rules-missing','rules-different','rules-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=r[id.replace('rules-','')]||''});setTimeout(autoGrowAll,100)}
+function saveRules(){const r={};['rules-world','rules-magicname','rules-magichow','rules-magiclimits','rules-magicaccess','rules-magicsource','rules-power','rules-hierarchy','rules-laws','rules-taboos','rules-techlevel','rules-tech','rules-missing','rules-different','rules-notes'].forEach(id=>{const el=document.getElementById(id);if(el)r[id.replace('rules-','')]=el.value});saveRulesData(r)}
+async function aiRulesFill(fieldId,fieldName,btn){if(!aiEnabled)return;setBtnLoading(btn);const p=currentProject||{},r=getRulesData();const ctx=`Project: ${p.title||'untitled'}\nGenre: ${p.genre||'unknown'}\nOutline: ${p.outline||'none'}\nTech level: ${r.techlevel||'none'}`;try{const s=await callAI(`You are a creative writing assistant in InkySwot. Generate ${fieldName} for this story world. Always produce a creative suggestion. Be specific and inventive. Return ONLY plain text.`,`Generate ${fieldName}:\n${ctx}`);if(s){const el=document.getElementById(fieldId);el.value=s;el.style.borderColor='var(--gold)';autoGrow(el);setTimeout(()=>{el.style.borderColor=''},2000);saveRules();setBtnUsed(btn)}}catch(e){console.error(e)}btn.disabled=false;if(!btn.classList.contains('used'))btn.innerHTML='✦ Prompt'}
 
 // OBJECTS & ARTEFACTS
 const OBJ_SUBCATEGORIES={'Bladed Weapon':['Sword','Dagger','Axe','Polearm','Spear','Machete','Other'],'Firearm':['Pistol','Revolver','Rifle','Shotgun','Sub-machine Gun','Machine Gun','Sniper Rifle','Flintlock','Musket','Other'],'Bow & Projectile':['Longbow','Crossbow','Compound Bow','Recurve Bow','Sling','Siege Weapon','Sci-fi Ranged','Other'],'Armour':['Full Plate','Chain Mail','Leather','Scale','Brigandine','Modern Body Armour','Sci-fi','Magical','Other'],'Shield':['Round','Kite','Tower','Buckler','Targe','Magical','Other'],'Vehicle — Land':['Car','Motorcycle','Bicycle','Horse & Carriage','Cart','Tank','APC','Other'],'Vehicle — Sea':['Sailing Ship','Steamship','Submarine','Yacht','Rowing Boat','Other'],'Vehicle — Air':['Aircraft','Helicopter','Airship','Glider','Other'],'Vehicle — Space':['Spacecraft','Space Station','Shuttle','Other'],'Vehicle — Rail':['Steam Train','Modern Train','Tram','Other'],'Document':['Letter','Map','Contract','Book','Manuscript','Scroll','Certificate','Other'],'Jewellery':['Ring','Necklace','Bracelet','Brooch','Crown','Amulet','Other'],'Clothing':['Uniform','Costume','Armour','Cloak','Hat','Shoes','Other'],'Technology':['Computer','Weapon System','Communication Device','Medical Device','Other'],'Food & Drink':['Food','Drink','Potion','Poison','Other'],'Magical Artefact':['Weapon','Talisman','Book','Crystal','Staff','Other'],'Other':['Other']};
