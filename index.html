@@ -327,7 +327,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="sidebar-group-label"><span class="sidebar-icon">⟁</span> Plot</div>
     <div class="sidebar-item sub" id="nav-plotthreads" onclick="showScreen('plotthreads')"><span class="sidebar-icon">·</span> Plot Threads</div>
     <div class="sidebar-item sub" id="nav-subplots" onclick="showScreen('subplots')"><span class="sidebar-icon">·</span> Subplots</div>
-    <div class="sidebar-item sub" id="nav-themes" onclick="showScreen('coming-soon','Themes & Motifs')"><span class="sidebar-icon">·</span> Themes & Motifs</div>
+    <div class="sidebar-item sub" id="nav-themes" onclick="showScreen('themes')"><span class="sidebar-icon">·</span> Themes & Motifs</div>
     <div class="sidebar-item sub" id="nav-events" onclick="showScreen('coming-soon','Events & Timeline')"><span class="sidebar-icon">·</span> Events & Timeline</div>
     <div class="sidebar-group-label"><span class="sidebar-icon">▣</span> Library</div>
     <div class="sidebar-item sub" id="nav-research" onclick="showScreen('coming-soon','Research & Reference')"><span class="sidebar-icon">·</span> Research & Reference</div>
@@ -756,6 +756,43 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
 </div>
 <!-- END SUBPLOTS -->
 
+<!-- THEMES & MOTIFS -->
+<div class="screen" id="screen-themes">
+  <div class="cast-layout">
+    <div class="cast-list">
+      <div class="cast-list-header"><div class="cast-list-title">Themes & Motifs</div><button class="cast-add-btn" onclick="newTheme()">+ Add</button></div>
+      <div class="cast-list-items" id="themeListItems"><div class="cast-empty"><div class="cast-empty-icon">◈</div><div class="cast-empty-text">No themes yet.</div><div class="cast-empty-sub">Every story says something.</div></div></div>
+    </div>
+    <div class="cast-detail">
+      <div class="cast-no-selection" id="themeNoSelection"><div class="cast-empty-icon" style="font-size:36px;opacity:0.2;">◈</div><div class="cast-empty-text" style="margin-top:12px;">Select a theme or add a new one.</div></div>
+      <div class="cast-form" id="themeForm" style="display:none">
+        <div class="cast-form-header"><div class="cast-character-name" id="themeNameDisplay">New Theme</div><button class="cast-delete-btn" onclick="deleteTheme()">✕</button></div>
+        <div class="field-group"><div class="field-group-title">Identity</div>
+          <div class="field"><div class="field-label">Title</div><div class="field-ai-row"><input type="text" class="field-input" id="th-title" placeholder="Name this theme or motif..." oninput="saveTheme();updateThemeName()"/><button class="ai-btn" onclick="aiThemeFill('th-title','theme title',this)">✦ Prompt</button></div></div>
+          <div class="field-row">
+            <div class="field"><div class="field-label">Type</div><select class="field-select" id="th-type" onchange="saveTheme()"><option value="">— None —</option><option>Theme</option><option>Motif</option><option>Symbol</option><option>Recurring Image</option><option>Recurring Element</option><option>Other</option></select></div>
+            <div class="field"><div class="field-label">Status</div><select class="field-select" id="th-status" onchange="saveTheme()"><option value="">— None —</option><option>Planned</option><option>Active</option><option>Resolved</option><option>Abandoned</option></select></div>
+          </div>
+        </div>
+        <div class="field-group"><div class="field-group-title">The Theme or Motif</div>
+          <div class="field"><div class="field-label">Description</div><div class="field-ai-row"><textarea class="field-textarea" id="th-description" placeholder="What is this theme or motif?" oninput="saveTheme()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiThemeFill('th-description','theme description',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('th-description',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">How It Manifests</div><div class="field-ai-row"><textarea class="field-textarea" id="th-manifests" placeholder="Where and how does it appear in the story?" oninput="saveTheme()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiThemeFill('th-manifests','how this theme manifests',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('th-manifests',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">First Appearance</div><input type="text" class="field-input" id="th-firstappearance" placeholder="Chapter or scene where it first appears..." oninput="saveTheme()"/></div>
+          <div class="field"><div class="field-label">Development</div><div class="field-ai-row"><textarea class="field-textarea" id="th-development" placeholder="How does it grow or change across the story?" oninput="saveTheme()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiThemeFill('th-development','how this theme develops',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('th-development',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">Resolution</div><div class="field-ai-row"><textarea class="field-textarea" id="th-resolution" placeholder="How or whether it resolves..." oninput="saveTheme()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiThemeFill('th-resolution','theme resolution',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('th-resolution',this)">⟳ Expand</button></div></div></div>
+        </div>
+        <div class="field-group"><div class="field-group-title">Connections</div>
+          <div class="field"><div class="field-label">Characters</div><div class="tag-field" id="th-characters-tags"></div><div class="tag-add-row"><select class="tag-add-select" id="th-characters-select"><option value="">— Add from Cast —</option></select><button class="tag-add-btn" onclick="addTHCharacter()">+ Add</button></div></div>
+          <div class="field"><div class="field-label">Linked Plot Threads</div><div class="tag-field" id="th-threads-tags"></div><div class="tag-add-row"><select class="tag-add-select" id="th-threads-select"><option value="">— Add from Plot Threads —</option></select><button class="tag-add-btn" onclick="addTHThread()">+ Add</button></div></div>
+        </div>
+        <div class="field-group"><div class="field-group-title">Notes</div><div class="field"><div class="field-ai-row"><textarea class="field-textarea" id="th-notes" placeholder="Anything else about this theme or motif..." oninput="saveTheme()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiThemeFill('th-notes','theme notes',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('th-notes',this)">⟳ Expand</button></div></div></div></div>
+        <div class="save-row"><div class="saved-indicator" id="thSavedIndicator" style="display:none">✓ Saved</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END THEMES & MOTIFS -->
+
 <!-- PLOT THREADS -->
 <div class="screen" id="screen-plotthreads">
   <div class="cast-layout">
@@ -840,6 +877,7 @@ function showScreen(name,label){
   else if(name==='buildings'){document.getElementById('screen-buildings').classList.add('active');document.getElementById('nav-buildings').classList.add('active');currentBuildingIndex=null;document.getElementById('bldNoSelection').style.display='flex';document.getElementById('bldForm').style.display='none';renderBuildingList();}
   else if(name==='locations'){document.getElementById('screen-locations').classList.add('active');document.getElementById('nav-locations').classList.add('active');currentLocationIndex=null;document.getElementById('locNoSelection').style.display='flex';document.getElementById('locForm').style.display='none';renderLocationList();}
   else if(name==='objects'){document.getElementById('screen-objects').classList.add('active');document.getElementById('nav-objects').classList.add('active');currentObjectIndex=null;document.getElementById('objNoSelection').style.display='flex';document.getElementById('objForm').style.display='none';renderObjectList();}
+  else if(name==='themes'){document.getElementById('screen-themes').classList.add('active');document.getElementById('nav-themes').classList.add('active');currentThemeIndex=null;document.getElementById('themeNoSelection').style.display='flex';document.getElementById('themeForm').style.display='none';renderThemeList();}
   else if(name==='subplots'){document.getElementById('screen-subplots').classList.add('active');document.getElementById('nav-subplots').classList.add('active');currentSubplotIndex=null;document.getElementById('subplotNoSelection').style.display='flex';document.getElementById('subplotForm').style.display='none';renderSubplotList();}
   else if(name==='plotthreads'){document.getElementById('screen-plotthreads').classList.add('active');document.getElementById('nav-plotthreads').classList.add('active');currentPlotThreadIndex=null;document.getElementById('plotThreadNoSelection').style.display='flex';document.getElementById('plotThreadForm').style.display='none';renderPlotThreadList();}
   else if(name==='rules'){document.getElementById('screen-rules').classList.add('active');document.getElementById('nav-rules').classList.add('active');loadRules();}
@@ -1011,6 +1049,24 @@ document.addEventListener('DOMContentLoaded',function(){document.querySelectorAl
 
 // AI EXPAND
 async function aiExpand(fieldId,btn){if(!aiEnabled)return;const el=document.getElementById(fieldId);if(!el||!el.value.trim())return;setBtnLoading(btn);const p=currentProject||{};try{const s=await callAI(`You are a creative writing assistant in InkySwot. Expand and develop this content. Keep the writer's voice. Do not rewrite from scratch. Return ONLY plain text.`,`Project: ${p.title||'untitled'}\nGenre: ${p.genre||'unknown'}\n\nContent to expand:\n${el.value.trim()}`);if(s){el.value=s;el.dispatchEvent(new Event('input',{bubbles:true}));autoGrow(el);el.style.borderColor='var(--gold)';setTimeout(()=>{el.style.borderColor=''},2000);setBtnUsed(btn)}}catch(e){console.error(e)}btn.disabled=false;if(!btn.classList.contains('used'))btn.innerHTML='⟳ Expand'}
+
+// THEMES & MOTIFS
+let currentThemeIndex=null;
+function getThemes(){if(!currentProject)return[];return getProjects()[currentProject.index]?.themes||[]}
+function saveThemes(t){if(!currentProject)return;const p=getProjects();p[currentProject.index].themes=t;saveProjects(p)}
+function renderThemeList(){const t=getThemes(),el=document.getElementById('themeListItems');if(t.length===0){el.innerHTML=`<div class="cast-empty"><div class="cast-empty-icon">◈</div><div class="cast-empty-text">No themes yet.</div><div class="cast-empty-sub">Every story says something.</div></div>`;return}el.innerHTML=t.map((th,i)=>`<div class="cast-list-item ${i===currentThemeIndex?'active':''}" onclick="selectTheme(${i})"><div class="cast-list-item-name">${th.title||'Untitled Theme'}</div><div class="cast-list-item-role">${[th.type,th.status].filter(Boolean).join(' · ')||'No type set'}</div></div>`).join('')}
+function populateTHCharacterSelect(){const chars=getCharacters(),th=currentThemeIndex!==null?getThemes()[currentThemeIndex]:null,existing=th?(th.characters||[]):[];document.getElementById('th-characters-select').innerHTML='<option value="">— Add from Cast —</option>'+chars.filter(c=>c.name&&!existing.includes(c.name)).map(c=>`<option value="${c.name}">${c.name}</option>`).join('')}
+function populateTHThreadSelect(){const threads=getPlotThreads(),th=currentThemeIndex!==null?getThemes()[currentThemeIndex]:null,existing=th?(th.threads||[]):[];document.getElementById('th-threads-select').innerHTML='<option value="">— Add from Plot Threads —</option>'+threads.filter(t=>t.title&&!existing.includes(t.title)).map(t=>`<option value="${t.title}">${t.title}</option>`).join('')}
+function selectTheme(i){currentThemeIndex=i;const th=getThemes()[i];if(!th)return;renderThemeList();document.getElementById('themeNoSelection').style.display='none';document.getElementById('themeForm').style.display='block';document.getElementById('themeNameDisplay').textContent=th.title||'New Theme';['th-title','th-type','th-status','th-description','th-manifests','th-firstappearance','th-development','th-resolution','th-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=th[id.replace('th-','')]||''});renderTagPills('th-characters-tags',th.characters||[],'removeTHCharacter');renderTagPills('th-threads-tags',th.threads||[],'removeTHThread');populateTHCharacterSelect();populateTHThreadSelect();document.querySelectorAll('#themeForm .ai-btn:not(.expand-btn)').forEach(b=>{b.classList.remove('used');b.innerHTML='✦ Prompt'});document.querySelectorAll('#themeForm .expand-btn').forEach(b=>{b.classList.remove('used');b.innerHTML='⟳ Expand'});setTimeout(autoGrowAll,100)}
+function newTheme(){const t=getThemes();t.push({title:'',type:'',status:'',description:'',manifests:'',firstappearance:'',development:'',resolution:'',notes:'',characters:[],threads:[]});saveThemes(t);currentThemeIndex=t.length-1;renderThemeList();selectTheme(currentThemeIndex);document.getElementById('th-title').focus()}
+function saveTheme(){if(currentThemeIndex===null)return;const t=getThemes(),ex=t[currentThemeIndex]||{};t[currentThemeIndex]={title:document.getElementById('th-title').value,type:document.getElementById('th-type').value,status:document.getElementById('th-status').value,description:document.getElementById('th-description').value,manifests:document.getElementById('th-manifests').value,firstappearance:document.getElementById('th-firstappearance').value,development:document.getElementById('th-development').value,resolution:document.getElementById('th-resolution').value,notes:document.getElementById('th-notes').value,characters:ex.characters||[],threads:ex.threads||[]};saveThemes(t);renderThemeList();flashSaved('thSavedIndicator')}
+function updateThemeName(){document.getElementById('themeNameDisplay').textContent=document.getElementById('th-title').value||'New Theme'}
+function addTHCharacter(){const sel=document.getElementById('th-characters-select'),val=sel.value;if(!val||currentThemeIndex===null)return;const t=getThemes();if(!t[currentThemeIndex].characters)t[currentThemeIndex].characters=[];if(!t[currentThemeIndex].characters.includes(val)){t[currentThemeIndex].characters.push(val);saveThemes(t);renderTagPills('th-characters-tags',t[currentThemeIndex].characters,'removeTHCharacter');populateTHCharacterSelect();flashSaved('thSavedIndicator')}sel.value=''}
+function removeTHCharacter(i){if(currentThemeIndex===null)return;const t=getThemes();t[currentThemeIndex].characters.splice(i,1);saveThemes(t);renderTagPills('th-characters-tags',t[currentThemeIndex].characters,'removeTHCharacter');populateTHCharacterSelect();flashSaved('thSavedIndicator')}
+function addTHThread(){const sel=document.getElementById('th-threads-select'),val=sel.value;if(!val||currentThemeIndex===null)return;const t=getThemes();if(!t[currentThemeIndex].threads)t[currentThemeIndex].threads=[];if(!t[currentThemeIndex].threads.includes(val)){t[currentThemeIndex].threads.push(val);saveThemes(t);renderTagPills('th-threads-tags',t[currentThemeIndex].threads,'removeTHThread');populateTHThreadSelect();flashSaved('thSavedIndicator')}sel.value=''}
+function removeTHThread(i){if(currentThemeIndex===null)return;const t=getThemes();t[currentThemeIndex].threads.splice(i,1);saveThemes(t);renderTagPills('th-threads-tags',t[currentThemeIndex].threads,'removeTHThread');populateTHThreadSelect();flashSaved('thSavedIndicator')}
+function deleteTheme(){if(currentThemeIndex===null)return;if(!confirm('Delete this theme?'))return;const t=getThemes();t.splice(currentThemeIndex,1);saveThemes(t);currentThemeIndex=null;document.getElementById('themeNoSelection').style.display='flex';document.getElementById('themeForm').style.display='none';renderThemeList()}
+async function aiThemeFill(fieldId,fieldName,btn){if(!aiEnabled)return;setBtnLoading(btn);const th=currentThemeIndex!==null?getThemes()[currentThemeIndex]:{},p=currentProject||{};const ctx=`Project: ${p.title||'untitled'}\nGenre: ${p.genre||'unknown'}\nOutline: ${p.outline||'none'}\nTheme: ${th.title||'unknown'}\nType: ${th.type||'unknown'}`;try{const s=await callAI(`You are a creative writing assistant in InkySwot. Generate ${fieldName}. Return ONLY plain text.`,`Generate ${fieldName}:\n${ctx}`);if(s){const el=document.getElementById(fieldId);el.value=s;el.style.borderColor='var(--gold)';autoGrow(el);setTimeout(()=>{el.style.borderColor=''},2000);saveTheme();setBtnUsed(btn)}}catch(e){console.error(e)}btn.disabled=false;if(!btn.classList.contains('used'))btn.innerHTML='✦ Prompt'}
 
 // SUBPLOTS
 let currentSubplotIndex=null;
