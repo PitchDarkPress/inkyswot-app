@@ -419,6 +419,45 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   </div>
 </div>
 
+<!-- EVENTS & TIMELINE -->
+<div class="screen" id="screen-events">
+  <div class="cast-layout">
+    <div class="cast-list">
+      <div class="cast-list-header"><div class="cast-list-title">Events & Timeline</div><button class="cast-add-btn" onclick="newEvent()">+ Add</button></div>
+      <div class="cast-list-items" id="eventListItems"><div class="cast-empty"><div class="cast-empty-icon">◎</div><div class="cast-empty-text">No events yet.</div><div class="cast-empty-sub">Every story turns on its moments.</div></div></div>
+    </div>
+    <div class="cast-detail">
+      <div class="cast-no-selection" id="eventNoSelection"><div class="cast-empty-icon" style="font-size:36px;opacity:0.2;">◎</div><div class="cast-empty-text" style="margin-top:12px;">Select an event or add a new one.</div></div>
+      <div class="cast-form" id="eventForm" style="display:none">
+        <div class="cast-form-header"><div class="cast-character-name" id="eventNameDisplay">New Event</div><button class="cast-delete-btn" onclick="deleteEvent()">✕</button></div>
+        <div class="field-group"><div class="field-group-title">Identity</div>
+          <div class="field"><div class="field-label">Event Title</div><div class="field-ai-row"><input type="text" class="field-input" id="ev-title" placeholder="Name this event..." oninput="saveEvent();updateEventName()"/><button class="ai-btn" onclick="aiEventFill('ev-title','event title',this)">✦ Prompt</button></div></div>
+          <div class="field-row">
+            <div class="field"><div class="field-label">Type</div><select class="field-select" id="ev-type" onchange="saveEvent()"><option value="">— None —</option><option>Story Event</option><option>Turning Point</option><option>Revelation</option><option>Climax</option><option>Character Event</option><option>Historical Event</option><option>Background Event</option><option>Other</option></select></div>
+            <div class="field"><div class="field-label">Chapter</div><input type="text" class="field-input" id="ev-chapter" placeholder="Ch. 1 / Before story..." oninput="saveEvent()"/></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><div class="field-label">Story Date / Time</div><input type="text" class="field-input" id="ev-storydate" placeholder="When in the story world..." oninput="saveEvent()"/></div>
+            <div class="field"><div class="field-label">Real Date</div><input type="text" class="field-input" id="ev-realdate" placeholder="Historical date if relevant..." oninput="saveEvent()"/></div>
+          </div>
+        </div>
+        <div class="field-group"><div class="field-group-title">The Event</div>
+          <div class="field"><div class="field-label">What Happens</div><div class="field-ai-row"><textarea class="field-textarea" id="ev-what" placeholder="What happens in this event?" oninput="saveEvent()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiEventFill('ev-what','what happens in this event',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('ev-what',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">Significance</div><div class="field-ai-row"><textarea class="field-textarea" id="ev-significance" placeholder="Why does this event matter to the story?" oninput="saveEvent()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiEventFill('ev-significance','significance of this event',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('ev-significance',this)">⟳ Expand</button></div></div></div>
+          <div class="field"><div class="field-label">Consequences</div><div class="field-ai-row"><textarea class="field-textarea" id="ev-consequences" placeholder="What does this event set in motion?" oninput="saveEvent()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiEventFill('ev-consequences','consequences of this event',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('ev-consequences',this)">⟳ Expand</button></div></div></div>
+        </div>
+        <div class="field-group"><div class="field-group-title">Connections</div>
+          <div class="field"><div class="field-label">Characters Present</div><div class="tag-field" id="ev-characters-tags"></div><div class="tag-add-row"><select class="tag-add-select" id="ev-characters-select"><option value="">— Add from Cast —</option></select><button class="tag-add-btn" onclick="addEVCharacter()">+ Add</button></div></div>
+          <div class="field"><div class="field-label">Location</div><select class="field-select" id="ev-location" onchange="saveEvent()"><option value="">— None —</option></select></div>
+        </div>
+        <div class="field-group"><div class="field-group-title">Notes</div><div class="field"><div class="field-ai-row"><textarea class="field-textarea" id="ev-notes" placeholder="Anything else about this event..." oninput="saveEvent()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiEventFill('ev-notes','event notes',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('ev-notes',this)">⟳ Expand</button></div></div></div></div>
+        <div class="save-row"><div class="saved-indicator" id="evSavedIndicator" style="display:none">✓ Saved</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END EVENTS & TIMELINE -->
+
 <!-- COMING SOON -->
 <div class="screen" id="screen-coming-soon">
   <div class="placeholder-screen">
