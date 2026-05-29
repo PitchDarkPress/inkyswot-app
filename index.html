@@ -335,7 +335,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="sidebar-item sub" id="nav-sandbox" onclick="showScreen('coming-soon','Sandbox')"><span class="sidebar-icon">·</span> Sandbox</div>
     <div class="sidebar-group-label"><span class="sidebar-icon">≡</span> Chapters</div>
     <div class="sidebar-item sub" id="nav-chapters" onclick="showScreen('chapters')"><span class="sidebar-icon">·</span> Chapters</div>
-    <div class="sidebar-item sub" id="nav-treatment" onclick="showScreen('coming-soon','The Treatment')"><span class="sidebar-icon">·</span> The Treatment</div>
+    <div class="sidebar-item sub" id="nav-treatment" onclick="showScreen('treatment')"><span class="sidebar-icon">·</span> The Treatment</div>
     <div class="sidebar-group-label"><span class="sidebar-icon">⬡</span> DCW</div>
     <div class="sidebar-item sub" id="nav-timeline" onclick="showScreen('coming-soon','Timeline')"><span class="sidebar-icon">·</span> Timeline</div>
     <div class="sidebar-item sub" id="nav-storyboard" onclick="showScreen('coming-soon','Storyboard')"><span class="sidebar-icon">·</span> Storyboard</div>
@@ -457,6 +457,38 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   </div>
 </div>
 <!-- END EVENTS & TIMELINE -->
+
+<!-- THE TREATMENT -->
+<div class="screen" id="screen-treatment">
+  <div class="cast-layout">
+    <div class="cast-list">
+      <div class="cast-list-header"><div class="cast-list-title">The Treatment</div></div>
+      <div class="cast-list-items">
+        <div class="cast-empty">
+          <div class="cast-empty-icon">◈</div>
+          <div class="cast-empty-text">The Treatment builds itself.</div>
+          <div class="cast-empty-sub">Keep writing. It is assembling.</div>
+        </div>
+      </div>
+    </div>
+    <div class="cast-detail">
+      <div class="placeholder-screen">
+        <div class="placeholder-label">The Treatment</div>
+        <div class="placeholder-title">Your professional document is taking shape.</div>
+        <div class="placeholder-text" style="max-width:480px;line-height:1.7">
+          The Treatment assembles itself from everything you build —
+          your characters, locations, plot threads, chapters, events.
+          By the time you are ready to share your work,
+          it will already be largely written.<br/><br/>
+          Ada will render it in the correct professional format.
+          You review, refine, and make it your own.<br/><br/>
+          Full build at Step 11.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END THE TREATMENT -->
 
 <!-- CHAPTERS -->
 <div class="screen" id="screen-chapters">
@@ -960,6 +992,7 @@ function showScreen(name,label){
   else if(name==='buildings'){document.getElementById('screen-buildings').classList.add('active');document.getElementById('nav-buildings').classList.add('active');currentBuildingIndex=null;document.getElementById('bldNoSelection').style.display='flex';document.getElementById('bldForm').style.display='none';renderBuildingList();}
   else if(name==='locations'){document.getElementById('screen-locations').classList.add('active');document.getElementById('nav-locations').classList.add('active');currentLocationIndex=null;document.getElementById('locNoSelection').style.display='flex';document.getElementById('locForm').style.display='none';renderLocationList();}
   else if(name==='objects'){document.getElementById('screen-objects').classList.add('active');document.getElementById('nav-objects').classList.add('active');currentObjectIndex=null;document.getElementById('objNoSelection').style.display='flex';document.getElementById('objForm').style.display='none';renderObjectList();}
+  else if(name==='treatment'){document.getElementById('screen-treatment').classList.add('active');document.getElementById('nav-treatment').classList.add('active');}
   else if(name==='chapters'){document.getElementById('screen-chapters').classList.add('active');document.getElementById('nav-chapters').classList.add('active');currentChapterIndex=null;document.getElementById('chapterNoSelection').style.display='flex';document.getElementById('chapterForm').style.display='none';renderChapterList();}
   else if(name==='events'){document.getElementById('screen-events').classList.add('active');document.getElementById('nav-events').classList.add('active');currentEventIndex=null;document.getElementById('eventNoSelection').style.display='flex';document.getElementById('eventForm').style.display='none';renderEventList();}
   else if(name==='themes'){document.getElementById('screen-themes').classList.add('active');document.getElementById('nav-themes').classList.add('active');currentThemeIndex=null;document.getElementById('themeNoSelection').style.display='flex';document.getElementById('themeForm').style.display='none';renderThemeList();}
