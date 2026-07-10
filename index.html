@@ -1278,6 +1278,9 @@ function enableSpellCheck(root){
 window.addEventListener("load", function(){ enableSpellCheck(document); });
 
 
+
+
+
 // -- READ ALOUD ON EVERY WRITTEN FIELD --------------------------
 // Adds a Read button to every text area and single-line text input across
 // the platform. Catches fields whenever they appear, not just at load.
@@ -1301,11 +1304,15 @@ window.addEventListener("load", function(){ enableSpellCheck(document); });
     f.dataset.readReady="1";
   }
   function scan(root){ (root||document).querySelectorAll('input[type="text"], textarea').forEach(attachTo); }
-  window.addEventListener("load", function(){
+  function start(){
     scan(document);
     var content=document.querySelector(".content")||document.body;
     new MutationObserver(function(){ scan(document); }).observe(content,{childList:true,subtree:true});
-  });
+  }
+  // Run now if the page is ready, and also on load, so fields present at any
+  // point get a Read button whether the code runs early or late.
+  if(document.readyState==="loading"){ document.addEventListener("DOMContentLoaded", start); } else { start(); }
+  window.addEventListener("load", function(){ scan(document); });
 })();
 
 </script>
