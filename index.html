@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1267,6 +1268,46 @@ function stopWhatsNewPulse(){const el=document.getElementById('nav-whatsnew');if
 
 renderProjects();
 updateAICounter();
+
+// -- SPELL CHECK --------------------------------------
+// Switches on the browser spell-check for every text field across the platform.
+// Red underlines under misspelled words; right-click to correct or add to dictionary.
+function enableSpellCheck(root){
+  (root||document).querySelectorAll('input[type="text"], textarea').forEach(function(f){ f.setAttribute("spellcheck","true"); });
+}
+window.addEventListener("load", function(){ enableSpellCheck(document); });
+
+
+// -- READ ALOUD ON EVERY WRITTEN FIELD --------------------------
+// Adds a Read button to every text area and single-line text input across
+// the platform. Catches fields whenever they appear, not just at load.
+(function(){
+  function makeReadBtn(f){
+    var b=document.createElement("button");
+    b.className="read-aloud-btn"; b.type="button";
+    b.innerHTML="\uD83D\uDD0A Read"; b.title="Read aloud";
+    b.onclick=function(){ readFieldAloud(f.id, this); };
+    return b;
+  }
+  function attachTo(f){
+    if(!f||!f.id) return;
+    if(f.dataset.readReady==="1") return;
+    var wrap=f.closest(".field"); if(!wrap) return;
+    var label=wrap.querySelector(".field-label");
+    if(label && !label.querySelector(".read-aloud-btn")){
+      label.style.display="flex"; label.style.alignItems="center"; label.style.gap="6px";
+      label.appendChild(makeReadBtn(f));
+    }
+    f.dataset.readReady="1";
+  }
+  function scan(root){ (root||document).querySelectorAll('input[type="text"], textarea').forEach(attachTo); }
+  window.addEventListener("load", function(){
+    scan(document);
+    var content=document.querySelector(".content")||document.body;
+    new MutationObserver(function(){ scan(document); }).observe(content,{childList:true,subtree:true});
+  });
+})();
+
 </script>
 </body>
 </html>
