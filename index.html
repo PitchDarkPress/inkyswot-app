@@ -385,7 +385,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="field-group">
       <div class="field-group-title">Basics</div>
       <div class="field"><div class="field-label">Book Title</div><div class="field-ai-row"><input type="text" class="field-input" id="ph-title" placeholder="The title of your work..." oninput="autoSave()"/><button class="ai-btn" onclick="aiAutofill('ph-title','book title',this)">✦ Prompt</button></div></div>
-      <div class="field"><div class="field-label">Strap Line</div><div class="field-ai-row"><input type="text" class="field-input" id="ph-strapline" placeholder="A short, compelling line about your story..." oninput="autoSave()"/><button class="ai-btn" onclick="aiAutofill('ph-strapline','strap line',this)">✦ Prompt</button></div></div>
+      <div class="field"><div class="field-label">Strap Line</div><div class="field-ai-row"><div class="strap-wrap" id="ph-strap-wrap"><input type="text" class="field-input strap-input" id="ph-strapline" placeholder="A short, compelling line about your story..." oninput="autoSave()"/></div><button class="ai-btn" onclick="aiAutofill('ph-strapline','strap line',this)">✦ Prompt</button></div></div>
       <div class="field-row">
         <div class="field"><div class="field-label">Author Name(s)</div><input type="text" class="field-input" id="ph-author" placeholder="Your name..." oninput="autoSave()"/></div>
         <div class="field"><div class="field-label">Status</div><select class="field-select" id="ph-status" onchange="autoSave()"><option value="">— Select —</option><option value="draft">Draft</option><option value="progress">In Progress</option><option value="complete">Complete</option><option value="published">Published</option></select></div>
@@ -447,6 +447,11 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
 <!-- these rules only shape the NEW parts this screen adds.          -->
 <!-- ============================================================= -->
 <style>
+  /* ===== the strap line — one line, hover to scroll the hidden end into view ===== */
+  #screen-project-overview .strap-wrap{flex:1;position:relative;overflow:hidden;}
+  #screen-project-overview .strap-input{white-space:nowrap;overflow-x:auto;scrollbar-width:none;}
+  #screen-project-overview .strap-input::-webkit-scrollbar{display:none;}
+
   /* ===== the custom Genre dropdown ===== */
   #screen-project-overview .is-select{position:relative;}
   #screen-project-overview .is-select-field{display:flex;align-items:center;justify-content:space-between;
@@ -657,6 +662,36 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       if (typeof autoSave === 'function') autoSave();
     };
     window.resetChapters = function(){ isChaptersEdited=false; window.updateChapterSteer(); if (typeof autoSave === 'function') autoSave(); };
+
+    /* ---- the strap line hover-scroll ---- */
+    (function(){
+      var wrap  = document.getElementById('ph-strap-wrap');
+      var input = document.getElementById('ph-strapline');
+      if(!wrap || !input) return;
+      var SPEED = 34, PAUSE_ENDS = 700, anim = null;
+      function overflowAmount(){ return input.scrollWidth - input.clientWidth; }
+      function startDrift(){
+        if (document.activeElement === input) return;
+        var max = overflowAmount(); if (max <= 2) return;
+        stopDrift();
+        var dir = 1, last = null, holdUntil = 0, started = false;
+        function step(ts){
+          if (last === null) last = ts;
+          var dt = (ts - last)/1000; last = ts;
+          if (ts < holdUntil){ anim = requestAnimationFrame(step); return; }
+          input.scrollLeft += dir * SPEED * dt; started = true;
+          if (input.scrollLeft >= max){ input.scrollLeft = max; dir = -1; holdUntil = ts + PAUSE_ENDS; }
+          else if (input.scrollLeft <= 0 && started && dir < 0){ input.scrollLeft = 0; dir = 1; holdUntil = ts + PAUSE_ENDS; }
+          anim = requestAnimationFrame(step);
+        }
+        anim = requestAnimationFrame(step);
+      }
+      function stopDrift(){ if (anim){ cancelAnimationFrame(anim); anim = null; } }
+      wrap.addEventListener('mouseenter', startDrift);
+      wrap.addEventListener('mouseleave', function(){ stopDrift(); input.scrollLeft = 0; });
+      input.addEventListener('focus', stopDrift);
+      input.addEventListener('blur', function(){ input.scrollLeft = 0; });
+    })();
 
     window.updateChapterSteer();
   }
