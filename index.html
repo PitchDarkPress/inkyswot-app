@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1547,14 +1546,26 @@ updateAICounter();
 // -- SPELL CHECK --------------------------------------
 // Switches on the browser spell-check for every text field across the platform.
 // Red underlines under misspelled words; right-click to correct or add to dictionary.
-function enableSpellCheck(root){
-  (root||document).querySelectorAll('input[type="text"], textarea').forEach(function(f){ f.setAttribute("spellcheck","true"); });
-}
-window.addEventListener("load", function(){ enableSpellCheck(document); });
-
-
-
-
+// Catches fields whenever they appear, not just at load.
+(function(){
+  function mark(f){
+    if(!f) return;
+    if(f.dataset.spellReady==="1") return;
+    f.setAttribute("spellcheck","true");
+    f.dataset.spellReady="1";
+  }
+  function scan(root){ (root||document).querySelectorAll('input[type="text"], textarea').forEach(mark); }
+  window.enableSpellCheck=scan;
+  function start(){
+    scan(document);
+    var content=document.querySelector(".content")||document.body;
+    new MutationObserver(function(){ scan(document); }).observe(content,{childList:true,subtree:true});
+  }
+  // Run now if the page is ready, and also on load, so fields present at any
+  // point get spell-check whether the code runs early or late.
+  if(document.readyState==="loading"){ document.addEventListener("DOMContentLoaded", start); } else { start(); }
+  window.addEventListener("load", function(){ scan(document); });
+})();
 
 // -- READ ALOUD ON EVERY WRITTEN FIELD --------------------------
 // Adds a Read button to every text area and single-line text input across
