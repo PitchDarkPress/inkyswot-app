@@ -393,11 +393,13 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
         <div class="field">
           <div class="field-label">Genre</div>
           <!-- custom InkySwot dropdown: greyed 'coming' formats + hover COMING SOON note.
+               Each ready format carries its industry word-count range, shown on the right.
                The real value is written into the hidden #ph-genre input so autoSave/saveProjectHeader
                keep working exactly as before. -->
           <div class="is-select" id="ph-genre-select">
             <div class="is-select-field" id="ph-genre-field">
               <span class="isf-val placeholder" id="ph-genre-val">— Select genre —</span>
+              <span class="isf-wc" id="ph-genre-wc"></span>
               <span class="isf-chev">▼</span>
             </div>
             <div class="is-menu" id="ph-genre-menu"></div>
@@ -453,13 +455,16 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
 
   /* ===== the custom Genre dropdown ===== */
   #screen-project-overview .is-select{position:relative;}
-  #screen-project-overview .is-select-field{display:flex;align-items:center;justify-content:space-between;
+  #screen-project-overview .is-select-field{display:flex;align-items:center;gap:10px;
     background:var(--panel2,#0c0a07);border:1px solid var(--border2,#352815);color:var(--ink,#e8e0d0);
     font-family:'Crimson Pro',Georgia,serif;font-size:17px;border-radius:5px;padding:10px 12px;cursor:pointer;}
   #screen-project-overview .is-select-field.open{border-color:var(--gold,#c9923a);}
-  #screen-project-overview .is-select-field .isf-val{color:var(--ink,#e8e0d0);}
+  #screen-project-overview .is-select-field .isf-val{color:var(--ink,#e8e0d0);flex:1 1 auto;min-width:0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   #screen-project-overview .is-select-field .isf-val.placeholder{color:var(--ink3,#706050);}
-  #screen-project-overview .is-select-field .isf-chev{color:var(--ink2,#b0a090);font-family:'JetBrains Mono',monospace;font-size:12px;transition:transform .15s;}
+  #screen-project-overview .is-select-field .isf-wc{font-family:'JetBrains Mono',monospace;font-size:12px;
+    letter-spacing:.04em;color:var(--gold,#c9923a);white-space:nowrap;flex:0 0 auto;}
+  #screen-project-overview .is-select-field .isf-chev{color:var(--ink2,#b0a090);font-family:'JetBrains Mono',monospace;font-size:12px;transition:transform .15s;flex:0 0 auto;}
   #screen-project-overview .is-select-field.open .isf-chev{transform:rotate(180deg);}
 
   #screen-project-overview .is-menu{position:absolute;left:0;right:0;top:calc(100% + 5px);z-index:60;
@@ -471,11 +476,19 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   #screen-project-overview .is-menu::-webkit-scrollbar-track{background:transparent;}
   #screen-project-overview .is-menu::-webkit-scrollbar-thumb{background:var(--border2,#352815);border-radius:6px;border:2px solid var(--panel,#18120d);background-clip:padding-box;}
   #screen-project-overview .is-menu::-webkit-scrollbar-thumb:hover{background:var(--gold,#c9923a);background-clip:padding-box;}
-  #screen-project-overview .is-opt{padding:10px 14px;font-family:'Crimson Pro',Georgia,serif;font-size:17px;color:var(--ink,#e8e0d0);cursor:pointer;}
+  #screen-project-overview .is-opt{display:flex;align-items:baseline;gap:12px;
+    padding:10px 14px;font-family:'Crimson Pro',Georgia,serif;font-size:17px;color:var(--ink,#e8e0d0);cursor:pointer;}
+  #screen-project-overview .is-opt .nm{flex:1 1 auto;min-width:0;}
+  #screen-project-overview .is-opt .wc{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;
+    color:var(--ink3,#706050);white-space:nowrap;flex:0 0 auto;}
+  #screen-project-overview .wcl{text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:var(--ink3,#706050);margin-right:4px;}
   #screen-project-overview .is-opt:hover{background:var(--panel2,#0c0a07);}
+  #screen-project-overview .is-opt:hover .wc{color:var(--gold,#c9923a);}
   #screen-project-overview .is-opt.sel{color:var(--gold2,#e8b060);background:rgba(201,146,58,.08);}
+  #screen-project-overview .is-opt.sel .wc{color:var(--gold2,#e8b060);}
   #screen-project-overview .is-opt.coming{color:var(--ink3,#706050);cursor:default;}
   #screen-project-overview .is-opt.coming:hover{background:rgba(201,146,58,.04);}
+  #screen-project-overview .is-opt.coming:hover .wc{color:var(--ink3,#706050);}
 
   /* the COMING SOON pointer-note (fixed to the viewport, so it sits outside the screen div) */
   .is-comingnote{position:fixed;z-index:80;background:var(--panel,#18120d);border:1px solid var(--gold,#c9923a);
@@ -518,42 +531,76 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     menu.dataset.built = '1';
 
     /* ---- the genre list — ready ones live, coming ones greyed ----
-       'coming' = needs specialised page formatting not built yet */
+       'coming' = needs specialised page formatting not built yet
+       'wc'     = the industry word-count range, shown beside the name */
     var GENRES = [
-      {name:"Academic Essay / Thesis"}, {name:"Adventure"},
+      {name:"Academic Essay / Thesis", wc:"40,000–80,000"},
+      {name:"Adventure", wc:"70,000–100,000"},
       {name:"Audio Drama", coming:true}, {name:"Audiobook", coming:true},
-      {name:"Autobiography / Memoir"}, {name:"Biography"},
-      {name:"Children's Book"}, {name:"Comedy / Humour"},
-      {name:"Comic Script", coming:true}, {name:"Coming of Age"},
-      {name:"Cookbook"}, {name:"Crime & Thriller"}, {name:"Drama"},
-      {name:"Dystopian"}, {name:"Erotic"}, {name:"Essay Collection"},
-      {name:"Fantasy"}, {name:"Flash Fiction"},
-      {name:"Game Script", coming:true}, {name:"Gothic"},
-      {name:"Graphic Novel", coming:true}, {name:"Historical Fiction"},
-      {name:"History"}, {name:"Horror"}, {name:"Literary Fiction"},
-      {name:"Literary Journal"}, {name:"Non-Fiction"}, {name:"Novel"},
-      {name:"Novella"}, {name:"Other"}, {name:"Paranormal"},
-      {name:"Personal Essay / Creative Non-Fiction"},
+      {name:"Autobiography / Memoir", wc:"70,000–100,000"},
+      {name:"Biography", wc:"80,000–110,000"},
+      {name:"Children's Book", wc:"500–5,000"},
+      {name:"Comedy / Humour", wc:"70,000–90,000"},
+      {name:"Comic Script", coming:true},
+      {name:"Coming of Age", wc:"60,000–90,000"},
+      {name:"Cookbook", wc:"20,000–50,000"},
+      {name:"Crime & Thriller", wc:"70,000–90,000"},
+      {name:"Drama", wc:"70,000–100,000"},
+      {name:"Dystopian", wc:"80,000–110,000"},
+      {name:"Erotic", wc:"50,000–90,000"},
+      {name:"Essay Collection", wc:"50,000–80,000"},
+      {name:"Fantasy", wc:"90,000–130,000"},
+      {name:"Flash Fiction", wc:"under 1,000"},
+      {name:"Game Script", coming:true},
+      {name:"Gothic", wc:"80,000–100,000"},
+      {name:"Graphic Novel", coming:true},
+      {name:"Historical Fiction", wc:"90,000–120,000"},
+      {name:"History", wc:"80,000–120,000"},
+      {name:"Horror", wc:"80,000–100,000"},
+      {name:"Literary Fiction", wc:"80,000–100,000"},
+      {name:"Literary Journal", wc:"20,000–60,000"},
+      {name:"Non-Fiction", wc:"60,000–90,000"},
+      {name:"Novel", wc:"70,000–100,000"},
+      {name:"Novella", wc:"17,500–40,000"},
+      {name:"Other"},
+      {name:"Paranormal", wc:"75,000–95,000"},
+      {name:"Personal Essay / Creative Non-Fiction", wc:"50,000–80,000"},
       {name:"Picture Book", coming:true}, {name:"Poetry", coming:true},
       {name:"Poetry Collection", coming:true},
-      {name:"Radio Drama", coming:true}, {name:"Romance"},
-      {name:"Science Fiction"}, {name:"Screenplay", coming:true},
-      {name:"Self-Help"}, {name:"Short Story"}, {name:"Speculative Fiction"},
+      {name:"Radio Drama", coming:true},
+      {name:"Romance", wc:"50,000–100,000"},
+      {name:"Science Fiction", wc:"90,000–120,000"},
+      {name:"Screenplay", coming:true},
+      {name:"Self-Help", wc:"40,000–70,000"},
+      {name:"Short Story", wc:"1,000–7,500"},
+      {name:"Speculative Fiction", wc:"80,000–110,000"},
       {name:"Stage Play", coming:true}, {name:"Teleplay", coming:true},
-      {name:"Thriller & Suspense"}, {name:"Travel Writing"},
-      {name:"True Crime"}, {name:"Urban & Contemporary"}, {name:"Western"}
+      {name:"Thriller & Suspense", wc:"70,000–90,000"},
+      {name:"Travel Writing", wc:"60,000–90,000"},
+      {name:"True Crime", wc:"70,000–100,000"},
+      {name:"Urban & Contemporary", wc:"70,000–90,000"},
+      {name:"Western", wc:"60,000–80,000"}
     ];
+    var GENRE_WC = {};
+    GENRES.forEach(function(g){ if (g.wc) GENRE_WC[g.name] = g.wc; });
+    window.IS_GENRE_WC = GENRE_WC;          /* the board can read this later */
+
     GENRES.forEach(function(g){
       var o = document.createElement('div');
       o.className = 'is-opt' + (g.coming ? ' coming' : '');
-      o.textContent = g.name; o.dataset.name = g.name;
+      o.dataset.name = g.name;
       if (g.coming) o.dataset.coming = '1';
+      if (g.wc) o.dataset.wc = g.wc;
+      var nm = document.createElement('span'); nm.className = 'nm'; nm.textContent = g.name;
+      o.appendChild(nm);
+      if (g.wc){ var w = document.createElement('span'); w.className = 'wc'; w.innerHTML = '<span class="wcl">Typical length:</span> ' + g.wc; o.appendChild(w); }
       menu.appendChild(o);
     });
 
     var genreSelect = document.getElementById('ph-genre-select');
     var genreField  = document.getElementById('ph-genre-field');
     var genreVal    = document.getElementById('ph-genre-val');
+    var genreWc     = document.getElementById('ph-genre-wc');
     var genreHidden = document.getElementById('ph-genre');
     var comingNote  = document.getElementById('ph-comingnote');
 
@@ -569,6 +616,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       if (opt.dataset.coming){ return; }                 /* greyed — hover shows note, click does nothing */
       var name = opt.dataset.name;
       genreVal.textContent = name; genreVal.classList.remove('placeholder');
+      genreWc.innerHTML = opt.dataset.wc ? '<span class="wcl">Typical length:</span> ' + opt.dataset.wc : '';
       genreHidden.value = name;
       menu.querySelectorAll('.is-opt.sel').forEach(function(s){ s.classList.remove('sel'); });
       opt.classList.add('sel');
