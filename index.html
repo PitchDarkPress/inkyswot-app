@@ -459,15 +459,17 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   /* ===== the custom Genre dropdown ===== */
   #screen-project-overview .is-select{position:relative;}
   #screen-project-overview .is-select-field{display:flex;align-items:center;gap:10px;
-    background:var(--panel2,#0c0a07);border:1px solid var(--border2,#352815);color:var(--ink,#e8e0d0);
-    font-family:'Crimson Pro',Georgia,serif;font-size:17px;border-radius:5px;padding:10px 12px;cursor:pointer;}
+    background:var(--input-bg,#18120d);border:1px solid var(--input-border,#352815);color:var(--ink,#e8e0d0);
+    font-family:'Crimson Pro',Georgia,serif;font-size:21px;border-radius:3px;padding:10px 14px;cursor:pointer;}
   #screen-project-overview .is-select-field.open{border-color:var(--gold,#c9923a);}
   #screen-project-overview .is-select-field .isf-val{color:var(--ink,#e8e0d0);flex:1 1 auto;min-width:0;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   #screen-project-overview .is-select-field .isf-val.placeholder{color:var(--ink3,#706050);}
   #screen-project-overview .is-select-field .isf-wc{font-family:'JetBrains Mono',monospace;font-size:12px;
     letter-spacing:.04em;color:var(--gold,#c9923a);white-space:nowrap;flex:0 0 auto;}
-  #screen-project-overview .is-select-field .isf-chev{color:var(--ink2,#b0a090);font-family:'JetBrains Mono',monospace;font-size:12px;transition:transform .15s;flex:0 0 auto;}
+  #screen-project-overview .is-select-field .isf-chev{color:var(--ink2,#b0a090);font-size:18px;line-height:1;
+    transition:transform .15s,color .15s;flex:0 0 auto;margin-left:2px;}
+  #screen-project-overview .is-select-field:hover .isf-chev{color:var(--gold,#c9923a);}
   #screen-project-overview .is-select-field.open .isf-chev{transform:rotate(180deg);}
 
   #screen-project-overview .is-menu{position:absolute;left:0;right:0;top:calc(100% + 5px);z-index:60;
@@ -485,7 +487,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   #screen-project-overview .is-opt .wc{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;
     color:var(--ink3,#706050);white-space:nowrap;flex:0 0 auto;}
   #screen-project-overview .wcl{text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:var(--ink3,#706050);margin-right:4px;}
-  #screen-project-overview .is-opt:hover{background:var(--panel2,#0c0a07);}
+  #screen-project-overview .is-opt:hover{background:var(--bg3,#221a14);}
   #screen-project-overview .is-opt:hover .wc{color:var(--gold,#c9923a);}
   #screen-project-overview .is-opt.sel{color:var(--gold2,#e8b060);background:rgba(201,146,58,.08);}
   #screen-project-overview .is-opt.sel .wc{color:var(--gold2,#e8b060);}
