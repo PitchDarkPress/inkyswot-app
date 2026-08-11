@@ -413,7 +413,6 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
         <div class="wc-cell">
           <input type="text" inputmode="numeric" class="field-input" id="ph-targetwords" placeholder="80,000" oninput="onTargetWordsInput()"/>
           <div class="word-count-label">Target</div>
-          <div class="wc-steer" id="ph-target-steer"></div>
         </div>
         <div class="wc-cell wc-chapters suggested" id="ph-chapters-cell">
           <div class="wc-ch-box">
@@ -421,11 +420,11 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
             <button class="wc-ch-reset" id="ph-chapters-reset" title="Use the suggestion" onclick="resetChapters()">↺</button>
           </div>
           <div class="word-count-label">Chapters</div>
-          <div class="wc-steer" id="ph-chapters-steer"></div>
         </div>
-        <div class="wc-cell"><div class="word-count-display" id="ph-currentwords">0</div><div class="word-count-label">Current (auto)</div></div>
+        <div class="wc-cell"><div class="word-count-display" id="ph-currentwords">0</div><div class="word-count-label">Current</div></div>
         <div class="wc-cell"><div class="word-count-display" id="ph-remaining">—</div><div class="word-count-label">Remaining</div></div>
       </div>
+      <div class="wc-line" id="ph-wc-line"></div>
     </div>
     <div class="field-group">
       <div class="field-group-title">Voice & Inspiration</div>
@@ -499,12 +498,15 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   .is-comingnote .sub{font-family:'Crimson Pro',Georgia,serif;font-style:italic;font-size:15px;color:var(--ink2,#b0a090);line-height:1.35;}
 
   /* ===== the clever Word Count steers ===== */
-  #screen-project-overview .word-count-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:18px;align-items:start;}
+  #screen-project-overview .word-count-row{display:grid;grid-template-columns:1.5fr 0.8fr 1fr 1fr;gap:18px;align-items:start;}
   #screen-project-overview .wc-cell{display:flex;flex-direction:column;gap:8px;}
-  #screen-project-overview .wc-steer{font-family:'Crimson Pro',Georgia,serif;font-size:16px;line-height:1.4;
-    color:var(--ink2,#b0a090);text-align:center;margin-top:9px;min-height:20px;}
-  #screen-project-overview .wc-steer b{display:block;color:var(--ink,#e8e0d0);font-weight:600;white-space:nowrap;font-size:17px;}
-  #screen-project-overview .wc-steer .free{display:block;font-size:15px;color:var(--ink2,#b0a090);margin-top:4px;}
+  /* every box the same depth, whether it is typed into or only read */
+  #screen-project-overview .wc-cell .field-input,
+  #screen-project-overview .wc-cell .word-count-display{height:46px;display:flex;align-items:center;}
+  #screen-project-overview .wc-cell .word-count-display{justify-content:center;}
+  #screen-project-overview .wc-ch-box .field-input{width:100%;text-align:center;}
+  #screen-project-overview .wc-line{font-family:'Crimson Pro',Georgia,serif;font-style:italic;font-size:16px;
+    line-height:1.45;color:var(--ink2,#b0a090);margin-top:16px;min-height:22px;}
 
   #screen-project-overview .wc-ch-box{position:relative;}
   #screen-project-overview .wc-chapters .field-input{color:var(--gold2,#e8b060);font-weight:600;}
@@ -677,26 +679,44 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       window.updateChapterSteer();
     };
 
+    /* plural of the genre, for the sentence under the row: "Most adventures land..." */
+    function isPlural(name){
+      var n=(name||'').toLowerCase();
+      if(!n) return 'works';
+      if(/(s|x|z|ch|sh)$/.test(n)) return n+'es';
+      if(/[^aeiou]y$/.test(n)) return n.slice(0,-1)+'ies';
+      return n+'s';
+    }
+
     window.updateChapterSteer = function(){
-      var genre=isGenre(), gName=genre||'work', gLower=gName.toLowerCase();
-      var free='<span class="free">You can change this to suit your needs</span>';
-      var tgSteer=document.getElementById('ph-target-steer');
-      if(tgSteer){
-        var typical=IS_TYPICAL_WORDS[genre]||IS_TYPICAL_WORDS._default;
-        var an=/^[aeiou]/i.test(gName)?'An':'A';
-        tgSteer.innerHTML='<b>'+an+' '+gLower+' runs ≈'+isFmt(typical)+' words</b>'+free;
-      }
+      var genre=isGenre();
       var per=IS_WORDS_PER_CH[genre]||IS_WORDS_PER_CH._default;
       var target=isTargetWords();
-      var chSteer=document.getElementById('ph-chapters-steer');
       var chInput=document.getElementById('ph-chapters');
       var cell=document.getElementById('ph-chapters-cell');
-      var n,why;
-      if(target>0){ n=Math.max(1,Math.round(target/per)); why='<b>'+isFmt(n)+' chapters suits '+isFmt(target)+' words</b>'+free; }
-      else { n=IS_FALLBACK_CH[genre]||IS_FALLBACK_CH._default; why='<b>'+isFmt(n)+' chapters is typical for a '+gLower+'</b>'+free; }
-      if(chSteer) chSteer.innerHTML=why;
+
+      /* the greyed prompt inside Target is the genre's range */
+      var tgt=document.getElementById('ph-targetwords');
+      if(tgt) tgt.placeholder = GENRE_WC[genre] || '80,000';
+
+      var n;
+      if(target>0){ n=Math.max(1,Math.round(target/per)); }
+      else { n=IS_FALLBACK_CH[genre]||IS_FALLBACK_CH._default; }
       if(chInput && !isChaptersEdited) chInput.value=n;
       if(cell && !isChaptersEdited){ cell.classList.remove('edited'); cell.classList.add('suggested'); }
+
+      /* one quiet sentence under the whole row */
+      var line=document.getElementById('ph-wc-line');
+      if(line){
+        var typical=IS_TYPICAL_WORDS[genre]||IS_TYPICAL_WORDS._default;
+        if(target>0){
+          line.textContent='At '+isFmt(target)+' words, that is about '+isFmt(n)+' chapters.';
+        } else if(genre){
+          line.textContent='Most '+isPlural(genre)+' land around '+isFmt(typical)+' words — about '+isFmt(n)+' chapters at that length.';
+        } else {
+          line.textContent='Choose a genre and InkySwot will suggest a length.';
+        }
+      }
     };
 
     window.onChaptersEdit = function(){
