@@ -314,8 +314,14 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   </div>
   <div class="sidebar-section" id="projectNav" style="display:none">
     <div class="sidebar-section-title" id="projectNavTitle">Project</div>
-    <div class="sidebar-item" id="nav-overview" onclick="showScreen('project-overview')"><span class="sidebar-icon">◈</span> Overview</div>
-    <div class="sidebar-group-label"><span class="sidebar-icon">♟</span> Cast</div>
+    <div class="sidebar-item" id="nav-overview" onclick="showScreen('project-overview')"><span class="sidebar-icon">◈</span> Basics</div>
+    <div class="sidebar-group-label"><span class="sidebar-icon">⟁</span> Story</div>
+    <div class="sidebar-item sub" id="nav-synopsis" onclick="showScreen('coming-soon','Synopsis')"><span class="sidebar-icon">·</span> Synopsis</div>
+    <div class="sidebar-item sub" id="nav-plotthreads" onclick="showScreen('plotthreads')"><span class="sidebar-icon">·</span> Plot Threads</div>
+    <div class="sidebar-item sub" id="nav-subplots" onclick="showScreen('subplots')"><span class="sidebar-icon">·</span> Subplots</div>
+    <div class="sidebar-item sub" id="nav-themes" onclick="showScreen('themes')"><span class="sidebar-icon">·</span> Themes & Motifs</div>
+    <div class="sidebar-item sub" id="nav-events" onclick="showScreen('events')"><span class="sidebar-icon">·</span> Events & Timeline</div>
+    <div class="sidebar-group-label"><span class="sidebar-icon">♟</span> People</div>
     <div class="sidebar-item sub" id="nav-cast" onclick="showScreen('cast')"><span class="sidebar-icon">·</span> Characters</div>
     <div class="sidebar-item sub" id="nav-relationships" onclick="showScreen('relationships')"><span class="sidebar-icon">·</span> Relationships</div>
     <div class="sidebar-item sub" id="nav-factions" onclick="showScreen('factions')"><span class="sidebar-icon">·</span> Factions & Orgs</div>
@@ -325,21 +331,15 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="sidebar-item sub" id="nav-buildings" onclick="showScreen('buildings')"><span class="sidebar-icon">·</span> Buildings</div>
     <div class="sidebar-item sub" id="nav-objects" onclick="showScreen('objects')"><span class="sidebar-icon">·</span> Objects & Artefacts</div>
     <div class="sidebar-item sub" id="nav-rules" onclick="showScreen('rules')"><span class="sidebar-icon">·</span> Rules & Lore</div>
-    <div class="sidebar-group-label"><span class="sidebar-icon">⟁</span> Plot</div>
-    <div class="sidebar-item sub" id="nav-plotthreads" onclick="showScreen('plotthreads')"><span class="sidebar-icon">·</span> Plot Threads</div>
-    <div class="sidebar-item sub" id="nav-subplots" onclick="showScreen('subplots')"><span class="sidebar-icon">·</span> Subplots</div>
-    <div class="sidebar-item sub" id="nav-themes" onclick="showScreen('themes')"><span class="sidebar-icon">·</span> Themes & Motifs</div>
-    <div class="sidebar-item sub" id="nav-events" onclick="showScreen('events')"><span class="sidebar-icon">·</span> Events & Timeline</div>
     <div class="sidebar-group-label"><span class="sidebar-icon">▣</span> Library</div>
     <div class="sidebar-item sub" id="nav-research" onclick="showScreen('coming-soon','Research & Reference')"><span class="sidebar-icon">·</span> Research & Reference</div>
-    <div class="sidebar-item sub" id="nav-notes" onclick="showScreen('coming-soon','Notes & Scratchpad')"><span class="sidebar-icon">·</span> Notes & Scratchpad</div>
+    <div class="sidebar-item sub" id="nav-notes" onclick="showScreen('coming-soon','Notes')"><span class="sidebar-icon">·</span> Notes</div>
+    <div class="sidebar-item sub" id="nav-images" onclick="showScreen('coming-soon','Images')"><span class="sidebar-icon">·</span> Images</div>
     <div class="sidebar-item sub" id="nav-sandbox" onclick="showScreen('coming-soon','Sandbox')"><span class="sidebar-icon">·</span> Sandbox</div>
-    <div class="sidebar-group-label"><span class="sidebar-icon">≡</span> Chapters</div>
-    <div class="sidebar-item sub" id="nav-chapters" onclick="showScreen('chapters')"><span class="sidebar-icon">·</span> Chapters</div>
-    <div class="sidebar-item sub" id="nav-treatment" onclick="showScreen('treatment')"><span class="sidebar-icon">·</span> The Treatment</div>
     <div class="sidebar-group-label"><span class="sidebar-icon">⬡</span> DCW</div>
-    <div class="sidebar-item sub" id="nav-timeline" onclick="showScreen('coming-soon','Timeline')"><span class="sidebar-icon">·</span> Timeline</div>
-    <div class="sidebar-item sub" id="nav-storyboard" onclick="showScreen('coming-soon','Storyboard')"><span class="sidebar-icon">·</span> Storyboard</div>
+    <div class="sidebar-item sub" id="nav-plotmapper" onclick="showScreen('coming-soon','Plot Mapper')"><span class="sidebar-icon">·</span> Plot Mapper</div>
+    <div class="sidebar-item sub" id="nav-manuscript" onclick="showScreen('coming-soon','Manuscript')"><span class="sidebar-icon">·</span> Manuscript</div>
+    <div class="sidebar-item sub" id="nav-publish" onclick="showScreen('coming-soon','Publish')"><span class="sidebar-icon">·</span> Publish</div>
   </div>
   <div class="sidebar-section">
     <div class="sidebar-section-title">Help</div>
@@ -1383,8 +1383,8 @@ function showScreen(name,label){
   else if(name==='buildings'){document.getElementById('screen-buildings').classList.add('active');document.getElementById('nav-buildings').classList.add('active');currentBuildingIndex=null;document.getElementById('bldNoSelection').style.display='flex';document.getElementById('bldForm').style.display='none';renderBuildingList();}
   else if(name==='locations'){document.getElementById('screen-locations').classList.add('active');document.getElementById('nav-locations').classList.add('active');currentLocationIndex=null;document.getElementById('locNoSelection').style.display='flex';document.getElementById('locForm').style.display='none';renderLocationList();}
   else if(name==='objects'){document.getElementById('screen-objects').classList.add('active');document.getElementById('nav-objects').classList.add('active');currentObjectIndex=null;document.getElementById('objNoSelection').style.display='flex';document.getElementById('objForm').style.display='none';renderObjectList();}
-  else if(name==='treatment'){document.getElementById('screen-treatment').classList.add('active');document.getElementById('nav-treatment').classList.add('active');}
-  else if(name==='chapters'){document.getElementById('screen-chapters').classList.add('active');document.getElementById('nav-chapters').classList.add('active');currentChapterIndex=null;document.getElementById('chapterNoSelection').style.display='flex';document.getElementById('chapterForm').style.display='none';renderChapterList();}
+  else if(name==='treatment'){document.getElementById('screen-treatment').classList.add('active');const nt=document.getElementById('nav-treatment');if(nt)nt.classList.add('active');}
+  else if(name==='chapters'){document.getElementById('screen-chapters').classList.add('active');const nc=document.getElementById('nav-chapters');if(nc)nc.classList.add('active');currentChapterIndex=null;document.getElementById('chapterNoSelection').style.display='flex';document.getElementById('chapterForm').style.display='none';renderChapterList();}
   else if(name==='events'){document.getElementById('screen-events').classList.add('active');document.getElementById('nav-events').classList.add('active');currentEventIndex=null;document.getElementById('eventNoSelection').style.display='flex';document.getElementById('eventForm').style.display='none';renderEventList();}
   else if(name==='themes'){document.getElementById('screen-themes').classList.add('active');document.getElementById('nav-themes').classList.add('active');currentThemeIndex=null;document.getElementById('themeNoSelection').style.display='flex';document.getElementById('themeForm').style.display='none';renderThemeList();}
   else if(name==='subplots'){document.getElementById('screen-subplots').classList.add('active');document.getElementById('nav-subplots').classList.add('active');currentSubplotIndex=null;document.getElementById('subplotNoSelection').style.display='flex';document.getElementById('subplotForm').style.display='none';renderSubplotList();}
