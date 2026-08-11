@@ -411,20 +411,24 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       <div class="field-group-title">Word Count</div>
       <div class="word-count-row">
         <div class="wc-cell">
-          <input type="text" inputmode="numeric" class="field-input" id="ph-targetwords" placeholder="80,000" oninput="onTargetWordsInput()"/>
-          <div class="word-count-label">Target</div>
+          <input type="text" class="field-input wc-guide" id="ph-wordrange" placeholder="70,000–100,000" oninput="onGuideEdit('words')"/>
+          <div class="word-count-label">Words</div>
         </div>
-        <div class="wc-cell wc-chapters suggested" id="ph-chapters-cell">
-          <div class="wc-ch-box">
-            <input type="number" class="field-input" id="ph-chapters" oninput="onChaptersEdit()"/>
-            <button class="wc-ch-reset" id="ph-chapters-reset" title="Use the suggestion" onclick="resetChapters()">↺</button>
-          </div>
+        <div class="wc-cell">
+          <input type="text" class="field-input wc-guide" id="ph-chapterrange" placeholder="23–33" oninput="onGuideEdit('chapters')"/>
           <div class="word-count-label">Chapters</div>
         </div>
-        <div class="wc-cell"><div class="word-count-display" id="ph-currentwords">0</div><div class="word-count-label">Current</div></div>
-        <div class="wc-cell"><div class="word-count-display" id="ph-remaining">—</div><div class="word-count-label">Remaining</div></div>
+        <div class="wc-cell">
+          <input type="text" inputmode="numeric" class="field-input wc-guide" id="ph-perchapter" placeholder="3,000" oninput="onGuideEdit('per')"/>
+          <div class="word-count-label">Words per chapter</div>
+        </div>
+        <button class="wc-reset" id="ph-guide-reset" title="Back to the suggestion" onclick="resetGuides()">↺</button>
       </div>
       <div class="wc-line" id="ph-wc-line"></div>
+      <!-- the corridor still looks for these three by name; kept hidden so nothing breaks -->
+      <input type="hidden" id="ph-targetwords" value=""/>
+      <span id="ph-currentwords" style="display:none">0</span>
+      <span id="ph-remaining" style="display:none">—</span>
     </div>
     <div class="field-group">
       <div class="field-group-title">Voice & Inspiration</div>
@@ -497,28 +501,19 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     color:var(--gold2,#e8b060);margin-bottom:5px;}
   .is-comingnote .sub{font-family:'Crimson Pro',Georgia,serif;font-style:italic;font-size:15px;color:var(--ink2,#b0a090);line-height:1.35;}
 
-  /* ===== the clever Word Count steers ===== */
-  #screen-project-overview .word-count-row{display:grid;grid-template-columns:1.5fr 0.8fr 1fr 1fr;gap:18px;align-items:start;}
-  #screen-project-overview .wc-cell{display:flex;flex-direction:column;gap:8px;}
-  /* every box the same depth, whether it is typed into or only read */
-  #screen-project-overview .wc-cell .field-input,
-  #screen-project-overview .wc-cell .word-count-display{height:46px;display:flex;align-items:center;}
-  #screen-project-overview .wc-cell .word-count-display{justify-content:center;}
-  #screen-project-overview .wc-ch-box .field-input{width:100%;text-align:center;}
+  /* ===== the Word Count guides — three figures drawn from the genre ===== */
+  #screen-project-overview .word-count-row{display:grid;grid-template-columns:1.5fr 1fr 1fr auto;gap:18px;align-items:start;}
+  #screen-project-overview .wc-cell{display:flex;flex-direction:column;gap:6px;}
+  #screen-project-overview .wc-guide{height:46px;text-align:center;font-weight:600;
+    color:var(--gold2,#e8b060);}
+  #screen-project-overview .wc-guide::placeholder{color:var(--gold2,#e8b060);opacity:1;font-style:normal;font-weight:600;}
+  #screen-project-overview .wc-guide.edited{color:var(--ink,#e8e0d0);}
   #screen-project-overview .wc-line{font-family:'Crimson Pro',Georgia,serif;font-style:italic;font-size:16px;
-    line-height:1.45;color:var(--ink2,#b0a090);margin-top:16px;min-height:22px;}
-
-  #screen-project-overview .wc-ch-box{position:relative;}
-  #screen-project-overview .wc-chapters .field-input{color:var(--gold2,#e8b060);font-weight:600;}
-  #screen-project-overview .wc-chapters.edited .field-input{color:var(--ink,#e8e0d0);}
-  #screen-project-overview .wc-ch-reset{position:absolute;top:50%;right:8px;transform:translateY(-50%);
-    font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--ink3,#706050);cursor:pointer;
-    background:transparent;border:none;padding:3px;line-height:1;display:none;}
-  #screen-project-overview .wc-ch-reset:hover{color:var(--gold,#c9923a);}
-  #screen-project-overview .wc-chapters.edited .wc-ch-reset{display:block;}
-  #screen-project-overview #ph-chapters::-webkit-inner-spin-button,
-  #screen-project-overview #ph-chapters::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
-  #screen-project-overview #ph-chapters{-moz-appearance:textfield;}
+    line-height:1.45;color:var(--ink2,#b0a090);margin-top:14px;min-height:22px;}
+  #screen-project-overview .wc-reset{align-self:center;margin-top:-18px;background:transparent;border:none;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;font-size:17px;color:var(--ink3,#706050);padding:4px 6px;line-height:1;display:none;}
+  #screen-project-overview .wc-reset:hover{color:var(--gold,#c9923a);}
+  #screen-project-overview .wc-reset.show{display:block;}
 </style>
 <script>
 (function(){
@@ -533,56 +528,57 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
        'coming' = needs specialised page formatting not built yet
        'wc'     = the industry word-count range, shown beside the name */
     var GENRES = [
-      {name:"Academic Essay / Thesis", wc:"40,000–80,000"},
-      {name:"Adventure", wc:"70,000–100,000"},
+      {name:"Academic Essay / Thesis", wc:"40,000–80,000", per:5000, says:"Most theses land"},
+      {name:"Adventure", wc:"70,000–100,000", per:3000, says:"Most adventures land"},
       {name:"Audio Drama", coming:true}, {name:"Audiobook", coming:true},
-      {name:"Autobiography / Memoir", wc:"70,000–100,000"},
-      {name:"Biography", wc:"80,000–110,000"},
-      {name:"Children's Book", wc:"500–5,000"},
-      {name:"Comedy / Humour", wc:"70,000–90,000"},
+      {name:"Autobiography / Memoir", wc:"70,000–100,000", per:3500, says:"Most memoirs land"},
+      {name:"Biography", wc:"80,000–110,000", per:4500, says:"Most biographies land"},
+      {name:"Children's Book", wc:"500–5,000", per:500, says:"Most children\u2019s books land"},
+      {name:"Comedy / Humour", wc:"70,000–90,000", per:3000, says:"Most comedy lands"},
       {name:"Comic Script", coming:true},
-      {name:"Coming of Age", wc:"60,000–90,000"},
-      {name:"Cookbook", wc:"20,000–50,000"},
-      {name:"Crime & Thriller", wc:"70,000–90,000"},
-      {name:"Drama", wc:"70,000–100,000"},
-      {name:"Dystopian", wc:"80,000–110,000"},
-      {name:"Erotic", wc:"50,000–90,000"},
-      {name:"Essay Collection", wc:"50,000–80,000"},
-      {name:"Fantasy", wc:"90,000–130,000"},
-      {name:"Flash Fiction", wc:"under 1,000"},
+      {name:"Coming of Age", wc:"60,000–90,000", per:3000, says:"Most coming-of-age novels land"},
+      {name:"Cookbook", wc:"20,000–50,000", per:1500, says:"Most cookbooks land"},
+      {name:"Crime & Thriller", wc:"70,000–90,000", per:2000, says:"Most crime novels land"},
+      {name:"Drama", wc:"70,000–100,000", per:3000, says:"Most dramas land"},
+      {name:"Dystopian", wc:"80,000–110,000", per:3500, says:"Most dystopian novels land"},
+      {name:"Erotic", wc:"50,000–90,000", per:2500, says:"Most erotic fiction lands"},
+      {name:"Essay Collection", wc:"50,000–80,000", per:4000, says:"Most essay collections land"},
+      {name:"Fantasy", wc:"90,000–130,000", per:4000, says:"Most fantasy lands"},
+      {name:"Flash Fiction", wc:"under 1,000", per:1000, says:"Most flash fiction lands"},
       {name:"Game Script", coming:true},
-      {name:"Gothic", wc:"80,000–100,000"},
+      {name:"Gothic", wc:"80,000–100,000", per:3500, says:"Most gothic novels land"},
       {name:"Graphic Novel", coming:true},
-      {name:"Historical Fiction", wc:"90,000–120,000"},
-      {name:"History", wc:"80,000–120,000"},
-      {name:"Horror", wc:"80,000–100,000"},
-      {name:"Literary Fiction", wc:"80,000–100,000"},
-      {name:"Literary Journal", wc:"20,000–60,000"},
-      {name:"Non-Fiction", wc:"60,000–90,000"},
-      {name:"Novel", wc:"70,000–100,000"},
-      {name:"Novella", wc:"17,500–40,000"},
-      {name:"Other"},
-      {name:"Paranormal", wc:"75,000–95,000"},
-      {name:"Personal Essay / Creative Non-Fiction", wc:"50,000–80,000"},
+      {name:"Historical Fiction", wc:"90,000–120,000", per:3500, says:"Most historical fiction lands"},
+      {name:"History", wc:"80,000–120,000", per:5000, says:"Most history lands"},
+      {name:"Horror", wc:"80,000–100,000", per:3000, says:"Most horror lands"},
+      {name:"Literary Fiction", wc:"80,000–100,000", per:4000, says:"Most literary fiction lands"},
+      {name:"Literary Journal", wc:"20,000–60,000", per:3000, says:"Most literary journals land"},
+      {name:"Non-Fiction", wc:"60,000–90,000", per:4500, says:"Most non-fiction lands"},
+      {name:"Novel", wc:"70,000–100,000", per:3000, says:"Most novels land"},
+      {name:"Novella", wc:"17,500–40,000", per:2500, says:"Most novellas land"},
+      {name:"Other", wc:"70,000–100,000", per:3000, says:"Most work lands"},
+      {name:"Paranormal", wc:"75,000–95,000", per:3000, says:"Most paranormal fiction lands"},
+      {name:"Personal Essay / Creative Non-Fiction", wc:"50,000–80,000", per:4000, says:"Most creative non-fiction lands"},
       {name:"Picture Book", coming:true}, {name:"Poetry", coming:true},
       {name:"Poetry Collection", coming:true},
       {name:"Radio Drama", coming:true},
-      {name:"Romance", wc:"50,000–100,000"},
-      {name:"Science Fiction", wc:"90,000–120,000"},
+      {name:"Romance", wc:"50,000–100,000", per:2500, says:"Most romance lands"},
+      {name:"Science Fiction", wc:"90,000–120,000", per:4000, says:"Most science fiction lands"},
       {name:"Screenplay", coming:true},
-      {name:"Self-Help", wc:"40,000–70,000"},
-      {name:"Short Story", wc:"1,000–7,500"},
-      {name:"Speculative Fiction", wc:"80,000–110,000"},
+      {name:"Self-Help", wc:"40,000–70,000", per:3500, says:"Most self-help lands"},
+      {name:"Short Story", wc:"1,000–7,500", per:2000, says:"Most short stories land"},
+      {name:"Speculative Fiction", wc:"80,000–110,000", per:3500, says:"Most speculative fiction lands"},
       {name:"Stage Play", coming:true}, {name:"Teleplay", coming:true},
-      {name:"Thriller & Suspense", wc:"70,000–90,000"},
-      {name:"Travel Writing", wc:"60,000–90,000"},
-      {name:"True Crime", wc:"70,000–100,000"},
-      {name:"Urban & Contemporary", wc:"70,000–90,000"},
-      {name:"Western", wc:"60,000–80,000"}
+      {name:"Thriller & Suspense", wc:"70,000–90,000", per:2000, says:"Most thrillers land"},
+      {name:"Travel Writing", wc:"60,000–90,000", per:3500, says:"Most travel writing lands"},
+      {name:"True Crime", wc:"70,000–100,000", per:4000, says:"Most true crime lands"},
+      {name:"Urban & Contemporary", wc:"70,000–90,000", per:3000, says:"Most contemporary fiction lands"},
+      {name:"Western", wc:"60,000–80,000", per:3000, says:"Most westerns land"}
     ];
-    var GENRE_WC = {};
-    GENRES.forEach(function(g){ if (g.wc) GENRE_WC[g.name] = g.wc; });
+    var GENRE_WC = {}, GENRE_INFO = {};
+    GENRES.forEach(function(g){ if (g.wc){ GENRE_WC[g.name] = g.wc; GENRE_INFO[g.name] = g; } });
     window.IS_GENRE_WC = GENRE_WC;          /* the board can read this later */
+    window.IS_GENRE_INFO = GENRE_INFO;
 
     GENRES.forEach(function(g){
       var o = document.createElement('div');
@@ -646,86 +642,92 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       comingNote.classList.remove('show');
     });
 
-    /* ---- the clever Word Count steers ---- */
-    var IS_WORDS_PER_CH = {
-      "Novel":3000,"Novella":2500,"Children's Book":1500,"Non-Fiction":4500,
-      "Crime & Thriller":2000,"Thriller & Suspense":2000,"Fantasy":4000,
-      "Science Fiction":4000,"Romance":2500,"Literary Fiction":4000,
-      "Historical Fiction":3500,"Horror":3000,"_default":3000
-    };
-    var IS_TYPICAL_WORDS = {
-      "Novel":80000,"Novella":35000,"Children's Book":10000,"Non-Fiction":90000,
-      "Crime & Thriller":85000,"Thriller & Suspense":85000,"Fantasy":100000,
-      "Science Fiction":100000,"Romance":80000,"Literary Fiction":90000,
-      "Historical Fiction":95000,"Horror":85000,"_default":80000
-    };
-    var IS_FALLBACK_CH = {
-      "Novel":25,"Novella":12,"Children's Book":10,"Non-Fiction":15,
-      "Crime & Thriller":35,"Thriller & Suspense":35,"Fantasy":30,
-      "Science Fiction":30,"Romance":28,"Literary Fiction":22,
-      "Historical Fiction":24,"Horror":28,"_default":25
-    };
-    var isChaptersEdited = false;
+    /* ---- the Word Count guides ----
+       Three figures, all drawn from the chosen genre and all editable.
+       Words and Words-per-chapter give the Chapter range; edit any of the
+       three and the others follow. Nothing here is a target — it is a guide. */
+    var guidesEdited = false;
     function isFmt(n){ return n.toLocaleString('en-GB'); }
     function isGenre(){ return genreHidden.value || ''; }
-    function isTargetWords(){ var el=document.getElementById('ph-targetwords'); return el?(parseInt((el.value||'').replace(/[^0-9]/g,''),10)||0):0; }
+    function elVal(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; }
+    function numsIn(str){
+      var m=(str||'').replace(/,/g,'').match(/\d+/g);
+      return m?m.map(Number):[];
+    }
+    function fmtRange(lo,hi){ return isFmt(lo)+'\u2013'+isFmt(hi); }
 
-    window.onTargetWordsInput = function(){
-      var el=document.getElementById('ph-targetwords');
-      var digits=el.value.replace(/[^0-9]/g,'');
-      el.value=digits?parseInt(digits,10).toLocaleString('en-GB'):'';
-      if (typeof autoSave === 'function') autoSave();
-      if (typeof updateWordCount === 'function') updateWordCount();
-      window.updateChapterSteer();
-    };
+    /* recalculate whichever of the three the writer did not just touch */
+    function recalcGuides(source){
+      var per = numsIn(elVal('ph-perchapter'))[0] || 0;
+      var w   = numsIn(elVal('ph-wordrange'));
+      var c   = numsIn(elVal('ph-chapterrange'));
 
-    /* plural of the genre, for the sentence under the row: "Most adventures land..." */
-    function isPlural(name){
-      var n=(name||'').toLowerCase();
-      if(!n) return 'works';
-      if(/(s|x|z|ch|sh)$/.test(n)) return n+'es';
-      if(/[^aeiou]y$/.test(n)) return n.slice(0,-1)+'ies';
-      return n+'s';
+      if(source==='chapters' && per && c.length>=2){
+        var wEl=document.getElementById('ph-wordrange');
+        if(wEl) wEl.value = fmtRange(c[0]*per, c[1]*per);
+      } else if(per && w.length>=2){
+        var cEl=document.getElementById('ph-chapterrange');
+        if(cEl) cEl.value = fmtRange(Math.max(1,Math.round(w[0]/per)), Math.max(1,Math.round(w[1]/per)));
+      }
     }
 
-    window.updateChapterSteer = function(){
-      var genre=isGenre();
-      var per=IS_WORDS_PER_CH[genre]||IS_WORDS_PER_CH._default;
-      var target=isTargetWords();
-      var chInput=document.getElementById('ph-chapters');
-      var cell=document.getElementById('ph-chapters-cell');
+    function showGuideReset(on){
+      var b=document.getElementById('ph-guide-reset');
+      if(b) b.classList.toggle('show', !!on);
+      ['ph-wordrange','ph-chapterrange','ph-perchapter'].forEach(function(id){
+        var e=document.getElementById(id); if(e) e.classList.toggle('edited', !!on);
+      });
+    }
 
-      /* the greyed prompt inside Target is the genre's range */
-      var tgt=document.getElementById('ph-targetwords');
-      if(tgt) tgt.placeholder = GENRE_WC[genre] || '80,000';
-
-      var n;
-      if(target>0){ n=Math.max(1,Math.round(target/per)); }
-      else { n=IS_FALLBACK_CH[genre]||IS_FALLBACK_CH._default; }
-      if(chInput && !isChaptersEdited) chInput.value=n;
-      if(cell && !isChaptersEdited){ cell.classList.remove('edited'); cell.classList.add('suggested'); }
-
-      /* one quiet sentence under the whole row */
-      var line=document.getElementById('ph-wc-line');
-      if(line){
-        var typical=IS_TYPICAL_WORDS[genre]||IS_TYPICAL_WORDS._default;
-        if(target>0){
-          line.textContent='At '+isFmt(target)+' words, that is about '+isFmt(n)+' chapters.';
-        } else if(genre){
-          line.textContent='Most '+isPlural(genre)+' land around '+isFmt(typical)+' words — about '+isFmt(n)+' chapters at that length.';
-        } else {
-          line.textContent='Choose a genre and InkySwot will suggest a length.';
-        }
-      }
-    };
-
-    window.onChaptersEdit = function(){
-      isChaptersEdited=true;
-      var cell=document.getElementById('ph-chapters-cell');
-      if(cell){ cell.classList.remove('suggested'); cell.classList.add('edited'); }
+    window.onGuideEdit = function(source){
+      guidesEdited = true;
+      showGuideReset(true);
+      recalcGuides(source);
+      updateWcLine();
       if (typeof autoSave === 'function') autoSave();
     };
-    window.resetChapters = function(){ isChaptersEdited=false; window.updateChapterSteer(); if (typeof autoSave === 'function') autoSave(); };
+
+    window.resetGuides = function(){
+      guidesEdited = false;
+      showGuideReset(false);
+      ['ph-wordrange','ph-chapterrange','ph-perchapter'].forEach(function(id){
+        var e=document.getElementById(id); if(e) e.value='';
+      });
+      window.updateChapterSteer();
+      if (typeof autoSave === 'function') autoSave();
+    };
+
+    /* the one quiet sentence beneath the row */
+    function updateWcLine(){
+      var line=document.getElementById('ph-wc-line'); if(!line) return;
+      var genre=isGenre(), info=GENRE_INFO[genre];
+      if(!genre || !info){ line.textContent='Choose a genre and InkySwot will suggest a length.'; return; }
+      line.textContent = info.says + ' somewhere in this range \u2014 it\u2019s a guide, not a rule.';
+    }
+
+    /* fill the three guides from the genre, unless the writer has changed them */
+    window.updateChapterSteer = function(){
+      var genre=isGenre(), info=GENRE_INFO[genre];
+      var wEl=document.getElementById('ph-wordrange'),
+          cEl=document.getElementById('ph-chapterrange'),
+          pEl=document.getElementById('ph-perchapter');
+
+      if(info){
+        var w=numsIn(info.wc), per=info.per||3000;
+        var wText = (w.length>=2) ? fmtRange(w[0],w[1]) : info.wc;
+        var cText = (w.length>=2)
+          ? fmtRange(Math.max(1,Math.round(w[0]/per)), Math.max(1,Math.round(w[1]/per)))
+          : '\u2014';
+        if(wEl) wEl.placeholder = wText;
+        if(cEl) cEl.placeholder = cText;
+        if(pEl) pEl.placeholder = isFmt(per);
+      } else {
+        if(wEl) wEl.placeholder = '70,000\u2013100,000';
+        if(cEl) cEl.placeholder = '23\u201333';
+        if(pEl) pEl.placeholder = '3,000';
+      }
+      updateWcLine();
+    };
 
     /* ---- the strap line hover-scroll ---- */
     (function(){
@@ -756,6 +758,43 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       input.addEventListener('focus', stopDrift);
       input.addEventListener('blur', function(){ input.scrollLeft = 0; });
     })();
+
+    /* ---- keep the guides with the project ----
+       The corridor saves the fields it knows about; these three are ours,
+       so the pocket stores and restores them itself. */
+    function saveGuides(){
+      if(typeof getProjects!=='function' || !window.currentProject) return;
+      var all=getProjects(), item=all[currentProject.index]; if(!item) return;
+      item.wordRange   = elVal('ph-wordrange');
+      item.chapterRange= elVal('ph-chapterrange');
+      item.perChapter  = elVal('ph-perchapter');
+      item.guidesEdited= guidesEdited;
+      saveProjects(all);
+    }
+    function loadGuides(){
+      var p=window.currentProject||{};
+      var wEl=document.getElementById('ph-wordrange'),
+          cEl=document.getElementById('ph-chapterrange'),
+          pEl=document.getElementById('ph-perchapter');
+      guidesEdited = !!p.guidesEdited;
+      if(wEl) wEl.value = p.wordRange||'';
+      if(cEl) cEl.value = p.chapterRange||'';
+      if(pEl) pEl.value = p.perChapter||'';
+      showGuideReset(guidesEdited);
+      window.updateChapterSteer();
+    }
+
+    /* when the corridor loads a project into the screen, load our guides too */
+    if(typeof window.loadProjectHeader==='function' && !window.loadProjectHeader._guarded){
+      var corridorLoad = window.loadProjectHeader;
+      window.loadProjectHeader = function(){ corridorLoad.apply(this, arguments); loadGuides(); };
+      window.loadProjectHeader._guarded = true;
+    }
+
+    var plainGuideEdit = window.onGuideEdit;
+    window.onGuideEdit = function(source){ plainGuideEdit(source); saveGuides(); };
+    var plainResetGuides = window.resetGuides;
+    window.resetGuides = function(){ plainResetGuides(); saveGuides(); };
 
     window.updateChapterSteer();
   }
