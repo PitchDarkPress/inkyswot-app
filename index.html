@@ -389,8 +389,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
         <div class="field"><div class="field-label">Author Name(s)</div><input type="text" class="field-input" id="ph-author" placeholder="Your name..." oninput="autoSave()"/></div>
         <div class="field"><div class="field-label">Status</div><select class="field-select" id="ph-status" onchange="autoSave()"><option value="">— Select —</option><option value="draft">Draft</option><option value="progress">In Progress</option><option value="complete">Complete</option><option value="published">Published</option></select></div>
       </div>
-      <div class="field-row">
-        <div class="field">
+      <div class="field">
           <div class="field-label">Genre</div>
           <!-- custom InkySwot dropdown: greyed 'coming' formats + hover COMING SOON note.
                Each ready format carries its industry word-count range, shown on the right.
@@ -405,10 +404,8 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
             <div class="is-menu" id="ph-genre-menu"></div>
           </div>
           <input type="hidden" id="ph-genre" value="" onchange="autoSave()"/>
-        </div>
-        <div class="field"><div class="field-label">Classification</div><select class="field-select" id="ph-classification" onchange="autoSave()"><option value="">— Select —</option><option>Children's (Under 12)</option><option>Young Adult (12–16)</option><option>Teen (16–18)</option><option>Adult (18+)</option><option>Explicit Adult (18+)</option><option>Other</option></select></div>
       </div>
-      <div class="field-row"><div class="field"><div class="field-label">Start Date</div><input type="date" class="field-input" id="ph-startdate" oninput="autoSave()"/></div></div>
+      <div class="field-row"><div class="field"><div class="field-label">Start Date</div><input type="date" class="field-input" id="ph-startdate" oninput="autoSave()"/></div><div class="field"><div class="field-label">Classification</div><select class="field-select" id="ph-classification" onchange="autoSave()"><option value="">— Select —</option><option>Children's (Under 12)</option><option>Young Adult (12–16)</option><option>Teen (16–18)</option><option>Adult (18+)</option><option>Explicit Adult (18+)</option><option>Other</option></select></div></div>
     </div>
     <div class="field-group">
       <div class="field-group-title">Word Count</div>
