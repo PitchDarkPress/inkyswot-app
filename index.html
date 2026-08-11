@@ -427,6 +427,9 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       <div class="wc-line" id="ph-wc-line"></div>
       <!-- the corridor still looks for these three by name; kept hidden so nothing breaks -->
       <input type="hidden" id="ph-targetwords" value=""/>
+      <input type="hidden" id="ph-format" value=""/>
+      <input type="hidden" id="ph-audience" value=""/>
+      <input type="hidden" id="ph-outline" value=""/>
       <span id="ph-currentwords" style="display:none">0</span>
       <span id="ph-remaining" style="display:none">—</span>
     </div>
@@ -617,8 +620,8 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       opt.classList.add('sel');
       genreSelect.classList.remove('open'); genreField.classList.remove('open');
       comingNote.classList.remove('show');
-      if (typeof autoSave === 'function') autoSave();     /* corridor helper — save as before */
       window.updateChapterSteer();
+      try { if (typeof autoSave === 'function') autoSave(); } catch(e){}   /* corridor helper — save as before */
     });
 
     /* hover a greyed format — the COMING SOON note pops up beside it */
@@ -787,12 +790,15 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     /* when the corridor loads a project into the screen, load our guides too */
     if(typeof window.loadProjectHeader==='function' && !window.loadProjectHeader._guarded){
       var corridorLoad = window.loadProjectHeader;
-      window.loadProjectHeader = function(){ corridorLoad.apply(this, arguments); loadGuides(); };
+      window.loadProjectHeader = function(){
+        try { corridorLoad.apply(this, arguments); } catch(e){}
+        loadGuides();
+      };
       window.loadProjectHeader._guarded = true;
     }
 
     var plainGuideEdit = window.onGuideEdit;
-    window.onGuideEdit = function(source){ plainGuideEdit(source); saveGuides(); };
+    window.onGuideEdit = function(source){ plainGuideEdit(source); try { saveGuides(); } catch(e){} };
     var plainResetGuides = window.resetGuides;
     window.resetGuides = function(){ plainResetGuides(); saveGuides(); };
 
