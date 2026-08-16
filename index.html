@@ -316,7 +316,6 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="sidebar-section-title" id="projectNavTitle">Project</div>
     <div class="sidebar-item" id="nav-overview" onclick="showScreen('project-overview')"><span class="sidebar-icon">◈</span> Basics</div>
     <div class="sidebar-group-label"><span class="sidebar-icon">⟁</span> Story</div>
-    <div class="sidebar-item sub" id="nav-synopsis" onclick="showScreen('coming-soon','Synopsis')"><span class="sidebar-icon">·</span> Synopsis</div>
     <div class="sidebar-item sub" id="nav-plotthreads" onclick="showScreen('plotthreads')"><span class="sidebar-icon">·</span> Plot Threads</div>
     <div class="sidebar-item sub" id="nav-subplots" onclick="showScreen('subplots')"><span class="sidebar-icon">·</span> Subplots</div>
     <div class="sidebar-item sub" id="nav-themes" onclick="showScreen('themes')"><span class="sidebar-icon">·</span> Themes & Motifs</div>
@@ -337,7 +336,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     <div class="sidebar-item sub" id="nav-images" onclick="showScreen('coming-soon','Images')"><span class="sidebar-icon">·</span> Images</div>
     <div class="sidebar-item sub" id="nav-sandbox" onclick="showScreen('coming-soon','Sandbox')"><span class="sidebar-icon">·</span> Sandbox</div>
     <div class="sidebar-group-label"><span class="sidebar-icon">⬡</span> DCW</div>
-    <div class="sidebar-item sub" id="nav-plotmapper" onclick="showScreen('coming-soon','Plot Mapper')"><span class="sidebar-icon">·</span> Plot Mapper</div>
+    <div class="sidebar-item sub" id="nav-plotmapper" onclick="showScreen('plot-mapper')"><span class="sidebar-icon">·</span> Plot Mapper</div>
     <div class="sidebar-item sub" id="nav-manuscript" onclick="showScreen('coming-soon','Manuscript')"><span class="sidebar-icon">·</span> Manuscript</div>
     <div class="sidebar-item sub" id="nav-publish" onclick="showScreen('coming-soon','Publish')"><span class="sidebar-icon">·</span> Publish</div>
   </div>
@@ -925,6 +924,1347 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
 </div>
 <!-- END CHAPTERS -->
 
+<!-- PLOT MAPPER -->
+<!-- ===================================================================
+     PLOT MAPPER  ·  pockets/plot-mapper.html
+
+     Write the whole story down. Sort it out afterwards.
+
+     The wordmark, the sidebar and the light/dark toggle are the corridor's
+     and are not repeated here. AI ON/OFF in the platform header drives
+     Ada on this screen.
+     =================================================================== -->
+<div class="screen" id="screen-plot-mapper">
+  <div class="page">
+
+    <div class="basics-head">
+      <div class="bh-kicker">Plot Mapper <span class="bh-from">&middot; carried over from Basics</span>
+        <button class="tb-help" id="pmHelpBtn" title="What does this screen do?">SECTION <span class="q">?</span></button>
+      </div>
+      <div class="bh-title" id="pmTitle">Untitled Project</div>
+      <div class="bh-strap" id="pmStrap"></div>
+      <div class="bh-block">
+        <div class="bh-rows">
+          <div class="steer" id="pmSteer"></div>
+          <div class="bh-morerow">
+            <button class="bh-more" id="pmMoreBtn" title="The book&rsquo;s details, as set in Basics">More</button>
+          </div>
+          <div class="bh-facts" id="pmFacts"></div>
+        </div>
+        <a class="bh-edit" id="pmEdit" href="#">Edit in Basics &rarr;</a>
+      </div>
+    </div>
+
+    <div class="doc-label">The Whole Story
+      <button class="ind-btn" id="pmBrkBtn" title="Put a chapter or scene break where the cursor is"><span class="dot"></span> Break here</button>
+      <button class="ind-btn" id="pmIndBtn" title="First line of each paragraph indented, as a printed book sets it"><span class="dot"></span> Indent</button>
+      <button class="ind-btn" id="pmMrkBtn" title="Show a dashed line under anything you have recorded"><span class="dot"></span> Details</button>
+    </div>
+
+    <div class="doc indent" id="pmDoc"></div>
+
+    <div class="offer"   id="pmOffer"></div>
+    <div class="brkmenu" id="pmBrkMenu"></div>
+    <div class="brkmenu" id="pmDotMenu"></div>
+
+    <div class="doc-foot">
+      <div class="tally" id="pmTally"></div>
+    </div>
+
+  </div>
+
+  <div class="scrim" id="pmScrim"><div class="card" id="pmCard"></div></div>
+
+  <div class="help-panel" id="pmHelp">
+    <div class="help-head">
+      <div><div class="help-kicker">Section guide</div><h2>Plot Mapper</h2></div>
+      <button class="help-close" id="pmHelpClose">&#10005;</button>
+    </div>
+    <div class="help-body">
+      <p class="help-tag">Write the whole story down. Sort it out afterwards.</p>
+
+      <div class="help-line"><span class="help-key">F2</span><span class="help-say">Break a chapter or a scene at the cursor.</span></div>
+      <div class="help-line"><span class="help-key">Highlight, F2</span><span class="help-say">Make a character, a place, a note. Part of a word will do.</span></div>
+      <div class="help-line"><span class="help-key">The gold dot</span><span class="help-say">Word range, change the break, remove it.</span></div>
+      <div class="help-line"><span class="help-key">Prompt / Expand</span><span class="help-say">Ada, on the chapter or scene they sit beside. Not connected yet &mdash; shown quiet until she is.</span></div>
+      <div class="help-line"><span class="help-key">Also called</span><span class="help-say">Mr. Toad and Toad, one character.</span></div>
+      <div class="help-line"><span class="help-key">Indent</span><span class="help-say">First lines set in, as a book does.</span></div>
+      <div class="help-line"><span class="help-key">Details</span><span class="help-say">The dashed lines under what you have recorded.</span></div>
+      <div class="help-line"><span class="help-key">Break here</span><span class="help-say">The same as F2, for the mouse.</span></div>
+      <div class="help-line"><span class="help-key">Word budget</span><span class="help-say">Each chapter&rsquo;s share of the book&rsquo;s range, taken from Basics. Red means over, never stopped.</span></div>
+      <div class="help-line"><span class="help-key">The count</span><span class="help-say">Words, chapters, scenes, and how much is not yet divided.</span></div>
+      <div class="help-line"><span class="help-key">AI ON</span><span class="help-say">In the platform header. Turns Ada off altogether. She never writes the prose.</span></div>
+      <div class="help-line"><span class="help-key">SECTION ?</span><span class="help-say">This window. Move it, resize it, leave it open.</span></div>
+      <div class="help-line"><span class="help-key">Ctrl+Z</span><span class="help-say">Steps back through all of it.</span></div>
+      <div class="help-line"><span class="help-key">Saving</span><span class="help-say">By itself, as you write. The document is kept with the project.</span></div>
+
+      <p class="help-foot">Ada proposes; you decide.</p>
+    </div>
+    <div class="help-grip" id="pmHelpGrip"></div>
+  </div>
+</div>
+
+<style>
+#screen-plot-mapper .ada-off{opacity:.35;pointer-events:none}#screen-plot-mapper .brkmenu button.ada{color:var(--gold)}#screen-plot-mapper .brkmenu button.ada:hover{color:var(--gold2)}#screen-plot-mapper .page{width:min(940px,calc(100% - 72px));margin:0 auto;padding:40px 0 140px}
+
+/* BASICS header — the book's identity, carried over (not re-entered) */#screen-plot-mapper .basics-head{padding-bottom:14px;border-bottom:1px solid var(--rule2)}#screen-plot-mapper .bh-kicker{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}#screen-plot-mapper .bh-from{color:var(--ink3);letter-spacing:.14em}#screen-plot-mapper .bh-title{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;margin-top:8px;color:var(--ink)}#screen-plot-mapper .bh-strap{font-size:20px;font-style:italic;color:var(--ink2)}#screen-plot-mapper .bh-strap{margin-top:4px}#screen-plot-mapper .bh-morerow{display:flex}#screen-plot-mapper .bh-more{flex:0 0 auto;min-width:78px;justify-content:center;background:transparent;border:1px solid var(--rule2);
+  border-radius:3px;color:var(--ink3);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;padding:3px 10px;cursor:pointer;display:inline-flex;align-items:center;white-space:nowrap}#screen-plot-mapper .bh-more:hover{border-color:var(--gold);color:var(--gold)}#screen-plot-mapper .basics-head.more .bh-facts{display:flex;align-items:center;flex-wrap:wrap;gap:14px;margin-top:2px}#screen-plot-mapper .bh-block{display:flex;align-items:flex-start;gap:18px;margin-top:12px}#screen-plot-mapper .bh-rows{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}#screen-plot-mapper .bh-facts{display:none}#screen-plot-mapper .bh-fact{font-family:'Crimson Pro',serif;font-size:17px;color:var(--ink2)}#screen-plot-mapper .bh-fact b{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-right:7px}#screen-plot-mapper .bh-dot{color:var(--ink3)}#screen-plot-mapper .bh-edit{flex:0 0 auto;align-self:flex-start;display:flex;align-items:center;justify-content:center;text-align:center;
+  width:106px;min-height:46px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.4;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink3);text-decoration:none;border:1px solid var(--rule2);padding:6px 12px;border-radius:3px}#screen-plot-mapper .bh-edit:hover{border-color:var(--gold);color:var(--gold)}
+
+/* WORD BUDGET steer */#screen-plot-mapper .steer{margin:0;padding:0}#screen-plot-mapper .steer-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px}#screen-plot-mapper .steer-label{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);flex-shrink:0}#screen-plot-mapper .steer-line{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-family:'Crimson Pro',serif;font-size:16px;color:var(--ink2)}#screen-plot-mapper .steer-line b{color:var(--ink)}#screen-plot-mapper .steer-num{background:transparent;border:none;border-bottom:1px solid var(--input-border);color:var(--gold2);font-family:'JetBrains Mono',monospace;font-size:14px;padding:2px 4px;outline:none;text-align:center;width:140px}#screen-plot-mapper .steer-num.sm{width:40px}#screen-plot-mapper .steer-num:hover{border-bottom-color:var(--gold)}#screen-plot-mapper .steer-num:focus{border-color:var(--gold)}#screen-plot-mapper .steer-toggle{justify-self:end;justify-content:center;min-width:126px;white-space:nowrap;display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);cursor:pointer;border:1px solid var(--rule2);padding:6px 11px;border-radius:3px;background:transparent}#screen-plot-mapper .steer-toggle:hover{border-color:var(--gold);color:var(--ink2)}#screen-plot-mapper .steer-after{font-family:'Crimson Pro',serif;font-style:italic;font-size:16px;color:var(--ink3)}#screen-plot-mapper .bud-state{display:inline-block;width:3ch;text-align:left}#screen-plot-mapper .steer-toggle .dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}#screen-plot-mapper .steer.off .steer-toggle .dot{background:var(--ink3)}#screen-plot-mapper .steer-warn{margin-top:10px;font-family:'Crimson Pro',serif;font-size:16px;font-style:italic;color:var(--danger);display:none}#screen-plot-mapper .steer.warn .steer-warn{display:block}
+
+/* ===== THE DOCUMENT ===== */#screen-plot-mapper .doc-label{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink3);margin:30px 0 4px;display:flex;align-items:center;gap:12px}#screen-plot-mapper .doc-label .lbl-hint{font-family:'Crimson Pro',serif;font-style:italic;font-size:15px;letter-spacing:0;
+  text-transform:none;color:var(--ink3);margin-left:auto;opacity:.75}#screen-plot-mapper .doc-label .lbl-hint kbd{font-family:'JetBrains Mono',monospace;font-style:normal;font-size:12px;letter-spacing:.06em;
+  color:var(--key-ink);border:1px solid var(--rule2);border-radius:3px;padding:2px 7px;margin:0 2px}#screen-plot-mapper .doc-label .ind-btn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink3);background:transparent;border:1px solid var(--rule2);border-radius:3px;padding:4px 10px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;min-width:104px}#screen-plot-mapper .doc-label .ind-btn:hover{border-color:var(--gold);color:var(--ink2)}#screen-plot-mapper .doc-label .ind-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}#screen-plot-mapper .doc-label .ind-btn.off .dot{background:var(--ink3)}#screen-plot-mapper .doc{position:relative;padding:14px 0 0 64px}
+
+/* the prose — one continuous flow, paragraph by paragraph */#screen-plot-mapper .prose{font-family:'Crimson Pro',serif;font-size:19px;line-height:1.7;color:var(--ink);outline:none;min-height:1.7em}#screen-plot-mapper .prose p{margin:0 0 .5em}#screen-plot-mapper .prose p:last-child{margin-bottom:0}#screen-plot-mapper .doc.indent .prose p{text-indent:1.7em}#screen-plot-mapper .doc.indent .prose p:first-child{text-indent:0}   /* flush after every break, as a book sets it */#screen-plot-mapper .prose::selection,
+#screen-plot-mapper .prose *::selection{background:rgba(201,146,58,.28)}
+
+/* ---- a break — a dashed hairline, its pill out in the gutter ---- */#screen-plot-mapper .brk{position:relative;display:flex;align-items:center;gap:12px;scroll-margin-top:70px}#screen-plot-mapper .brk-chap{margin:20px 0 16px}#screen-plot-mapper .brk-scene{margin:14px 0}#screen-plot-mapper .brk .bk-pill{position:absolute;left:-64px;top:50%;transform:translateY(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--gold);
+  border:1px solid rgba(201,146,58,.5);border-radius:3px;padding:2px 7px;background:var(--bg);white-space:nowrap}#screen-plot-mapper .brk-scene .bk-pill{left:-52px;color:var(--ink2);border-color:var(--rule2);font-size:11px;padding:2px 7px}#screen-plot-mapper .brk .bk-title{flex:0 1 auto;min-width:90px;max-width:400px;background:transparent;border:none;
+  border-bottom:1px solid transparent;color:var(--ink);font-family:'Crimson Pro',serif;font-size:23px;
+  font-style:italic;padding:0 3px;outline:none}#screen-plot-mapper .brk-scene .bk-title{font-size:21px;color:var(--ink2);max-width:280px}#screen-plot-mapper .brk .bk-title:hover{border-bottom-color:var(--rule2)}#screen-plot-mapper .brk .bk-title:focus{border-bottom-color:var(--gold);color:var(--ink)}#screen-plot-mapper .brk .bk-title::placeholder{color:var(--ink3);opacity:.55}#screen-plot-mapper .brk .bk-rule{flex:1 1 auto;min-width:20px;height:0;border-top:1px dashed rgba(201,146,58,.55)}#screen-plot-mapper .brk-scene .bk-rule{border-top:1px dashed rgba(182,164,132,.55)}#screen-plot-mapper .brk .bk-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink2);flex:0 0 auto;white-space:nowrap}#screen-plot-mapper .brk .bk-count .act{color:var(--ink)}#screen-plot-mapper .brk.over .bk-count .act{color:var(--danger)}#screen-plot-mapper .brk .bk-count input{width:104px;background:var(--input-bg);border:1px solid var(--gold);color:var(--gold2);
+  font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 5px;border-radius:2px;outline:none;text-align:right}
+
+/* Ada's two, on the right of the chapter or scene they act on */#screen-plot-mapper .bk-ada{display:flex;align-items:center;gap:6px;flex:0 0 auto}#screen-plot-mapper .bk-ada button{background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:2px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;padding:2px 8px;cursor:pointer;
+  white-space:nowrap;line-height:1.5}#screen-plot-mapper .bk-ada button:hover{background:var(--gold);color:var(--btn-text)}#screen-plot-mapper .bk-ada button.quiet{opacity:.32;border-color:var(--rule2);color:var(--ink3);cursor:default}#screen-plot-mapper .bk-ada button.quiet:hover{background:transparent;color:var(--ink3)}#screen-plot-mapper .brk .bk-dot{flex:0 0 auto;width:11px;height:11px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;padding:0}#screen-plot-mapper .brk .bk-dot:hover{background:var(--gold2);box-shadow:0 0 0 4px rgba(201,146,58,.16)}#screen-plot-mapper .brk-scene .bk-dot{width:7px;height:7px;background:var(--ink3)}#screen-plot-mapper .brk-scene .bk-dot:hover{background:var(--gold)}
+
+/* ===== THE F2 MENU, WITH A PHRASE HIGHLIGHTED ===== */#screen-plot-mapper .offer{position:fixed;z-index:600;display:none;flex-direction:column;padding:8px;border-radius:6px;
+  background:var(--bg2);border:1px solid var(--rule2);box-shadow:0 16px 40px rgba(0,0,0,.65)}#screen-plot-mapper .offer.show{display:flex}#screen-plot-mapper .offer .o-head{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink3);padding:4px 6px 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:760px}#screen-plot-mapper .offer .o-cols{display:flex;align-items:flex-start;gap:6px}#screen-plot-mapper .offer .o-col{flex:1 1 0;min-width:184px;display:flex;flex-direction:column;gap:1px}#screen-plot-mapper .offer .o-col + .o-col{border-left:1px solid var(--rule);padding-left:6px}#screen-plot-mapper .offer .o-group{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  padding:2px 8px 6px;color:var(--gcol,var(--gold))}#screen-plot-mapper .offer button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:transparent;border:none;
+  border-radius:4px;padding:5px 8px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:16px;color:var(--ink);white-space:nowrap}#screen-plot-mapper .offer button:hover{background:var(--bg3)}#screen-plot-mapper .offer button .dot{width:10px;height:10px;border-radius:3px;flex:0 0 auto;border:1px solid transparent}#screen-plot-mapper .offer button .key{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--key-ink);
+  border:1px solid var(--rule2);border-radius:3px;padding:2px 7px;flex:0 0 auto}#screen-plot-mapper .offer button:hover .key{border-color:var(--gold);color:var(--key-ink)}
+
+/* ===== THE SECTION GUIDE — the same pill and panel used platform-wide ===== */#screen-plot-mapper .tb-help{background:transparent;border:2px solid var(--gold);border-radius:3px;color:var(--gold2);
+  font-family:'JetBrains Mono',monospace;font-weight:500;font-size:12px;letter-spacing:.08em;height:32px;padding:0 12px;
+  display:inline-flex;align-items:center;gap:7px;cursor:pointer;white-space:nowrap}#screen-plot-mapper .tb-help:hover{background:var(--gold);color:var(--btn-text)}#screen-plot-mapper .tb-help .q{font-family:'Playfair Display',serif;font-weight:900;font-size:15px;line-height:1}#screen-plot-mapper .help-panel{position:fixed;z-index:5600;display:none;flex-direction:column;
+  width:540px;height:min(74vh,700px);min-width:360px;min-height:220px;max-width:96vw;max-height:92vh;
+  background:var(--bg2);border:1px solid var(--rule2);border-top:2px solid var(--gold);border-radius:5px;
+  box-shadow:0 24px 60px rgba(0,0,0,.6);overflow:hidden}#screen-plot-mapper .help-grip{position:absolute;right:0;bottom:0;width:18px;height:18px;cursor:nwse-resize;z-index:2}#screen-plot-mapper .help-grip::after{content:'';position:absolute;right:4px;bottom:4px;width:8px;height:8px;
+  border-right:2px solid var(--rule2);border-bottom:2px solid var(--rule2);border-radius:0 0 2px 0}#screen-plot-mapper .help-grip:hover::after{border-color:var(--gold)}#screen-plot-mapper .help-panel.show{display:flex}#screen-plot-mapper .help-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  padding:16px 20px 13px;border-bottom:1px solid var(--rule2);cursor:grab;user-select:none;flex:0 0 auto}#screen-plot-mapper .help-head:active{cursor:grabbing}body.help-moving{user-select:none}#screen-plot-mapper .help-kicker{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:4px}#screen-plot-mapper .help-head h2{font-family:'Playfair Display',serif;font-weight:700;font-size:26px;color:var(--ink)}#screen-plot-mapper .help-close{background:transparent;border:none;font-family:'JetBrains Mono',monospace;font-size:20px;
+  color:var(--ink3);cursor:pointer;line-height:1}#screen-plot-mapper .help-close:hover{color:var(--gold)}#screen-plot-mapper .help-body{overflow:auto;padding:18px 22px 26px}#screen-plot-mapper .help-tag{font-family:'Crimson Pro',serif;font-style:italic;font-size:19px;line-height:1.4;
+  color:var(--ink2);margin-bottom:20px}#screen-plot-mapper .help-line{display:flex;gap:12px;align-items:baseline;margin-bottom:13px}#screen-plot-mapper .help-key{flex:0 0 132px;font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.04em;
+  color:var(--gold);text-align:right;white-space:nowrap}#screen-plot-mapper .help-say{flex:1;font-family:'Crimson Pro',serif;font-size:18px;line-height:1.4;color:var(--ink)}#screen-plot-mapper .help-foot{margin-top:20px;padding-top:14px;border-top:1px solid var(--rule2);
+  font-family:'Crimson Pro',serif;font-style:italic;font-size:16px;color:var(--ink3)}
+
+/* a phrase the platform now knows — tinted in its group's colour */#screen-plot-mapper .mark{color:inherit;border-bottom:1px dashed var(--markcol,var(--gold));padding-bottom:2px}#screen-plot-mapper .doc.nomarks .mark{border-bottom-color:transparent}
+
+/* the small menus — the two breaks at the cursor, and the dot's own */#screen-plot-mapper .brkmenu{position:fixed;z-index:620;display:none;flex-direction:column;padding:5px;border-radius:6px;min-width:210px;
+  background:var(--bg2);border:1px solid var(--rule2);box-shadow:0 16px 40px rgba(0,0,0,.65)}#screen-plot-mapper .brkmenu.show{display:flex}#screen-plot-mapper .brkmenu .bm-head{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink3);padding:6px 8px 5px}#screen-plot-mapper .brkmenu button{display:flex;align-items:center;gap:9px;width:100%;text-align:left;background:transparent;border:none;
+  border-radius:4px;padding:7px 8px;cursor:pointer;font-family:'Crimson Pro',serif;font-size:16px;color:var(--ink)}#screen-plot-mapper .brkmenu button:hover{background:var(--bg3)}#screen-plot-mapper .brkmenu button.warn:hover{color:var(--danger)}#screen-plot-mapper .brkmenu button .key{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--key-ink);
+  border:1px solid var(--rule2);border-radius:3px;padding:2px 7px}#screen-plot-mapper .brkmenu button:hover .key{border-color:var(--gold);color:var(--key-ink)}
+
+/* ===== THE CARD — the whole page, over the synopsis ===== */#screen-plot-mapper .scrim{position:fixed;inset:0;z-index:700;background:rgba(8,6,4,.72);display:none;align-items:flex-start;
+  justify-content:center;padding:40px 20px;overflow:auto}#screen-plot-mapper .scrim.show{display:flex}#screen-plot-mapper .card{width:min(720px,100%);background:var(--bg2);border:1px solid var(--rule2);border-top:2px solid var(--cardcol,var(--gold));
+  border-radius:5px;box-shadow:0 30px 80px rgba(0,0,0,.7)}#screen-plot-mapper .card-head{display:flex;align-items:flex-start;gap:14px;padding:20px 24px 16px;border-bottom:1px solid var(--rule)}#screen-plot-mapper .card-kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cardcol,var(--gold));margin-bottom:6px}#screen-plot-mapper .card-name{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--ink);
+  background:transparent;border:none;border-bottom:1px solid transparent;outline:none;width:100%;padding:1px 2px}#screen-plot-mapper .card-name:hover{border-bottom-color:var(--rule2)}#screen-plot-mapper .card-name:focus{border-bottom-color:var(--cardcol,var(--gold))}#screen-plot-mapper .card-from{font-family:'Crimson Pro',serif;font-style:italic;font-size:15px;color:var(--ink3);margin-top:7px}#screen-plot-mapper .aka{margin-top:10px}#screen-plot-mapper .aka-lab{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink2);margin-bottom:6px}#screen-plot-mapper .aka-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px}#screen-plot-mapper .aka-pill{display:inline-flex;align-items:center;gap:6px;font-family:'Crimson Pro',serif;font-size:16px;
+  color:var(--ink);border:1px solid var(--cardcol,var(--gold));border-radius:3px;padding:2px 6px 2px 9px}#screen-plot-mapper .aka-pill button{background:transparent;border:none;color:var(--ink3);cursor:pointer;font-size:13px;line-height:1;padding:0 1px}#screen-plot-mapper .aka-pill button:hover{color:var(--danger)}#screen-plot-mapper .aka-pill.sug{border-style:dashed;border-color:var(--input-border);color:var(--ink2)}#screen-plot-mapper .aka-pill.sug:hover{border-color:var(--cardcol,var(--gold));color:var(--ink)}#screen-plot-mapper .aka-pill.sug span{cursor:pointer}#screen-plot-mapper .aka-add{background:var(--input-bg);border:1px solid var(--input-border);color:var(--ink);
+  font-family:'Crimson Pro',serif;font-size:16px;padding:3px 9px;border-radius:2px;outline:none;width:150px}#screen-plot-mapper .aka-add:focus{border-color:var(--cardcol,var(--gold))}#screen-plot-mapper .aka-set{background:transparent;border:none;font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:.1em;color:var(--ink3);cursor:pointer;padding:2px 0;text-decoration:underline dotted}#screen-plot-mapper .aka-set:hover{color:var(--gold)}#screen-plot-mapper .card-x{flex:0 0 auto;background:transparent;border:none;color:var(--ink3);font-size:20px;cursor:pointer;padding:2px 6px;line-height:1}#screen-plot-mapper .card-x:hover{color:var(--gold)}#screen-plot-mapper .card-body{padding:20px 24px 8px}#screen-plot-mapper .cf{margin-bottom:18px}#screen-plot-mapper .cf label{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink2);margin-bottom:6px}#screen-plot-mapper .cf input,
+#screen-plot-mapper .cf select,
+#screen-plot-mapper .cf textarea{width:100%;background:var(--input-bg);border:1px solid var(--input-border);
+  color:var(--ink);font-family:'Crimson Pro',serif;font-size:18px;line-height:1.5;padding:10px 13px;
+  border-radius:2px;outline:none;resize:vertical}#screen-plot-mapper .cf textarea{min-height:96px}#screen-plot-mapper .cf input:focus,
+#screen-plot-mapper .cf select:focus,
+#screen-plot-mapper .cf textarea:focus{border-color:var(--cardcol,var(--gold))}#screen-plot-mapper .cf select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7860' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}#screen-plot-mapper .card-foot{display:flex;align-items:center;gap:10px;padding:16px 24px 20px;border-top:1px solid var(--rule)}#screen-plot-mapper .card-foot .ada-btn{border:2px solid var(--gold);color:var(--gold);background:transparent;height:38px;padding:0 14px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;cursor:pointer;display:flex;align-items:center}#screen-plot-mapper .card-foot .ada-btn:hover{background:var(--gold);color:var(--btn-text)}
+#screen-plot-mapper .card-foot .ada-btn.quiet{opacity:.32;border-color:var(--rule2);color:var(--ink3);cursor:default}
+#screen-plot-mapper .card-foot .ada-btn.quiet:hover{background:transparent;color:var(--ink3)}#screen-plot-mapper .card-foot .save{margin-left:auto;background:var(--gold);color:var(--btn-text);border:none;height:38px;padding:0 22px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px}#screen-plot-mapper .card-foot .save:hover{background:var(--gold2)}#screen-plot-mapper .card-foot .cancel{background:transparent;border:1px solid var(--rule2);color:var(--ink2);height:38px;padding:0 16px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:2px}#screen-plot-mapper .card-foot .cancel:hover{border-color:var(--gold);color:var(--gold)}
+
+/* Ada, on the document as a whole */#screen-plot-mapper .doc-foot{display:flex;align-items:center;gap:10px;margin-top:26px;padding-top:16px;border-top:1px solid var(--rule)}#screen-plot-mapper .doc-foot .btn{border:2px solid var(--gold);color:var(--gold);background:transparent;padding:0 14px;height:38px;
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;cursor:pointer;display:flex;align-items:center}#screen-plot-mapper .doc-foot .btn:hover{background:var(--gold);color:var(--btn-text)}#screen-plot-mapper .doc-foot .tally{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink3)}#screen-plot-mapper .doc-foot .tally b{color:var(--ink2);font-weight:400}
+
+/* ===== THE POCKET'S OWN FITTINGS ===================================== */
+/* The screen fills the corridor's content area and keeps its own glow. */
+#screen-plot-mapper{min-height:100%;
+  background:radial-gradient(circle at 50% -15%,rgba(201,146,58,.06),transparent 40%)}
+
+/* Fields on this screen sit a shade darker than the platform default, as
+   the screen was drawn. In light, the platform's own values are right. */
+#screen-plot-mapper{--input-bg:#100c09;--input-border:#39291a;--key-ink:#ffffff}
+body.light #screen-plot-mapper{--input-bg:#ffffff;--input-border:#d0c8bc;--key-ink:var(--ink)}
+
+/* SECTION ? sits at the top right of the screen, on the kicker line */
+#screen-plot-mapper .bh-kicker{display:flex;align-items:center;gap:10px;min-height:32px}
+#screen-plot-mapper .bh-kicker .tb-help{margin-left:auto;flex:0 0 auto}
+
+#screen-plot-mapper .bh-strap.quiet{color:var(--ink3)}
+#screen-plot-mapper .steer-num::placeholder{color:var(--ink3);opacity:.75;font-style:italic}
+
+/* an untouched document says what it is for, rather than sitting blank */
+#screen-plot-mapper .doc.blank .prose p:first-child::before{
+  content:'Write the whole story down here. Break it into chapters and scenes afterwards.';
+  color:var(--ink3);font-style:italic;opacity:.55;pointer-events:none}
+
+</style>
+
+<script>
+(function(){
+
+var SCREEN = document.getElementById('screen-plot-mapper');
+
+/* The corridor holds the open project and the AI switch. Both are reached
+   carefully rather than assumed: if either ever moves or is renamed, this
+   screen goes quiet instead of throwing. */
+function proj(){ try { return currentProject || null; } catch(e){ return null; } }
+function adaIsOn(){
+  var b = document.getElementById('aiToggleBtn');
+  return b ? !b.classList.contains('ai-off') : true;
+}
+function isOpen(){ return !!SCREEN && SCREEN.classList.contains('active'); }
+function q(id){ return document.getElementById(id); }
+
+/* ---- which project this screen is holding, and writing it down ---------
+   The document is kept with the project itself, so it is there when the
+   writer comes back to it. ---------------------------------------------- */
+var loadedIndex = null, saveTimer = null, budgetTouched = false;
+
+function allProjects(){ return window.getProjects ? window.getProjects() : []; }
+
+function saveNow(){
+  clearTimeout(saveTimer);
+  if(loadedIndex===null || !window.getProjects || !window.saveProjects) return;
+  var list = allProjects(), rec = list[loadedIndex];
+  if(!rec) return;
+  rec.plotMapper = {
+    parts:    parts,
+    made:     made,
+    bookLo:   bookLo,
+    bookHi:   bookHi,
+    budgetTouched: budgetTouched,
+    estimate: estimate,
+    budgetOn: budgetOn,
+    indent:   docEl.classList.contains('indent'),
+    marks:   !docEl.classList.contains('nomarks')
+  };
+  rec.currentWords = totalWords();
+  rec.lastEdited   = new Date().toISOString();
+  window.saveProjects(list);
+}
+function saveSoon(){
+  if(loadedIndex===null) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveNow, 600);
+}
+window.addEventListener('beforeunload', saveNow);
+
+/* ---- an untouched document says what it is for ---- */
+function showBlank(){
+  var blank = parts.length===1 && parts[0].kind==='prose' &&
+    (parts[0].paras||[]).every(function(pa){ return !((pa.text||'').trim()); });
+  docEl.classList.toggle('blank', blank);
+}
+
+/* ---- the book's own details, carried over from Basics ---- */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function orNot(v){ return (v && String(v).trim()) ? String(v).trim() : 'Not set'; }
+function fact(label, value){ return '<span class="bh-fact"><b>'+label+'</b>'+esc(orNot(value))+'</span>'; }
+
+function fillHead(){
+  var p = proj() || {};
+  q('pmTitle').textContent = p.title || 'Untitled Project';
+
+  var strap = q('pmStrap'), has = !!(p.strapline && p.strapline.trim());
+  strap.textContent = has ? p.strapline.trim() : 'No strap line yet.';
+  strap.classList.toggle('quiet', !has);
+
+  var status = p.status ? (window.statusLabel ? window.statusLabel(p.status) : p.status) : '';
+  var dot = '<span class="bh-dot">\u00b7</span>';
+  q('pmFacts').innerHTML =
+      fact('Genre', p.genre) + dot
+    + fact('Classification', p.classification) + dot
+    + fact('Status', status) + dot
+    + fact('Author', p.author);
+}
+
+/* ---- fetching this project's document, or starting a clean one ---- */
+function loadDoc(){
+  var cp = proj() || {};
+  loadedIndex = (typeof cp.index === 'number') ? cp.index : null;
+  var rec = (loadedIndex!==null ? allProjects()[loadedIndex] : null) || {};
+  var saved = rec.plotMapper;
+  var target = parseInt(cp.targetWords, 10) || 0;
+
+  undoStack.length = 0;
+  made = {};
+
+  if(saved && saved.parts && saved.parts.length){
+    parts         = saved.parts;
+    estimate      = saved.estimate || 10;
+    budgetOn      = (saved.budgetOn !== false);
+    budgetTouched = !!saved.budgetTouched;
+    bookLo        = budgetTouched ? (saved.bookLo||0) : target;
+    bookHi        = budgetTouched ? (saved.bookHi||0) : target;
+    MAKES.forEach(function(m){ made[m.section] = (saved.made && saved.made[m.section]) || []; });
+    docEl.classList.toggle('indent',  saved.indent !== false);
+    docEl.classList.toggle('nomarks', saved.marks  === false);
+  } else {
+    parts         = [ proseRun([]) ];
+    estimate      = 10;
+    budgetOn      = true;
+    budgetTouched = false;
+    bookLo = target; bookHi = target;
+    MAKES.forEach(function(m){ made[m.section] = []; });
+    docEl.classList.add('indent');
+    docEl.classList.remove('nomarks');
+  }
+  indBtn.classList.toggle('off', !docEl.classList.contains('indent'));
+  mrkBtn.classList.toggle('off',  docEl.classList.contains('nomarks'));
+}
+
+/* =======================================================================
+   THE SYNOPSIS, AS ONE DOCUMENT — with the board's own divider
+
+   A break is a dashed gold hairline drawn through the writing, its label
+   out in the left gutter as a pill, and a gold dot at the far end which
+   is the live part of it. The same mark the Plot Mapper uses.
+
+   HOW THE WRITING IS HELD
+   An ordered list of parts:
+       { kind:'chapter', title, budget }
+       { kind:'scene',   title }
+       { kind:'prose',   paras:[ {text, marks} ] }
+   A run of prose is a LIST OF PARAGRAPHS, not one long string. So a break
+   is simply "this paragraph, this point in it" — there is no counting
+   across the whole document, and nothing to drift out of step.
+
+   ONE KEY: F2 asks what you want.
+       nothing highlighted  ->  Chapter break (1) or Scene break (2)
+       a phrase highlighted ->  the sixteen sections of the sidebar
+   ======================================================================= */
+
+/* ---- the word budget, carried over from Basics as a range ---- */
+var bookLo = 0, bookHi = 0;   /* taken from Basics when the screen opens */
+var estimate = 10;            /* how many chapters the writer is planning */
+var budgetOn = true;
+
+/* ---- the document ---- */
+function proseRun(list){
+  return { kind:'prose', paras:(list||['']).map(function(t){ return { text:t, marks:[] }; }) };
+}
+var parts = [ proseRun([]) ];
+
+var docEl   = document.getElementById('pmDoc');
+var offerEl = document.getElementById('pmOffer');
+var steerEl = document.getElementById('pmSteer');
+var tallyEl = document.getElementById('pmTally');
+
+function fmt(n){ return Math.round(n).toLocaleString('en-GB'); }
+function words(s){ s=(s||'').replace(/\s+/g,' ').trim(); return s ? s.split(' ').length : 0; }
+function runWords(p){ var n=0; (p.paras||[]).forEach(function(pa){ n+=words(pa.text); }); return n; }
+function parseRange(str){
+  var m=(str||'').replace(/,/g,'').match(/\d+/g);
+  if(!m||!m.length) return null;
+  if(m.length===1) return { lo:+m[0], hi:+m[0] };
+  return { lo:Math.min(+m[0],+m[1]), hi:Math.max(+m[0],+m[1]) };
+}
+function fmtRange(r){ return (r.lo===r.hi) ? fmt(r.lo) : fmt(r.lo)+'\u2013'+fmt(r.hi); }
+
+/* ---- what belongs to what ---- */
+function chapterIndexes(){
+  var out=[]; parts.forEach(function(p,i){ if(p.kind==='chapter') out.push(i); }); return out;
+}
+function chapterWords(ci){
+  var idxs=chapterIndexes(), start=idxs[ci], next=(ci+1<idxs.length)?idxs[ci+1]:parts.length, n=0;
+  for(var i=start+1;i<next;i++){ if(parts[i].kind==='prose') n+=runWords(parts[i]); }
+  return n;
+}
+function undividedWords(){
+  var idxs=chapterIndexes(), first=idxs.length?idxs[0]:parts.length, n=0;
+  for(var i=0;i<first;i++){ if(parts[i].kind==='prose') n+=runWords(parts[i]); }
+  return n;
+}
+function totalWords(){ var n=0; parts.forEach(function(p){ if(p.kind==='prose') n+=runWords(p); }); return n; }
+/* the words belonging to one scene: everything after its break until the
+   next break of either kind */
+function sceneWords(pi){
+  var n=0;
+  for(var i=pi+1;i<parts.length;i++){
+    if(parts[i].kind!=='prose') break;
+    n+=runWords(parts[i]);
+  }
+  return n;
+}
+function sceneCount(){ var n=0; parts.forEach(function(p){ if(p.kind==='scene') n++; }); return n; }
+
+function alloc(){
+  var pinLo=0, pinHi=0, pinned=0;
+  parts.forEach(function(p){ if(p.kind==='chapter' && p.budget){ pinLo+=p.budget.lo; pinHi+=p.budget.hi; pinned++; } });
+  var slots=Math.max(1, estimate - pinned);
+  return { per:{ lo:Math.max(0,Math.round((bookLo-pinLo)/slots)), hi:Math.max(0,Math.round((bookHi-pinHi)/slots)) },
+           pinLo:pinLo, pinHi:pinHi, pinned:pinned };
+}
+
+/* ---- the steer ---- */
+function renderSteer(){
+  var a=alloc(), over = a.pinLo > bookHi;
+  steerEl.className = 'steer' + (budgetOn?'':' off') + (over&&budgetOn?' warn':'');
+  if(!budgetOn){
+    steerEl.innerHTML =
+      '<div class="steer-row"><span class="steer-label">Word budget</span>'+
+      '<span class="steer-line"><span class="steer-after">Still counting, no longer steering.</span></span>'+
+      '<button class="steer-toggle" id="pmBudToggle"><span class="dot"></span> Budget: <span class="bud-state">off</span></button></div>';
+  } else {
+    var hasTarget = bookHi > 0;
+    steerEl.innerHTML =
+      '<div class="steer-row"><span class="steer-label">Word budget</span>'+
+      '<span class="steer-line">Aiming for <input class="steer-num" id="pmStBook" placeholder="no target set" value="'+(hasTarget?fmtRange({lo:bookLo,hi:bookHi}):'')+'"> across '+
+      '<input class="steer-num sm" id="pmStEst" value="'+estimate+'"> chapters'+
+      (hasTarget ? ' \u00b7 about <b>'+fmtRange(a.per)+'</b> each chapter' : '')+'</span>'+
+      '<button class="steer-toggle" id="pmBudToggle"><span class="dot"></span> Budget: <span class="bud-state">on</span></button></div>'+
+      '<div class="steer-warn">Your pinned chapters already come to '+fmt(a.pinLo)+' \u2014 past the top of the book\u2019s range. The chapters on auto have nothing left to divide.</div>';
+    steerEl.querySelector('#pmStBook').addEventListener('change', function(e){
+      var r=parseRange(e.target.value); if(r&&r.hi>0){ bookLo=r.lo; bookHi=r.hi; budgetTouched=true; } render();
+    });
+    steerEl.querySelector('#pmStEst').addEventListener('change', function(e){
+      var v=parseInt(e.target.value,10); if(v>0){ estimate=v; budgetTouched=true; } render();
+    });
+  }
+  steerEl.querySelector('#pmBudToggle').addEventListener('click', function(){ budgetOn=!budgetOn; render(); });
+}
+
+/* ---- drawing the document ---- */
+var focusPart = null;
+
+/* an empty run of writing caught between two breaks has nothing in it to
+   keep, and it would otherwise hold open a gap between the two marks */
+function tidyParts(){
+  for(var i=parts.length-1;i>=0;i--){
+    var p=parts[i];
+    if(p.kind!=='prose') continue;
+    var empty=(p.paras||[]).every(function(pa){ return !((pa.text||'').trim()); });
+    if(!empty) continue;
+    var before=parts[i-1], after=parts[i+1];
+    var beforeIsBreak = !before || before.kind!=='prose';
+    var afterIsBreak  = !!after && after.kind!=='prose';
+    if(beforeIsBreak && afterIsBreak) parts.splice(i,1);
+  }
+  if(!parts.some(function(p){ return p.kind==='prose'; })) parts.push({ kind:'prose', paras:[{ text:'', marks:[] }] });
+}
+
+function render(){
+  tidyParts();
+  renderSteer();
+  var a=alloc(), ci=-1, sn=0;
+  docEl.innerHTML='';
+
+  parts.forEach(function(p, i){
+
+    if(p.kind==='chapter' || p.kind==='scene'){
+      var isChap = p.kind==='chapter';
+      if(isChap){ ci++; sn=0; } else { sn++; }
+      var myCi=ci;
+
+      var brk=document.createElement('div');
+      brk.className='brk '+(isChap?'brk-chap':'brk-scene');
+
+      var pill=document.createElement('span'); pill.className='bk-pill';
+      pill.textContent = isChap ? ('Ch. '+(ci+1)) : ('Sc. '+sn);
+      brk.appendChild(pill);
+
+      var ttl=document.createElement('input'); ttl.className='bk-title';
+      ttl.placeholder = isChap ? 'Name this chapter\u2026' : 'Name this scene\u2026';
+      ttl.value=p.title||'';
+      ttl.addEventListener('input', function(){ p.title=ttl.value; });
+      brk.appendChild(ttl);
+
+      var rule=document.createElement('span'); rule.className='bk-rule';
+      brk.appendChild(rule);
+
+      if(isChap){
+        var actual=chapterWords(myCi);
+        var cnt=document.createElement('span'); cnt.className='bk-count';
+        var act=document.createElement('span'); act.className='act'; act.textContent=fmt(actual);
+        cnt.appendChild(act);
+        if(budgetOn && (p.budget || bookHi>0)){
+          var budg = p.budget ? p.budget : a.per;
+          brk.classList.toggle('over', budg.hi>0 && actual>budg.hi);
+          cnt.appendChild(document.createTextNode(' / '));
+          if(p.budget){
+            var inp=document.createElement('input'); inp.value=fmtRange(p.budget); inp.title='This chapter\u2019s own range';
+            inp.addEventListener('change', function(){ var r=parseRange(inp.value); p.budget=r||p.budget; render(); });
+            cnt.appendChild(inp);
+          } else {
+            var rng=document.createElement('span'); rng.textContent=fmtRange(a.per); rng.style.color='var(--gold)';
+            cnt.appendChild(rng);
+          }
+        }
+        brk.appendChild(cnt);
+      }
+
+      {   /* Ada's pair — built always, shown or hidden by applyAi() */
+        var here = isChap ? chapterWords(myCi) : sceneWords(i);
+        var what = isChap ? 'chapter' : 'scene';
+        var ada=document.createElement('span'); ada.className='bk-ada';
+
+        /* Ada is not connected to this screen yet. Until she is, her two
+           are shown quiet and say so, rather than looking live and doing
+           nothing when pressed. */
+        var pb=document.createElement('button'); pb.textContent='\u2726 Prompt';
+        pb.className='quiet'; pb.disabled=true;
+        pb.title = 'Ada is not connected to this screen yet.';
+
+        var eb=document.createElement('button'); eb.textContent='\u27f3 Expand';
+        eb.className='quiet'; eb.disabled=true;
+        eb.title = 'Ada is not connected to this screen yet.';
+
+        ada.appendChild(pb); ada.appendChild(eb);
+        brk.appendChild(ada);
+      }
+
+      var dot=document.createElement('button'); dot.className='bk-dot';
+      dot.title = isChap ? 'This chapter' : 'This scene';
+      (function(idx){
+        dot.addEventListener('click', function(e){ e.stopPropagation(); openDotMenu(dot, idx); });
+      })(i);
+      brk.appendChild(dot);
+
+      docEl.appendChild(brk);
+      return;
+    }
+
+    /* a run of prose, paragraph by paragraph */
+    var pr=document.createElement('div');
+    pr.className='prose'; pr.contentEditable='true'; pr.spellcheck=true;
+    pr.dataset.i=i;
+    paintProse(pr, p);
+    pr.addEventListener('beforeinput', noteTyping);
+    pr.addEventListener('input', function(){ readBack(pr, p); updateCounts(); showBlank(); saveSoon(); });
+    docEl.appendChild(pr);
+  });
+
+  if(focusPart!=null){
+    var el=docEl.querySelector('.prose[data-i="'+focusPart+'"]');
+    if(el){ caretToStart(el); }
+    focusPart=null;
+  }
+  updateCounts();
+  applyAi();
+  showBlank();
+  saveSoon();
+}
+
+/* read the writer's paragraphs back out of the page */
+function readBack(el, p){
+  var list=[];
+  el.querySelectorAll('p').forEach(function(pEl){ list.push(pEl.textContent); });
+  if(!list.length) list=[el.textContent];
+  p.paras = list.map(function(t){ return { text:t, marks:[] }; });   /* the text has moved; old tints no longer hold */
+  if(!p.paras.length) p.paras=[{ text:'', marks:[] }];
+}
+
+function updateCounts(){
+  var a=alloc(), idxs=chapterIndexes();
+  var brks=docEl.querySelectorAll('.brk-chap');
+  idxs.forEach(function(pi, ci){
+    var brk=brks[ci]; if(!brk) return;
+    var p=parts[pi], actual=chapterWords(ci);
+    var act=brk.querySelector('.act'); if(act) act.textContent=fmt(actual);
+    if(budgetOn && (p.budget || bookHi>0)){
+      var budg = p.budget ? p.budget : a.per;
+      brk.classList.toggle('over', budg.hi>0 && actual>budg.hi);
+    } else { brk.classList.remove('over'); }
+  });
+  var und=undividedWords();
+  var cards=0; for(var k in made) cards+=made[k].length;
+  tallyEl.innerHTML = '<b>'+fmt(totalWords())+'</b> words \u00b7 <b>'+idxs.length+'</b> chapters \u00b7 <b>'+sceneCount()+'</b> scenes'
+    + (cards ? ' \u00b7 <b>'+cards+'</b> made' : '')
+    + (und ? ' \u00b7 <b>'+fmt(und)+'</b> not yet divided' : '');
+}
+
+/* draw a run of prose, tinting anything already made into a card */
+function paintProse(el, p){
+  el.innerHTML='';
+  (p.paras||[]).forEach(function(pa){
+    var para=document.createElement('p');
+    var t=pa.text||'', ms=(pa.marks||[]).slice().sort(function(a,b){ return a.from-b.from; });
+    if(!t.length){ para.appendChild(document.createElement('br')); el.appendChild(para); return; }
+    if(!ms.length){ para.textContent=t; el.appendChild(para); return; }
+    var cur=0;
+    ms.forEach(function(m){
+      if(m.from<cur) return;
+      if(m.from>cur) para.appendChild(document.createTextNode(t.slice(cur,m.from)));
+      var sp=document.createElement('span');
+      sp.className='mark'; sp.style.setProperty('--markcol', m.col); sp.title=m.section;
+      sp.textContent=t.slice(m.from,m.to);
+      para.appendChild(sp);
+      cur=m.to;
+    });
+    if(cur<t.length) para.appendChild(document.createTextNode(t.slice(cur)));
+    el.appendChild(para);
+  });
+  if(!el.children.length){ var e=document.createElement('p'); e.appendChild(document.createElement('br')); el.appendChild(e); }
+}
+
+/* where in the writing a point sits: which run, which paragraph, how far in */
+function pointAt(node, off){
+  if(!node) return null;
+  var el=(node.nodeType===3)?node.parentElement:node;
+  if(!el || !el.closest) return null;
+  var prose=el.closest('.prose'); if(!prose) return null;
+  var pEl=el.closest('p'); if(!pEl) pEl=prose.querySelector('p');
+  if(!pEl) return null;
+  var pi=Array.prototype.indexOf.call(prose.children, pEl);
+  var at=0;
+  if(node.nodeType===1){
+    at = (node===pEl) ? 0 : 0;
+  } else {
+    var w=document.createTreeWalker(pEl, NodeFilter.SHOW_TEXT, null, false), n;
+    while((n=w.nextNode())){
+      if(n===node){ at+=off; break; }
+      at+=n.nodeValue.length;
+    }
+  }
+  return { i:+prose.dataset.i, pi:Math.max(0,pi), at:at, prose:prose, pEl:pEl };
+}
+
+function caretToStart(el){
+  el.focus();
+  try{
+    var first=el.querySelector('p')||el;
+    var node=first.firstChild||first;
+    var sel=window.getSelection(), r=document.createRange();
+    if(node.nodeType===3){ r.setStart(node,0); } else { r.setStart(first,0); }
+    r.collapse(true); sel.removeAllRanges(); sel.addRange(r);
+  }catch(e){ }
+}
+
+/* the last place the writer had the cursor, so F2 always has somewhere to go */
+var lastCaret=null, lastRect=null;
+document.addEventListener('selectionchange', function(){
+  if(!isOpen()) return;
+  var sel=window.getSelection();
+  if(!sel.rangeCount) return;
+  var pt=pointAt(sel.anchorNode, sel.anchorOffset);
+  if(pt){
+    lastCaret=pt;
+    try{ var r=sel.getRangeAt(0).getBoundingClientRect(); if(r && (r.top||r.left)) lastRect=r; }catch(e){}
+  }
+});
+
+/* ---- the dot's own small menu ---- */
+var dotEl=document.getElementById('pmDotMenu');
+function openDotMenu(anchor, i){
+  closeBreakMenu(); hideOffer();
+  var p=parts[i]; if(!p) return;
+  var isChap=(p.kind==='chapter');
+  var html='<div class="bm-head">'+(isChap?'This chapter':'This scene')+'</div>';
+  if(isChap){
+    html += p.budget
+      ? '<button data-a="auto">Back to the shared range</button>'
+      : '<button data-a="own">Give it its own word range</button>';
+    html += '<button data-a="toscene">Make it a scene break</button>';
+  } else {
+    html += '<button data-a="tochap">Make it a chapter break</button>';
+  }
+  html += '<button data-a="remove" class="warn">Remove this break</button>';
+  dotEl.innerHTML=html;
+  dotEl.classList.add('show');
+
+  var r=anchor.getBoundingClientRect();
+  var w=dotEl.offsetWidth, h=dotEl.offsetHeight;
+  var left=Math.min(r.right-w, window.innerWidth-w-10);
+  var top=r.bottom+8;
+  if(top+h>window.innerHeight-10) top=Math.max(10, r.top-h-8);
+  dotEl.style.left=Math.max(10,left)+'px';
+  dotEl.style.top=Math.max(10,top)+'px';
+
+  dotEl.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('mousedown', function(e){
+      e.preventDefault();
+      var a=b.dataset.a;
+      closeDotMenu();
+      if(a==='own'){ snapshot(); p.budget=alloc().per; render(); }
+      else if(a==='auto'){ snapshot(); p.budget=null; render(); }
+      else if(a==='toscene'){ snapshot(); parts[i]={ kind:'scene', title:p.title||'' }; render(); }
+      else if(a==='tochap'){ snapshot(); parts[i]={ kind:'chapter', title:p.title||'', budget:null }; render(); }
+      else if(a==='remove'){ removeBreak(i); }
+    });
+  });
+}
+function closeDotMenu(){ dotEl.classList.remove('show'); }
+
+/* removing a break stitches the prose either side back together */
+function removeBreak(i){
+  snapshot();
+  parts.splice(i,1);
+  if(i>0 && i<parts.length && parts[i-1].kind==='prose' && parts[i].kind==='prose'){
+    parts[i-1].paras = parts[i-1].paras.concat(parts[i].paras);
+    parts.splice(i,1);
+  }
+  lastCaret=null;
+  render();
+}
+
+/* ---- what a highlighted phrase can be made into ---- */
+var FAMILY = { story:'#c9923a', people:'#cf7f57', world:'#5fa898', library:'#9a8f72' };
+
+var GROUPS = [
+  { name:'Story', fam:'story', items:[
+    { key:'t', label:'Plot thread',          section:'threads'  },
+    { key:'u', label:'Subplot',              section:'subplots' },
+    { key:'m', label:'Theme or motif',       section:'themes'   },
+    { key:'e', label:'Event',                section:'events'   }
+  ]},
+  { name:'People', fam:'people', items:[
+    { key:'c', label:'Character',            section:'characters'    },
+    { key:'r', label:'Relationship',         section:'relationships' },
+    { key:'f', label:'Faction or org',       section:'factions'      },
+    { key:'d', label:'Language or dialogue', section:'language'      }
+  ]},
+  { name:'World', fam:'world', items:[
+    { key:'l', label:'Location',             section:'locations' },
+    { key:'b', label:'Building',             section:'buildings' },
+    { key:'o', label:'Object or artefact',   section:'objects'   },
+    { key:'w', label:'Rule or lore',         section:'lore'      }
+  ]},
+  { name:'Library', fam:'library', items:[
+    { key:'g', label:'Research reference',   section:'research' },
+    { key:'n', label:'Note',                 section:'notes'    },
+    { key:'i', label:'Image',                section:'images'   },
+    { key:'s', label:'Sandbox piece',        section:'sandbox'  }
+  ]}
+];
+
+var MAKES = [];
+GROUPS.forEach(function(g){
+  g.items.forEach(function(it){
+    MAKES.push({ key:it.key, label:it.label, section:it.section, fam:g.fam, col:FAMILY[g.fam] });
+  });
+});
+
+var made = {};
+MAKES.forEach(function(m){ made[m.section]=[]; });
+
+var lastSel = null;
+
+/* catching part of a word is enough — the phrase grows out to whole words,
+   so a rough drag still gives a clean name */
+function widenToWords(text, from, to){
+  var len=text.length;
+  while(from>0 && !/\s/.test(text[from-1])) from--;
+  while(to<len && !/\s/.test(text[to])) to++;
+  while(from<to && /[\s.,;:!?"\u201c\u201d\u2018\u2019()\[\]]/.test(text[from])) from++;
+  while(to>from){
+    var last=text[to-1];
+    if(/[\s,;:!?"\u201c\u201d\u2018\u2019()\[\]]/.test(last)){ to--; continue; }
+    if(last==='.'){
+      /* a full stop belongs to Mr. and St., not to the end of a sentence */
+      var run=0, k=to-2;
+      while(k>=from && /[A-Za-z]/.test(text[k])){ run++; k--; }
+      if(run>3){ to--; continue; }
+    }
+    break;
+  }
+  return { from:from, to:to };
+}
+
+function captureSelection(){
+  var sel=window.getSelection();
+  if(!sel.rangeCount || sel.isCollapsed) return null;
+  var a=pointAt(sel.anchorNode, sel.anchorOffset);
+  var b=pointAt(sel.focusNode, sel.focusOffset);
+  if(!a || !b) return null;
+  var text=sel.toString();
+  if(!text.trim()) return null;
+  var same = (a.i===b.i && a.pi===b.pi);
+  var from=Math.min(a.at,b.at), to=Math.max(a.at,b.at);
+  if(same){
+    var p=parts[a.i], pa=p && p.paras ? p.paras[a.pi] : null;
+    if(pa){
+      var w=widenToWords(pa.text||'', from, to);
+      if(w.to>w.from){ from=w.from; to=w.to; text=(pa.text||'').slice(from,to); }
+    }
+  }
+  if(!text.trim()) return null;
+  return { i:a.i, pi:a.pi, from:from, to:to, text:text, tintable:same };
+}
+
+function buildOffer(){
+  offerEl.innerHTML='';
+  var head=document.createElement('div'); head.className='o-head';
+  head.textContent = lastSel ? ('Make \u201c'+lastSel.text.trim()+'\u201d into\u2026') : '';
+  offerEl.appendChild(head);
+
+  var cols=document.createElement('div'); cols.className='o-cols';
+  GROUPS.forEach(function(g){
+    var col=document.createElement('div'); col.className='o-col';
+    col.style.setProperty('--gcol', FAMILY[g.fam]);
+    var h=document.createElement('div'); h.className='o-group'; h.textContent=g.name;
+    col.appendChild(h);
+    g.items.forEach(function(it){
+      var m=MAKES.filter(function(x){ return x.section===it.section; })[0];
+      var b=document.createElement('button');
+      var dot=document.createElement('span'); dot.className='dot'; dot.style.background=FAMILY[g.fam];
+      var lab=document.createElement('span'); lab.textContent=it.label;
+      var k=document.createElement('span'); k.className='key'; k.textContent=it.key.toUpperCase();
+      b.appendChild(dot); b.appendChild(lab); b.appendChild(k);
+      b.addEventListener('mousedown', function(e){ e.preventDefault(); run(m); });
+      col.appendChild(b);
+    });
+    cols.appendChild(col);
+  });
+  offerEl.appendChild(cols);
+}
+
+function run(m){ if(!lastSel) return; makeCard(m); }
+
+/* ---- the card ---- */
+var CARD_FIELDS = {
+  threads:{ kicker:'Plot thread', fields:[
+    ['Type','select',['Main plot','Mystery','Conflict','Quest','Revelation','Other']],
+    ['Summary','textarea'] ]},
+  subplots:{ kicker:'Subplot', fields:[ ['Summary','textarea'], ['Stakes','textarea'] ]},
+  themes:{ kicker:'Theme or motif', fields:[ ['Description','textarea'], ['How it shows','textarea'] ]},
+  events:{ kicker:'Event', fields:[
+    ['Type','select',['Story event','Turning point','Revelation','Climax','Other']],
+    ['What happens','textarea'], ['Consequences','textarea'] ]},
+
+  characters:{ kicker:'Character', fields:[
+    ['Role','select',['Protagonist','Antagonist','Supporting character','Minor character','Other']],
+    ['Description','textarea'], ['First appears','text'] ]},
+  relationships:{ kicker:'Relationship', fields:[
+    ['Between','text'],
+    ['Type','select',['Family','Friendship','Romance','Rivalry','Alliance','Mentorship','Other']],
+    ['Description','textarea'] ]},
+  factions:{ kicker:'Faction or organisation', fields:[
+    ['Type','select',['Family','Guild','Government','Company','Order','Gang','Other']],
+    ['Description','textarea'], ['Who leads it','text'] ]},
+  language:{ kicker:'Language or dialogue', fields:[
+    ['Type','select',['Language','Dialect','Accent','Turn of phrase','Catchphrase','Other']],
+    ['Who speaks it','text'], ['Notes','textarea'] ]},
+
+  locations:{ kicker:'Location', fields:[
+    ['Type','select',['City','Town','Village','Building','Wilderness','Region','Other']],
+    ['Description','textarea'] ]},
+  buildings:{ kicker:'Building', fields:[
+    ['Type','select',['House','Manor','Inn','Church','Workplace','Ruin','Other']],
+    ['Description','textarea'] ]},
+  objects:{ kicker:'Object or artefact', fields:[
+    ['Category','select',['Weapon','Document','Vehicle','Jewellery','Clothing','Artefact','Other']],
+    ['Description','textarea'], ['Significance','textarea'] ]},
+  lore:{ kicker:'Rule or lore', fields:[
+    ['Type','select',['Natural law','Magic','Custom','History','Belief','Other']],
+    ['Description','textarea'], ['What it forbids','textarea'] ]},
+
+  research:{ kicker:'Research reference', fields:[ ['Source','text'], ['What it tells you','textarea'] ]},
+  notes:{ kicker:'Note', fields:[ ['Note','textarea'] ]},
+  images:{ kicker:'Image', fields:[ ['What it shows','textarea'], ['Where it belongs','text'] ]},
+  sandbox:{ kicker:'Sandbox piece', fields:[ ['Draft','textarea'] ]}
+};
+
+var scrimEl=document.getElementById('pmScrim'), cardEl=document.getElementById('pmCard');
+var pendingCard=null;
+
+/* ---- the other names a thing goes by --------------------------------
+   Mr. Toad is also Toad. One card, several names, so the writing is not
+   full of three Toads who never meet. The first name stays the proper
+   one; the rest are ways of referring to it. --------------------------- */
+function suggestNames(name){
+  var out=[], n=(name||'').trim().replace(/\s+/g,' ');
+  if(!n) return out;
+  var words=n.split(' ');
+  var titles=/^(mr|mrs|ms|miss|dr|sir|lord|lady|master|captain|professor|rev|st)\.?$/i;
+  if(words.length>1 && titles.test(words[0])) out.push(words.slice(1).join(' '));
+  if(words.length>1 && !titles.test(words[0])) out.push(words[0]);
+  if(words.length>2) out.push(words[words.length-1]);
+  var uniq=[], seen={};
+  out.forEach(function(w){
+    var k=w.toLowerCase();
+    if(w && k!==n.toLowerCase() && !seen[k]){ seen[k]=1; uniq.push(w); }
+  });
+  return uniq;
+}
+
+function drawAka(){
+  var box=document.getElementById('pmAkaBox');
+  if(!box || !pendingCard) return;
+  var nameEl=document.getElementById('pmCardName');
+  var proper=(nameEl?nameEl.value:pendingCard.name).trim();
+  var held=pendingCard.aka, aside=pendingCard.aside, showAside=pendingCard.showAside;
+
+  function taken(w){
+    if(w.toLowerCase()===proper.toLowerCase()) return true;
+    return held.some(function(x){ return x.toLowerCase()===w.toLowerCase(); });
+  }
+  var offers=suggestNames(proper).filter(function(w){
+    return !taken(w) && !aside.some(function(x){ return x.toLowerCase()===w.toLowerCase(); });
+  });
+  var back=showAside ? aside.filter(function(w){ return !taken(w); }) : [];
+
+  box.innerHTML='<div class="aka-lab">Also called</div><div class="aka-row" id="pmAkaRow"></div>';
+  var row=box.querySelector('#pmAkaRow');
+
+  held.forEach(function(w, i){
+    var p=document.createElement('span'); p.className='aka-pill';
+    var t=document.createElement('span'); t.textContent=w;
+    var x=document.createElement('button'); x.title='Remove this name'; x.textContent='\u2715';
+    x.onclick=function(){ held.splice(i,1); drawAka(); };
+    p.appendChild(t); p.appendChild(x); row.appendChild(p);
+  });
+
+  offers.concat(back).forEach(function(w){
+    var p=document.createElement('span'); p.className='aka-pill sug';
+    var t=document.createElement('span'); t.title='Add this name'; t.textContent=w;
+    t.onclick=function(){
+      held.push(w);
+      var k=aside.map(function(a){ return a.toLowerCase(); }).indexOf(w.toLowerCase());
+      if(k>=0) aside.splice(k,1);
+      drawAka();
+    };
+    var x=document.createElement('button'); x.title='Set this one aside'; x.textContent='\u2715';
+    x.onclick=function(){
+      if(!aside.some(function(a){ return a.toLowerCase()===w.toLowerCase(); })) aside.push(w);
+      drawAka();
+    };
+    p.appendChild(t); p.appendChild(x); row.appendChild(p);
+  });
+
+  var add=document.createElement('input'); add.className='aka-add'; add.placeholder='Another name\u2026';
+  add.onkeydown=function(e){
+    if(e.key==='Enter'){
+      e.preventDefault();
+      var v=add.value.trim().replace(/\s+/g,' ');
+      if(v && !taken(v)){
+        held.push(v);
+        var k=aside.map(function(a){ return a.toLowerCase(); }).indexOf(v.toLowerCase());
+        if(k>=0) aside.splice(k,1);
+        add.value='';
+        drawAka();
+        var again=document.querySelector('.aka-add'); if(again) again.focus();
+      }
+    }
+  };
+  row.appendChild(add);
+
+  if(aside.length && !showAside){
+    var s2=document.createElement('button'); s2.className='aka-set';
+    s2.textContent=aside.length+' set aside';
+    s2.onclick=function(){ pendingCard.showAside=true; drawAka(); };
+    row.appendChild(s2);
+  }
+}
+
+function openCard(m, name, context){
+  var def=CARD_FIELDS[m.section]; if(!def) return;
+  pendingCard={ m:m, name:name, aka:[], aside:[], showAside:false };
+  cardEl.style.setProperty('--cardcol', m.col);
+  var html =
+    '<div class="card-head"><div style="flex:1;min-width:0">'+
+      '<div class="card-kicker">'+def.kicker+'</div>'+
+      '<input class="card-name" id="pmCardName" value="'+name.replace(/"/g,'&quot;')+'"/>'+
+      (context ? '<div class="card-from">from the synopsis \u2014 \u201c'+context+'\u201d</div>' : '')+
+      '<div class="aka" id="pmAkaBox"></div>'+
+    '</div><button class="card-x" id="pmCardX">\u2715</button></div><div class="card-body">';
+  def.fields.forEach(function(f){
+    html += '<div class="cf"><label>'+f[0]+'</label>';
+    if(f[1]==='select'){
+      html += '<select>'+f[2].map(function(o){ return '<option>'+o+'</option>'; }).join('')+'</select>';
+    } else if(f[1]==='textarea'){
+      html += '<textarea placeholder="\u2026"></textarea>';
+    } else {
+      html += '<input type="text"/>';
+    }
+    html += '</div>';
+  });
+  html += '</div><div class="card-foot">'+
+    '<button class="ada-btn quiet" disabled title="Ada is not connected to this screen yet.">\u2726 Prompt</button>'+
+    '<button class="ada-btn quiet" disabled title="Ada is not connected to this screen yet.">\u27f3 Expand</button>'+
+    '<button class="cancel" id="pmCardCancel">Cancel</button>'+
+    '<button class="save" id="pmCardSave">Save</button></div>';
+  cardEl.innerHTML=html;
+  scrimEl.classList.add('show');
+  drawAka();
+  applyAi();
+  setTimeout(function(){
+    var n=document.getElementById('pmCardName');
+    if(n){ n.focus(); n.select(); n.addEventListener('input', drawAka); }
+  },30);
+
+  document.getElementById('pmCardX').onclick=closeCard;
+  document.getElementById('pmCardCancel').onclick=closeCard;
+  document.getElementById('pmCardSave').onclick=saveCard;
+}
+function closeCard(){ scrimEl.classList.remove('show'); pendingCard=null; }
+function saveCard(){
+  if(!pendingCard) return;
+  var m=pendingCard.m;
+  var nameEl=document.getElementById('pmCardName');
+  var name=(nameEl?nameEl.value:pendingCard.name).trim();
+  if(!name){ closeCard(); return; }
+  if(!made[m.section].some(function(x){ return x.name.toLowerCase()===name.toLowerCase(); })){
+    made[m.section].push({ name:name, col:m.col, aka:pendingCard.aka.slice(), aside:pendingCard.aside.slice() });
+  }
+  closeCard();
+  render();
+}
+scrimEl.addEventListener('mousedown', function(e){ if(e.target===scrimEl) closeCard(); });
+
+function makeCard(m){
+  var sel=lastSel; if(!sel) return;
+  var name=sel.text.trim().replace(/\s+/g,' ');
+  if(!name) return;
+  var p=parts[sel.i];
+  if(!p || p.kind!=='prose'){ hideOffer(); return; }
+
+  snapshot();
+  var around=name;
+  var pa=p.paras[sel.pi];
+  if(pa && sel.tintable){
+    if(!pa.marks) pa.marks=[];
+    pa.marks.push({ from:sel.from, to:sel.to, col:m.col, section:m.section });
+    pa.marks.sort(function(a,b){ return a.from-b.from; });
+    around=pa.text.slice(Math.max(0,sel.from-40), Math.min(pa.text.length, sel.to+40)).replace(/\s+/g,' ').trim();
+  }
+
+  hideOffer();
+  render();
+  openCard(m, name, around);
+}
+
+/* ---- the section menu, beside the highlighted phrase ---- */
+function showOffer(){
+  var s=captureSelection();
+  if(!s){ hideOffer(); return; }
+  lastSel=s;
+  buildOffer();
+  offerEl.classList.add('show');
+  var r=null;
+  try{ r=window.getSelection().getRangeAt(0).getBoundingClientRect(); }catch(e){}
+  if(!r || (!r.width && !r.height)) r=lastRect;
+  if(!r){ hideOffer(); return; }
+  var w=offerEl.offsetWidth, h=offerEl.offsetHeight;
+  var left=Math.min(r.left, window.innerWidth-w-10);
+  var top =r.bottom+8;
+  if(top+h > window.innerHeight-10) top=Math.max(10, r.top-h-8);
+  offerEl.style.left=Math.max(10,left)+'px';
+  offerEl.style.top=Math.max(10,top)+'px';
+}
+function hideOffer(){ offerEl.classList.remove('show'); lastSel=null; }
+
+/* ---- the break menu, at the cursor ---- */
+var brkEl=document.getElementById('pmBrkMenu'), brkAt=null;
+
+/* a break never falls mid-word — it steps back to the start of the word */
+function tidyBreakPoint(text, at){
+  if(at<=0 || at>=text.length) return at;
+  if(/\s/.test(text[at])) return at;
+  var i=at; while(i>0 && !/\s/.test(text[i-1])) i--;
+  return i;
+}
+
+/* the point a break would fall at: the live caret, or the last one used,
+   or the very start of the writing if the writer has not clicked in yet */
+function breakPoint(){
+  var sel=window.getSelection();
+  if(sel.rangeCount){
+    var pt=pointAt(sel.anchorNode, sel.anchorOffset);
+    if(pt) return pt;
+  }
+  if(lastCaret){
+    var prose=docEl.querySelector('.prose[data-i="'+lastCaret.i+'"]');
+    if(prose) return lastCaret;
+  }
+  var first=docEl.querySelector('.prose');
+  if(!first) return null;
+  return { i:+first.dataset.i, pi:0, at:0, prose:first, pEl:first.querySelector('p') };
+}
+
+function openBreakMenu(forcePt, forceRect){
+  var pt=forcePt||breakPoint();
+  if(!pt) return;
+  var p=parts[pt.i];
+  if(!p || p.kind!=='prose') return;
+  var pa=p.paras[pt.pi] || p.paras[0];
+  if(!pa) return;
+
+  brkAt={ i:pt.i, pi:Math.min(pt.pi, p.paras.length-1), at:tidyBreakPoint(pa.text||'', pt.at) };
+
+  brkEl.innerHTML =
+    '<div class="bm-head">Break here</div>'+
+    '<button data-k="chapter">Chapter break <span class="key">1</span></button>'+
+    '<button data-k="scene">Scene break <span class="key">2</span></button>';
+  brkEl.classList.add('show');
+
+  var r=forceRect||null;
+  if(!r){
+    try{ var sel=window.getSelection(); if(sel.rangeCount) r=sel.getRangeAt(0).getBoundingClientRect(); }catch(e){}
+    if(!r || (!r.top && !r.left)) r=lastRect;
+    if(!r || (!r.top && !r.left)) r=(pt.pEl||pt.prose||docEl).getBoundingClientRect();
+  }
+
+  var w=brkEl.offsetWidth, h=brkEl.offsetHeight;
+  var left=Math.min(r.left, window.innerWidth-w-10);
+  var top=r.bottom+8;
+  if(top+h>window.innerHeight-10) top=Math.max(10, r.top-h-8);
+  brkEl.style.left=Math.max(10,left)+'px';
+  brkEl.style.top=Math.max(10,top)+'px';
+
+  brkEl.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('mousedown', function(e){ e.preventDefault(); doBreak(b.dataset.k); });
+  });
+}
+function closeBreakMenu(){ brkEl.classList.remove('show'); brkAt=null; }
+
+function doBreak(kind){
+  if(!brkAt) return;
+  var i=brkAt.i, pi=brkAt.pi, at=brkAt.at;
+  closeBreakMenu();
+  var p=parts[i];
+  if(!p) return;
+  if(p.kind!=='prose') return;
+
+  try{
+    snapshot();
+
+    var head=p.paras.slice(0,pi);
+    var cur=p.paras[pi] || { text:'', marks:[] };
+    var tail=p.paras.slice(pi+1);
+
+    var beforeTxt=(cur.text||'').slice(0,at).replace(/\s+$/,'');
+    var afterTxt =(cur.text||'').slice(at).replace(/^\s+/,'');
+
+    var beforeParas=head.slice();
+    if(beforeTxt) beforeParas.push({ text:beforeTxt, marks:[] });
+    var afterParas=[];
+    if(afterTxt) afterParas.push({ text:afterTxt, marks:[] });
+    afterParas=afterParas.concat(tail);
+    if(!afterParas.length) afterParas=[{ text:'', marks:[] }];
+
+    var mark = (kind==='chapter') ? { kind:'chapter', title:'', budget:null } : { kind:'scene', title:'' };
+
+    var fresh=[];
+    if(beforeParas.length) fresh.push({ kind:'prose', paras:beforeParas });
+    fresh.push(mark);
+    fresh.push({ kind:'prose', paras:afterParas });
+
+    parts.splice.apply(parts, [i,1].concat(fresh));
+    tidyParts();
+    var mi=parts.indexOf(mark);
+    focusPart = (mi>=0 && parts[mi+1] && parts[mi+1].kind==='prose') ? mi+1 : null;
+    lastCaret = null;
+    render();
+  }catch(err){ }
+}
+
+/* ---- F2 — the one key ---- */
+function askF2(){
+  var sel=window.getSelection();
+  var live=false;
+  if(sel.rangeCount && !sel.isCollapsed && sel.toString().trim()){
+    live = !!pointAt(sel.anchorNode, sel.anchorOffset);
+  }
+  closeBreakMenu(); hideOffer(); closeDotMenu();
+  if(live){ showOffer(); } else { openBreakMenu(); }
+}
+
+/* the same thing from the header, using wherever the cursor last was */
+document.getElementById('pmBrkBtn').addEventListener('click', function(e){
+  e.stopPropagation();
+  hideOffer(); closeDotMenu();
+  openBreakMenu(null, this.getBoundingClientRect());
+});
+
+/* ---- undo ---- */
+var undoStack=[];
+function snapshot(){
+  undoStack.push(JSON.stringify({ parts:parts, made:made }));
+  if(undoStack.length>80) undoStack.shift();
+}
+function undo(){
+  if(!undoStack.length) return;
+  var o=JSON.parse(undoStack.pop());
+  parts=o.parts; made=o.made;
+  lastCaret=null;
+  closeCard(); hideOffer(); closeBreakMenu(); closeDotMenu();
+  render();
+}
+
+var typingTimer=null, typingOpen=false;
+function noteTyping(){
+  if(!typingOpen){ snapshot(); typingOpen=true; }
+  clearTimeout(typingTimer);
+  typingTimer=setTimeout(function(){ typingOpen=false; }, 900);
+}
+
+/* ---- Ada, and whether she is listening -------------------------------
+   Prompt and Expand belong to the piece they work on: a chapter, a scene,
+   or the whole synopsis. With the AI switched off they are not offered at
+   all, rather than sitting there greyed and tempting. ------------------- */
+/* The AI ON/OFF button lives in the platform header and belongs to the
+   corridor. This screen simply reads it: with Ada off, her buttons are not
+   offered at all rather than sitting there greyed and tempting. */
+function askAda(kind, part, isChap){
+  /* placeholder until this is wired to the corridor's own helpers */
+}
+
+function applyAi(){
+  var on = adaIsOn();
+  SCREEN.querySelectorAll('.bk-ada button, .doc-foot .btn, .card-foot .ada-btn')
+    .forEach(function(b){ b.style.display = on ? '' : 'none'; });
+}
+
+/* ---- the book's details, in view or out of the way ---- */
+var moreBtn=document.getElementById('pmMoreBtn');
+var headEl=document.querySelector('.basics-head');
+moreBtn.addEventListener('click', function(){
+  var on=headEl.classList.toggle('more');
+  moreBtn.textContent = on ? 'Less' : 'More';
+});
+
+/* ---- the two switches ---- */
+var indBtn=document.getElementById('pmIndBtn');
+indBtn.addEventListener('click', function(){
+  var on=docEl.classList.toggle('indent');
+  indBtn.classList.toggle('off', !on);
+  saveSoon();
+});
+
+var mrkBtn=document.getElementById('pmMrkBtn');
+mrkBtn.addEventListener('click', function(){
+  var off=docEl.classList.toggle('nomarks');
+  mrkBtn.classList.toggle('off', off);
+  saveSoon();
+});
+
+/* ---- the section guide ------------------------------------------------
+   A small window rather than a panel over the page: it can be moved out of
+   the way, made bigger, and left open while the writer works. ----------- */
+var helpPanel=document.getElementById('pmHelp');
+var helpPlaced=false;
+
+function openHelp(){
+  /* shown first, then measured: a hidden panel measures nothing, and the
+     window was placing itself off the right-hand edge of the screen */
+  helpPanel.classList.add('show');
+  if(!helpPlaced){
+    var w=helpPanel.offsetWidth || 540;
+    helpPanel.style.left = Math.round(Math.max(12, window.innerWidth - w - 28)) + 'px';
+    helpPanel.style.top  = '76px';
+    helpPlaced=true;
+  }
+}
+function closeHelp(){ helpPanel.classList.remove('show'); }
+document.getElementById('pmHelpBtn').addEventListener('click', function(e){
+  e.stopPropagation();
+  if(helpPanel.classList.contains('show')) closeHelp(); else openHelp();
+});
+document.getElementById('pmHelpClose').addEventListener('click', closeHelp);
+
+/* drag it about by its head */
+var helpDrag=null;
+helpPanel.querySelector('.help-head').addEventListener('pointerdown', function(e){
+  if(e.target.closest('.help-close')) return;
+  e.preventDefault();
+  var r=helpPanel.getBoundingClientRect();
+  helpDrag={ dx:e.clientX-r.left, dy:e.clientY-r.top };
+  document.body.classList.add('help-moving');
+});
+window.addEventListener('pointermove', function(e){
+  if(!helpDrag) return;
+  var w=helpPanel.offsetWidth, h=helpPanel.offsetHeight;
+  var x=Math.round(Math.min(Math.max(4, e.clientX-helpDrag.dx), window.innerWidth-w-4));
+  var y=Math.round(Math.min(Math.max(4, e.clientY-helpDrag.dy), window.innerHeight-h-4));
+  helpPanel.style.left=x+'px';
+  helpPanel.style.top=y+'px';
+});
+window.addEventListener('pointerup', function(){
+  if(helpDrag){ helpDrag=null; document.body.classList.remove('help-moving'); }
+  if(helpSize){ helpSize=null; document.body.classList.remove('help-moving'); }
+});
+
+/* and resize it by the corner, in whole pixels */
+var helpSize=null;
+document.getElementById('pmHelpGrip').addEventListener('pointerdown', function(e){
+  e.preventDefault(); e.stopPropagation();
+  helpSize={ x:e.clientX, y:e.clientY, w:helpPanel.offsetWidth, h:helpPanel.offsetHeight };
+  document.body.classList.add('help-moving');
+});
+window.addEventListener('pointermove', function(e){
+  if(!helpSize) return;
+  var w=Math.round(Math.max(360, helpSize.w + (e.clientX-helpSize.x)));
+  var h=Math.round(Math.max(220, helpSize.h + (e.clientY-helpSize.y)));
+  helpPanel.style.width=w+'px';
+  helpPanel.style.height=h+'px';
+});
+
+/* ---- the keyboard ---- */
+document.addEventListener('keydown', function(e){
+  if(!isOpen()) return;
+  if((e.metaKey||e.ctrlKey) && (e.key==='z'||e.key==='Z')){ e.preventDefault(); undo(); return; }
+
+  if(e.key==='Escape'){ closeBreakMenu(); hideOffer(); closeDotMenu(); closeHelp();
+    if(scrimEl.classList.contains('show')) closeCard(); return; }
+
+  if(e.key==='F2'){ e.preventDefault(); askF2(); return; }
+
+  if(brkEl.classList.contains('show')){
+    if(e.key==='1'){ e.preventDefault(); doBreak('chapter'); return; }
+    if(e.key==='2'){ e.preventDefault(); doBreak('scene'); return; }
+  }
+
+  if(offerEl.classList.contains('show') && !e.metaKey && !e.ctrlKey && !e.altKey){
+    var k=(e.key||'').toLowerCase();
+    var m=MAKES.filter(function(x){ return x.key===k; })[0];
+    if(m){ e.preventDefault(); run(m); return; }
+  }
+});
+
+document.addEventListener('mousedown', function(e){
+  if(!isOpen()) return;
+  var fromBreakControl = e.target.id==='pmBrkBtn' || (e.target.closest && e.target.closest('#pmBrkBtn'));
+  if(!brkEl.contains(e.target) && !fromBreakControl) closeBreakMenu();
+  if(!offerEl.contains(e.target)) hideOffer();
+  if(!dotEl.contains(e.target) && !(e.target.classList && e.target.classList.contains('bk-dot'))) closeDotMenu();
+});
+
+/* ---- Edit in Basics is a real door ---- */
+q('pmEdit').addEventListener('click', function(e){
+  e.preventDefault();
+  saveNow();
+  if(window.showScreen) window.showScreen('project-overview');
+});
+
+/* ---- the corridor opens this screen through here ----------------------
+   Called by showScreen(). Everything above is sealed inside this box; this
+   one name is all the platform can see. --------------------------------- */
+window.plotMapperRefreshAda = applyAi;
+
+window.openPlotMapper = function(){
+  var cp = proj();
+  if(loadedIndex !== null && cp && loadedIndex !== cp.index) saveNow();
+  closeHelp(); hideOffer(); closeBreakMenu(); closeDotMenu(); closeCard();
+  loadDoc();
+  fillHead();
+  render();
+};
+
+})();
+
+</script>
+
+<!-- END PLOT MAPPER -->
+
 <!-- COMING SOON -->
 <div class="screen" id="screen-coming-soon">
   <div class="placeholder-screen">
@@ -1368,7 +2708,7 @@ function updateAICounter(){const u=getAICallsToday(),r=Math.max(0,AI_DAILY_LIMIT
 function setTone(dark){isDark=dark;localStorage.setItem('is-tone',dark?'dark':'light');document.body.className=dark?'dark':'light';document.getElementById('toneIcon').textContent=dark?'☀':'☾';document.getElementById('toneLbl').textContent=dark?'Light':'Dark'}
 function toggleTone(){setTone(!isDark)}
 document.body.style.transition='none';setTone(isDark);setTimeout(()=>{document.body.style.transition='background-color 1.5s ease,color 1.5s ease'},100);
-function toggleAI(){aiEnabled=!aiEnabled;const btn=document.getElementById('aiToggleBtn');btn.textContent=aiEnabled?'AI ON':'AI OFF';btn.classList.remove('ai-on','ai-off');btn.classList.add(aiEnabled?'ai-on':'ai-off');document.querySelectorAll('.ai-btn').forEach(b=>{b.style.display=aiEnabled?'':'none'})}
+function toggleAI(){aiEnabled=!aiEnabled;const btn=document.getElementById('aiToggleBtn');btn.textContent=aiEnabled?'AI ON':'AI OFF';btn.classList.remove('ai-on','ai-off');btn.classList.add(aiEnabled?'ai-on':'ai-off');document.querySelectorAll('.ai-btn').forEach(b=>{b.style.display=aiEnabled?'':'none'});if(window.plotMapperRefreshAda)window.plotMapperRefreshAda()}
 
 function showScreen(name,label){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -1376,6 +2716,7 @@ function showScreen(name,label){
   if(name==='projects'){document.getElementById('screen-projects').classList.add('active');document.getElementById('nav-projects').classList.add('active');document.getElementById('headerProjectName').textContent='My Projects';document.getElementById('projectNav').style.display='none';currentProject=null;}
   else if(name==='trash'){document.getElementById('screen-trash').classList.add('active');document.getElementById('nav-trash').classList.add('active');document.getElementById('headerProjectName').textContent='Trash';document.getElementById('projectNav').style.display='none';currentProject=null;renderTrash();}
   else if(name==='project-overview'){document.getElementById('screen-project-overview').classList.add('active');document.getElementById('nav-overview').classList.add('active');loadProjectHeader();}
+  else if(name==='plot-mapper'){document.getElementById('screen-plot-mapper').classList.add('active');document.getElementById('nav-plotmapper').classList.add('active');if(window.openPlotMapper)window.openPlotMapper();}
   else if(name==='cast'){document.getElementById('screen-cast').classList.add('active');document.getElementById('nav-cast').classList.add('active');currentCharacterIndex=null;document.getElementById('castNoSelection').style.display='flex';document.getElementById('castForm').style.display='none';renderCharacterList();}
   else if(name==='relationships'){document.getElementById('screen-relationships').classList.add('active');document.getElementById('nav-relationships').classList.add('active');currentRelationshipIndex=null;document.getElementById('relNoSelection').style.display='flex';document.getElementById('relForm').style.display='none';renderRelationshipList();}
   else if(name==='factions'){document.getElementById('screen-factions').classList.add('active');document.getElementById('nav-factions').classList.add('active');currentFactionIndex=null;document.getElementById('facNoSelection').style.display='flex';document.getElementById('facForm').style.display='none';renderFactionList();}
