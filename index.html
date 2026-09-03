@@ -436,7 +436,9 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       <div class="field"><div class="field-label">Inspirations & Influences</div><div class="field-ai-row"><textarea class="field-textarea" id="ph-influences" placeholder="Books, films, writers, music that inform this work..." oninput="autoSave()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiAutofill('ph-influences','inspirations and influences',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('ph-influences',this)">⟳ Expand</button></div></div></div>
       <div class="field"><div class="field-label">Tone & Style Notes</div><div class="field-ai-row"><textarea class="field-textarea" id="ph-tone" placeholder="The register, mood, voice, and feel of this work..." oninput="autoSave()"></textarea><div class="field-ai-btn-stack"><button class="ai-btn" onclick="aiAutofill('ph-tone','tone and style',this)">✦ Prompt</button><button class="ai-btn expand-btn" onclick="aiExpand('ph-tone',this)">⟳ Expand</button></div></div></div>
     </div>
-    <div class="save-row"><button class="save-btn" onclick="saveProjectHeader()">Save Overview</button><button class="cancel-btn" onclick="showScreen('projects')">Back to Projects</button><div class="saved-indicator" id="savedIndicator">✓ Saved</div></div>
+    <!-- the foot of the screen: save and stay, save and go forward, or go back -->
+    <div class="save-row"><button class="save-btn ov-act" id="ph-save-btn" onclick="saveProjectHeader()">Save</button><button class="save-btn ov-act" id="ph-save-go-btn" onclick="saveAndGoToPlotMapper()">Plot Mapper →</button><button class="cancel-btn ov-act" onclick="saveAndGoToProjects()">Back to Projects</button><div class="saved-indicator" id="savedIndicator">✓ Saved</div></div>
+    <div class="save-state" id="ph-save-state">Everything on this screen saves as you type.</div>
   </div>
 </div>
 
@@ -453,6 +455,25 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   #screen-project-overview .strap-wrap{flex:1;position:relative;overflow:hidden;}
   #screen-project-overview .strap-input{white-space:nowrap;overflow-x:auto;scrollbar-width:none;}
   #screen-project-overview .strap-input::-webkit-scrollbar{display:none;}
+
+  /* ===== the three buttons at the foot =====
+     One fixed width for all three, sized to the longest wording, so the row
+     reads as one set. Each carries a border at all times, so switching a
+     button between the filled and the outlined look cannot change its size. */
+  #screen-project-overview .save-row .ov-act{width:258px;padding:12px 0;text-align:center;
+    border:1px solid var(--gold,#c9923a);}
+  #screen-project-overview .save-row .ov-act.quiet{background:transparent;color:var(--gold,#c9923a);}
+  #screen-project-overview .save-row .ov-act.quiet:hover{background:var(--bg3,#221a14);color:var(--gold2,#e8b060);border-color:var(--gold2,#e8b060);}
+  /* Back to Projects keeps its own quieter colouring, but takes the same size */
+  #screen-project-overview .save-row .cancel-btn.ov-act{border-color:var(--rule2,#352815);}
+  #screen-project-overview .save-row .cancel-btn.ov-act:hover{border-color:var(--gold,#c9923a);}
+
+  /* the standing saved line — one quiet sentence under the row, always there.
+     It replaces the tick that only flashed when Save was pressed. */
+  #screen-project-overview .save-row .saved-indicator{display:none !important;}
+  #screen-project-overview .save-state{font-family:'JetBrains Mono',monospace;font-size:12px;
+    letter-spacing:.08em;color:var(--ink3,#706050);margin-top:14px;min-height:16px;}
+  #screen-project-overview .save-state.saved{color:var(--gold,#c9923a);}
 
   /* ===== the custom Genre dropdown ===== */
   #screen-project-overview .is-select{position:relative;}
@@ -787,12 +808,74 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
       window.updateChapterSteer();
     }
 
+    /* ---- the foot of the screen: the way forward ----
+       A project has "been to the Plot Mapper" if it carries a plotMapper
+       record. On the first visit the Plot Mapper button is the filled one,
+       so a new writer's eye lands on it. After that the two sit as equals.
+       Both are always there; neither ever disappears. */
+    function beenToPlotMapper(){
+      if(typeof getProjects!=='function' || !window.currentProject) return false;
+      try{
+        var item = getProjects()[currentProject.index];
+        return !!(item && item.plotMapper);
+      }catch(e){ return false; }
+    }
+
+    function setSaveRowEmphasis(){
+      var saveBtn = document.getElementById('ph-save-btn');
+      var goBtn   = document.getElementById('ph-save-go-btn');
+      if(!saveBtn || !goBtn) return;
+      var been = beenToPlotMapper();
+      /* first visit: Save is outlined, the Plot Mapper is filled.
+         afterwards: both outlined, so neither shouts at the other. */
+      saveBtn.classList.toggle('quiet', true);
+      goBtn.classList.toggle('quiet', been);
+    }
+
+    window.saveAndGoToPlotMapper = function(){
+      try { if (typeof autoSave === 'function') autoSave(); } catch(e){}
+      try { saveGuides(); } catch(e){}
+      if (typeof showScreen === 'function') showScreen('plot-mapper');
+    };
+
+    window.saveAndGoToProjects = function(){
+      try { if (typeof autoSave === 'function') autoSave(); } catch(e){}
+      try { saveGuides(); } catch(e){}
+      if (typeof showScreen === 'function') showScreen('projects');
+    };
+
+    /* ---- the standing saved line ----
+       The screen already saves on every keystroke, but it never said so.
+       This line sits under the row and reports the time of the last save,
+       so the writer can see the work is down without pressing anything. */
+    function markSaved(){
+      var line = document.getElementById('ph-save-state');
+      if(!line) return;
+      var t = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      line.textContent = 'Saved \u00B7 ' + t;
+      line.classList.add('saved');
+    }
+
+    /* every route that writes to the project reports itself through one door */
+    if(typeof window.autoSave==='function' && !window.autoSave._reports){
+      var corridorAutoSave = window.autoSave;
+      window.autoSave = function(){
+        var r = corridorAutoSave.apply(this, arguments);
+        markSaved();
+        return r;
+      };
+      window.autoSave._reports = true;
+    }
+
     /* when the corridor loads a project into the screen, load our guides too */
     if(typeof window.loadProjectHeader==='function' && !window.loadProjectHeader._guarded){
       var corridorLoad = window.loadProjectHeader;
       window.loadProjectHeader = function(){
         try { corridorLoad.apply(this, arguments); } catch(e){}
         loadGuides();
+        setSaveRowEmphasis();
+        var line = document.getElementById('ph-save-state');
+        if(line){ line.textContent = 'Everything on this screen saves as you type.'; line.classList.remove('saved'); }
       };
       window.loadProjectHeader._guarded = true;
     }
@@ -803,6 +886,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     window.resetGuides = function(){ plainResetGuides(); saveGuides(); };
 
     window.updateChapterSteer();
+    setSaveRowEmphasis();
   }
   init();
 })();
