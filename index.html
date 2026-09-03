@@ -1146,7 +1146,8 @@ function saveNow(){
     estimate: estimate,
     budgetOn: budgetOn,
     indent:   docEl.classList.contains('indent'),
-    marks:   !docEl.classList.contains('nomarks')
+    marks:   !docEl.classList.contains('nomarks'),
+    nextId:   nextBreakId
   };
   rec.currentWords = totalWords();
   rec.lastEdited   = new Date().toISOString();
@@ -1189,6 +1190,35 @@ function fillHead(){
 }
 
 /* ---- fetching this project's document, or starting a clean one ---- */
+/* ---- every chapter and scene carries a permanent id ------------------
+   This screen never needs one: it redraws the whole document each time and
+   a break is simply its position in the list. The Manuscript DOES need it.
+   It has to keep the prose written for a scene attached to THAT scene, and
+   if it held on to a position instead, adding a chapter break higher up
+   would slide every scene's writing down by one.
+   An id is given once when a break is made and never changes afterwards —
+   changing a chapter to a scene keeps the same id, because it is the same
+   break wearing a different hat. Documents written before today are
+   stamped the first time they are opened. Nothing on this screen looks any
+   different. --------------------------------------------------------- */
+var nextBreakId = 1;
+function newBreakId(){ return nextBreakId++; }
+
+function stampIds(saved){
+  var highest = 0;
+  parts.forEach(function(p){
+    if(p.kind==='chapter' || p.kind==='scene'){
+      if(typeof p.id === 'number' && p.id > highest) highest = p.id;
+    }
+  });
+  nextBreakId = Math.max((saved && saved.nextId) || 1, highest + 1);
+  parts.forEach(function(p){
+    if((p.kind==='chapter' || p.kind==='scene') && typeof p.id !== 'number'){
+      p.id = newBreakId();
+    }
+  });
+}
+
 function loadDoc(){
   var cp = proj() || {};
   loadedIndex = (typeof cp.index === 'number') ? cp.index : null;
@@ -1219,6 +1249,7 @@ function loadDoc(){
     docEl.classList.add('indent');
     docEl.classList.remove('nomarks');
   }
+  stampIds(saved);
   indBtn.classList.toggle('off', !docEl.classList.contains('indent'));
   mrkBtn.classList.toggle('off',  docEl.classList.contains('nomarks'));
 }
@@ -1587,8 +1618,8 @@ function openDotMenu(anchor, i){
       closeDotMenu();
       if(a==='own'){ snapshot(); p.budget=alloc().per; render(); }
       else if(a==='auto'){ snapshot(); p.budget=null; render(); }
-      else if(a==='toscene'){ snapshot(); parts[i]={ kind:'scene', title:p.title||'' }; render(); }
-      else if(a==='tochap'){ snapshot(); parts[i]={ kind:'chapter', title:p.title||'', budget:null }; render(); }
+      else if(a==='toscene'){ snapshot(); parts[i]={ kind:'scene', title:p.title||'', id:p.id }; render(); }
+      else if(a==='tochap'){ snapshot(); parts[i]={ kind:'chapter', title:p.title||'', budget:null, id:p.id }; render(); }
       else if(a==='remove'){ removeBreak(i); }
     });
   });
@@ -2042,7 +2073,9 @@ function doBreak(kind){
     afterParas=afterParas.concat(tail);
     if(!afterParas.length) afterParas=[{ text:'', marks:[] }];
 
-    var mark = (kind==='chapter') ? { kind:'chapter', title:'', budget:null } : { kind:'scene', title:'' };
+    var mark = (kind==='chapter')
+      ? { kind:'chapter', title:'', budget:null, id:newBreakId() }
+      : { kind:'scene',   title:'',              id:newBreakId() };
 
     var fresh=[];
     if(beforeParas.length) fresh.push({ kind:'prose', paras:beforeParas });
