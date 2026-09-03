@@ -1098,7 +1098,15 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   color:var(--ink3);background:transparent;border:1px solid var(--rule2);border-radius:3px;padding:4px 10px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;min-width:104px}#screen-plot-mapper .doc-label .ind-btn:hover{border-color:var(--gold);color:var(--ink2)}#screen-plot-mapper .doc-label .ind-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}#screen-plot-mapper .doc-label .ind-btn.off .dot{background:var(--ink3)}#screen-plot-mapper .doc{position:relative;padding:14px 0 0 64px}
 
-/* the prose — one continuous flow, paragraph by paragraph */#screen-plot-mapper .prose{font-family:'Crimson Pro',serif;font-size:19px;line-height:1.7;color:var(--ink);outline:none;min-height:1.7em}#screen-plot-mapper .prose p{margin:0 0 .5em}#screen-plot-mapper .prose p:last-child{margin-bottom:0}#screen-plot-mapper .doc.indent .prose p{text-indent:1.7em}#screen-plot-mapper .doc.indent .prose p:first-child{text-indent:0}   /* flush after every break, as a book sets it */#screen-plot-mapper .prose::selection,
+/* the prose — one continuous flow, paragraph by paragraph */#screen-plot-mapper .prose{font-family:'Crimson Pro',serif;font-size:19px;line-height:1.7;color:var(--ink);outline:none;min-height:1.7em}
+/* Text pasted out of Word or a PDF arrives wearing its own colour, usually
+   black, which is all but invisible on the dark screen. The writing takes
+   the screen's own ink and face whatever it arrives in. Bold and italic
+   are left alone — those belong to the writing. */
+#screen-plot-mapper .prose,
+#screen-plot-mapper .prose *{color:var(--ink)!important;background:transparent!important;
+  font-family:'Crimson Pro',serif!important;font-size:19px!important;line-height:1.7!important;
+  letter-spacing:normal!important;text-shadow:none!important}#screen-plot-mapper .prose p{margin:0 0 .5em}#screen-plot-mapper .prose p:last-child{margin-bottom:0}#screen-plot-mapper .doc.indent .prose p{text-indent:1.7em}#screen-plot-mapper .doc.indent .prose p:first-child{text-indent:0}   /* flush after every break, as a book sets it */#screen-plot-mapper .prose::selection,
 #screen-plot-mapper .prose *::selection{background:rgba(201,146,58,.28)}
 
 /* ---- a break — a dashed hairline, its pill out in the gutter ---- */#screen-plot-mapper .brk{position:relative;display:flex;align-items:center;gap:12px;scroll-margin-top:70px}#screen-plot-mapper .brk-chap{margin:20px 0 16px}#screen-plot-mapper .brk-scene{margin:14px 0}#screen-plot-mapper .brk .bk-pill{position:absolute;left:-64px;top:50%;transform:translateY(-50%);
@@ -1467,6 +1475,75 @@ function tidyParts(){
   if(!parts.some(function(p){ return p.kind==='prose'; })) parts.push({ kind:'prose', paras:[{ text:'', marks:[] }] });
 }
 
+/* ---- pasting in ------------------------------------------------------
+   Text pasted out of Word or a PDF brings its own markup with it — colour,
+   size, spans, styles. Left alone it lands black on a dark screen and
+   carries a pile of formatting into the writing.
+   SO THE PASTE IS TAKEN AS PLAIN TEXT AND REBUILT AS PARAGRAPHS. Blank
+   lines separate paragraphs; where a source has none, every line break is
+   taken as a paragraph, which is how most PDFs come out. This is the same
+   rule the entity pop-up already follows: what arrives, arrives as plain
+   ink. --------------------------------------------------------------- */
+function handlePaste(e, p){
+  var dt = e.clipboardData || window.clipboardData;
+  var text = dt ? dt.getData('text/plain') : '';
+  e.preventDefault();
+  if(!text) return;
+
+  text = text.replace(/\r\n?/g,'\n');
+  /* a paragraph is trimmed, because Word and PDFs carry indents in with
+     them — but a single space at either end of the paste is the writer's
+     own, and putting it back is what keeps "Hello| world" from becoming
+     "Hellothere world" */
+  var leadSpace  = /^[ \t]/.test(text);
+  var trailSpace = /[ \t]$/.test(text);
+  var blocks = text.split(/\n{2,}/);
+  if(blocks.length===1) blocks = text.split(/\n/);
+  blocks = blocks.map(function(t){ return t.replace(/[ \t]+/g,' ').trim(); })
+                 .filter(function(t){ return t.length; });
+  if(!blocks.length) return;
+
+  var sel = window.getSelection();
+  var a = sel.rangeCount ? pointAt(sel.anchorNode, sel.anchorOffset) : null;
+  if(!a) return;
+  var b = (sel.isCollapsed ? a : pointAt(sel.focusNode, sel.focusOffset));
+  if(!b || b.i !== a.i) b = a;
+
+  var startPi, startAt, endPi, endAt;
+  if(a.pi < b.pi || (a.pi === b.pi && a.at <= b.at)){
+    startPi=a.pi; startAt=a.at; endPi=b.pi; endAt=b.at;
+  } else {
+    startPi=b.pi; startAt=b.at; endPi=a.pi; endAt=a.at;
+  }
+
+  snapshot();
+
+  var paras = p.paras || [];
+  var head  = paras.slice(0, startPi);
+  var tail  = paras.slice(endPi+1);
+  var before = ((paras[startPi] && paras[startPi].text) || '').slice(0, startAt);
+  var after  = ((paras[endPi]   && paras[endPi].text)   || '').slice(endAt);
+
+  var lead  = (leadSpace  && before && !/\s$/.test(before)) ? ' ' : '';
+  var trail = (trailSpace && after  && !/^\s/.test(after))  ? ' ' : '';
+
+  var fresh = [];
+  if(blocks.length === 1){
+    fresh.push({ text: before + lead + blocks[0] + trail + after, marks:[] });
+  } else {
+    fresh.push({ text: before + lead + blocks[0], marks:[] });
+    for(var k=1; k<blocks.length-1; k++) fresh.push({ text: blocks[k], marks:[] });
+    fresh.push({ text: blocks[blocks.length-1] + trail + after, marks:[] });
+  }
+
+  p.paras = head.concat(fresh, tail);
+  if(!p.paras.length) p.paras = [{ text:'', marks:[] }];
+
+  lastCaret = null;
+  render();
+  saveSoon();
+}
+
 function render(){
   tidyParts();
   renderSteer();
@@ -1554,6 +1631,7 @@ function render(){
     pr.dataset.i=i;
     paintProse(pr, p);
     pr.addEventListener('beforeinput', noteTyping);
+    pr.addEventListener('paste', function(e){ handlePaste(e, p); });
     pr.addEventListener('input', function(){ readBack(pr, p); updateCounts(); showBlank(); saveSoon(); });
     docEl.appendChild(pr);
   });
