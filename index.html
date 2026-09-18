@@ -474,6 +474,19 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
   #screen-project-overview .save-state{font-family:'JetBrains Mono',monospace;font-size:12px;
     letter-spacing:.08em;color:var(--ink3,#706050);margin-top:14px;min-height:16px;}
   #screen-project-overview .save-state.saved{color:var(--gold,#c9923a);}
+  /* and when a save has actually failed, the same line says so in the danger
+     red rather than claiming a time it has not earned. */
+  #screen-project-overview .save-state.failed{color:var(--danger,#c43a2a);}
+
+  /* ===== two boxes side by side line up with each other =====
+     A label can be taller than the one beside it — the Read button is added
+     to some labels after the page loads, and that pushes its box down. The
+     box is the thing the eye follows, so the box wins: each half of a row is
+     a column, and its box is pushed to the foot. Whatever the labels do
+     above them, the two boxes sit level. */
+  #screen-project-overview .field-row .field{display:flex;flex-direction:column;}
+  #screen-project-overview .field-row .field > .field-input,
+  #screen-project-overview .field-row .field > .field-select{margin-top:auto;}
 
   /* ===== the custom Genre dropdown ===== */
   #screen-project-overview .is-select{position:relative;}
@@ -847,12 +860,25 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
     /* ---- the standing saved line ----
        The screen already saves on every keystroke, but it never said so.
        This line sits under the row and reports the time of the last save,
-       so the writer can see the work is down without pressing anything. */
+       so the writer can see the work is down without pressing anything.
+
+       AND IT REPORTS A SUCCESS, NOT AN ATTEMPT. The corridor's save guard
+       sets window.IS_SAVE_OK to false when a write to storage has actually
+       failed. If that has happened, this line must not claim a time it has
+       not earned — it says so plainly, in the danger red, alongside the
+       guard's own warning at the top of the screen. */
     function markSaved(){
       var line = document.getElementById('ph-save-state');
       if(!line) return;
+      if(window.IS_SAVE_OK === false){
+        line.textContent = 'NOT SAVED \u2014 see the warning at the top of the screen.';
+        line.classList.remove('saved');
+        line.classList.add('failed');
+        return;
+      }
       var t = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
       line.textContent = 'Saved \u00B7 ' + t;
+      line.classList.remove('failed');
       line.classList.add('saved');
     }
 
@@ -875,7 +901,7 @@ body.light{--bg:#fafaf8;--bg2:#f0ede6;--bg3:#e8e4dc;--ink:#1a1410;--ink2:#5a4a38
         loadGuides();
         setSaveRowEmphasis();
         var line = document.getElementById('ph-save-state');
-        if(line){ line.textContent = 'Everything on this screen saves as you type.'; line.classList.remove('saved'); }
+        if(line){ line.textContent = 'Everything on this screen saves as you type.'; line.classList.remove('saved'); line.classList.remove('failed'); }
       };
       window.loadProjectHeader._guarded = true;
     }
