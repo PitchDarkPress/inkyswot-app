@@ -3238,7 +3238,70 @@ updateAICounter();
   if(document.readyState==="loading"){ document.addEventListener("DOMContentLoaded", start); } else { start(); }
   window.addEventListener("load", function(){ scan(document); });
 })();
+// -- THE SAVE GUARD --------------------------------------
+// Until now, saving could fail in complete silence. getProjects and
+// saveProjects write to the browser's own storage, which has a ceiling of
+// roughly 5MB. When it is full the write simply does not happen — no error,
+// no warning, and the screen carries on as though the work were safe.
+// This block catches that. It wraps the two save doors, checks whether the
+// write actually succeeded, and if it did not, puts a red bar across the top
+// of the screen and leaves it there until a save works.
+// It informs. It never blocks the writer.
+(function(){
 
+  /* the bar, made once and kept hidden until it is needed */
+  var bar = null;
+  function makeBar(){
+    if (bar) return bar;
+    bar = document.createElement('div');
+    bar.id = 'is-save-alarm';
+    bar.style.cssText =
+      'position:fixed;left:0;right:0;top:0;z-index:900;display:none;' +
+      'background:#c43a2a;color:#fafaf8;padding:10px 16px;' +
+      "font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:0.06em;" +
+      'text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.5);';
+    document.body.appendChild(bar);
+    return bar;
+  }
+
+  function raiseAlarm(){
+    var b = makeBar();
+    b.textContent = 'YOUR WORK IS NOT BEING SAVED — the browser\u2019s storage is full. Do not close this tab. Copy anything unsaved somewhere safe.';
+    b.style.display = 'block';
+    window.IS_SAVE_OK = false;
+  }
+
+  function clearAlarm(){
+    if (bar) bar.style.display = 'none';
+    window.IS_SAVE_OK = true;
+  }
+
+  window.IS_SAVE_OK = true;
+
+  /* wrap one save function so it reports rather than failing quietly */
+  function guard(name){
+    var original = window[name];
+    if (typeof original !== 'function') return;
+    if (original._guarded) return;
+    var wrapped = function(){
+      try {
+        original.apply(this, arguments);
+        clearAlarm();
+        return true;
+      } catch(e) {
+        console.error(name + ' failed:', e);
+        raiseAlarm();
+        return false;
+      }
+    };
+    wrapped._guarded = true;
+    window[name] = wrapped;
+  }
+
+  guard('saveProjects');
+  guard('saveTrash');
+
+})();
 </script>
 </body>
 </html>
