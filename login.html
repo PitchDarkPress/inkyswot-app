@@ -139,6 +139,31 @@ body {
 .field-input:focus { border-color: #c9923a; }
 .field-input::placeholder { color: #2a2010; }
 
+/* SHOW PASSWORD — a quiet word inside the right-hand end of the box.
+   The box keeps its own size and position; only the padding on that
+   side makes room, so nothing shifts when the word changes. */
+.pw-wrap { position: relative; }
+.pw-wrap .field-input { padding-right: 76px; }
+.pw-show {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  width: 48px;
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #4a3a28;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s ease;
+}
+.pw-show:hover { color: #c9923a; }
+
 .btn-enter {
   width: 100%;
   padding: 16px;
@@ -224,7 +249,10 @@ body {
       </div>
       <div>
         <label class="field-label" for="login-password">Password</label>
-        <input class="field-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+        <div class="pw-wrap">
+          <input class="field-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+          <button type="button" class="pw-show" onclick="showPw('login-password', this)">Show</button>
+        </div>
       </div>
       <div class="error-msg" id="login-error"></div>
       <button class="btn-enter" id="login-btn" onclick="handleLogin()">Enter</button>
@@ -239,11 +267,17 @@ body {
       </div>
       <div>
         <label class="field-label" for="signup-password">Password</label>
-        <input class="field-input" type="password" id="signup-password" placeholder="••••••••" autocomplete="new-password">
+        <div class="pw-wrap">
+          <input class="field-input" type="password" id="signup-password" placeholder="••••••••" autocomplete="new-password">
+          <button type="button" class="pw-show" onclick="showPw('signup-password', this)">Show</button>
+        </div>
       </div>
       <div>
         <label class="field-label" for="signup-confirm">Confirm Password</label>
-        <input class="field-input" type="password" id="signup-confirm" placeholder="••••••••" autocomplete="new-password">
+        <div class="pw-wrap">
+          <input class="field-input" type="password" id="signup-confirm" placeholder="••••••••" autocomplete="new-password">
+          <button type="button" class="pw-show" onclick="showPw('signup-confirm', this)">Show</button>
+        </div>
       </div>
       <div class="error-msg" id="signup-error"></div>
       <button class="btn-enter" id="signup-btn" onclick="handleSignup()">Request Admission</button>
@@ -287,6 +321,16 @@ function busy(which, on){
   const { data } = await sb.auth.getSession();
   if (data && data.session) { window.location.replace(THE_APP); }
 })();
+
+/* ---- SHOW PASSWORD --------------------------------------------------
+   Turns the dots into words and back. The word on the button says what
+   pressing it will DO, which is the way round people expect. */
+function showPw(id, btn){
+  const box = document.getElementById(id);
+  const hidden = (box.type === 'password');
+  box.type = hidden ? 'text' : 'password';
+  btn.textContent = hidden ? 'Hide' : 'Show';
+}
 
 function showTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
