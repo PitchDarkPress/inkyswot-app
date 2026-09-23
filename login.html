@@ -154,6 +154,7 @@ body {
   margin-top: auto;
 }
 .btn-enter:hover { background: #e8b060; border-color: #e8b060; }
+.btn-enter:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .error-msg {
   font-family: 'JetBrains Mono', monospace;
@@ -163,6 +164,8 @@ body {
   text-align: center;
   min-height: 14px;
 }
+/* a real failure is said in the house danger red, not in gold */
+.error-msg.bad { color: #c43a2a; }
 
 .form-note {
   font-family: 'JetBrains Mono', monospace;
@@ -224,8 +227,8 @@ body {
         <input class="field-input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
       </div>
       <div class="error-msg" id="login-error"></div>
-      <button class="btn-enter" onclick="handleLogin()">Enter</button>
-      <div class="form-note"><a href="#" onclick="showForgot()">Forgot your password?</a></div>
+      <button class="btn-enter" id="login-btn" onclick="handleLogin()">Enter</button>
+      <div class="form-note"><a href="#" onclick="showForgot(); return false;">Forgot your password?</a></div>
     </div>
 
     <!-- SIGN UP FORM -->
@@ -243,14 +246,47 @@ body {
         <input class="field-input" type="password" id="signup-confirm" placeholder="••••••••" autocomplete="new-password">
       </div>
       <div class="error-msg" id="signup-error"></div>
-      <button class="btn-enter" onclick="handleSignup()">Request Admission</button>
+      <button class="btn-enter" id="signup-btn" onclick="handleSignup()">Request Admission</button>
       <div class="form-note">By joining you agree to our <a href="#">terms</a> and <a href="#">privacy policy</a>.</div>
     </div>
 
   </div>
 </div>
 
+<!-- Supabase's own library. It is used for one reason: it keeps the writer
+     signed in between visits and renews the session quietly in the
+     background. Doing that by hand is fiddly and easy to get wrong. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+
+/* The project address and the PUBLISHABLE key. Supabase's own note says a
+   publishable key is safe in a browser: the database's own rules decide
+   what it may touch, not the key. The SECRET key never appears here. */
+const SUPABASE_URL = 'https://gyosezfmsbhyyyrtxwws.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_xPn4WUR7_ray22TdrPEqJQ_0Ig9oX7T';
+const THE_APP      = 'https://app.inkyswot.com/';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ---- the message lines ---------------------------------------------
+   One door for saying anything to the writer, so a failure can never be
+   mistaken for a success. Gold for news, danger red for a real failure. */
+function say(which, text, bad){
+  const el = document.getElementById(which + '-error');
+  el.textContent = text;
+  el.classList.toggle('bad', !!bad);
+}
+function busy(which, on){
+  const b = document.getElementById(which + '-btn');
+  if(b) b.disabled = !!on;
+}
+
+/* ---- already signed in? ---------------------------------------------
+   Then there is nothing to do here — go straight through. */
+(async function(){
+  const { data } = await sb.auth.getSession();
+  if (data && data.session) { window.location.replace(THE_APP); }
+})();
 
 function showTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -259,29 +295,75 @@ function showTab(tab) {
   document.getElementById('form-' + tab).classList.add('active');
 }
 
-function handleLogin() {
+/* ---- LOG IN ---------------------------------------------------------- */
+async function handleLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass  = document.getElementById('login-password').value;
-  const err   = document.getElementById('login-error');
-  err.textContent = '';
-  if (!email || !pass) { err.textContent = 'Please enter your email and password.'; return; }
-  err.textContent = 'InkySwot is not yet open. Check back Autumn 2026.';
+  say('login', '');
+  if (!email || !pass) { say('login', 'Please enter your email and password.'); return; }
+
+  busy('login', true);
+  say('login', 'Checking…');
+  const { error } = await sb.auth.signInWithPassword({ email: email, password: pass });
+  busy('login', false);
+
+  if (error) {
+    /* Supabase's own words are often unhelpful to a writer, so the two
+       common cases are said plainly and anything else is passed through. */
+    let msg = error.message || 'Could not sign you in.';
+    if (/invalid login/i.test(msg))  msg = 'That email and password do not match.';
+    if (/not confirmed/i.test(msg))  msg = 'Please confirm your email first — check your inbox.';
+    say('login', msg, true);
+    return;
+  }
+  window.location.replace(THE_APP);
 }
 
-function handleSignup() {
+/* ---- SIGN UP --------------------------------------------------------- */
+async function handleSignup() {
   const email   = document.getElementById('signup-email').value.trim();
   const pass    = document.getElementById('signup-password').value;
   const confirm = document.getElementById('signup-confirm').value;
-  const err     = document.getElementById('signup-error');
-  err.textContent = '';
-  if (!email || !pass || !confirm) { err.textContent = 'Please complete all fields.'; return; }
-  if (pass !== confirm) { err.textContent = 'Passwords do not match.'; return; }
-  if (pass.length < 8)  { err.textContent = 'Password must be at least 8 characters.'; return; }
-  err.textContent = 'InkySwot is not yet open. Check back Autumn 2026.';
+  say('signup', '');
+  if (!email || !pass || !confirm) { say('signup', 'Please complete all fields.'); return; }
+  if (pass !== confirm) { say('signup', 'Passwords do not match.'); return; }
+  if (pass.length < 8)  { say('signup', 'Password must be at least 8 characters.'); return; }
+
+  busy('signup', true);
+  say('signup', 'Sending…');
+  const { data, error } = await sb.auth.signUp({
+    email: email,
+    password: pass,
+    options: { emailRedirectTo: THE_APP }
+  });
+  busy('signup', false);
+
+  if (error) {
+    let msg = error.message || 'Could not create the account.';
+    if (/already registered/i.test(msg)) msg = 'That email already has an account. Try logging in.';
+    say('signup', msg, true);
+    return;
+  }
+
+  /* With Confirm Email on, nobody is signed in yet. Say exactly that
+     rather than leaving them staring at a still screen. */
+  say('signup', 'Check your email and click the link to confirm. Then log in.');
+  document.getElementById('signup-password').value = '';
+  document.getElementById('signup-confirm').value  = '';
 }
 
-function showForgot() {
-  alert('Password reset coming in Step 9 — Resend.');
+/* ---- FORGOTTEN PASSWORD ---------------------------------------------- */
+async function showForgot() {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) { say('login', 'Type your email above first, then press this again.'); return; }
+
+  busy('login', true);
+  say('login', 'Sending…');
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: THE_APP });
+  busy('login', false);
+
+  if (error) { say('login', error.message || 'Could not send the email.', true); return; }
+  say('login', 'If that email has an account, a reset link is on its way.');
 }
 
 </script>
