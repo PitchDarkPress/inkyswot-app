@@ -55,17 +55,8 @@ body {
   letter-spacing: 0.15em;
   color: #c9923a;
   text-align: center;
-  margin-bottom: 20px;
-}
-
-.members-access {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #8a7860;
-  text-align: center;
-  margin-bottom: 36px;
+  margin-bottom: 36px;   /* was 20px — takes up the space the removed
+                            Members Access line used to hold */
 }
 
 .gold-rule {
@@ -230,7 +221,6 @@ body {
   <div class="panel-header">
     <div class="wordmark">InkySwot</div>
     <div class="publish">PUBLISH AND BE DAMNED</div>
-    <div class="members-access">Members Access</div>
     <div class="gold-rule"></div>
     <div class="tabs">
       <div class="tab active" onclick="showTab('login')">Log In</div>
@@ -338,6 +328,14 @@ function showTab(tab) {
   document.querySelector(`.tab[onclick="showTab('${tab}')"]`).classList.add('active');
   document.getElementById('form-' + tab).classList.add('active');
 }
+
+/* ---- ARRIVE ON THE RIGHT TAB ----------------------------------------
+   The front page has two buttons and they must not land in the same
+   place. login.html#signup opens on Sign Up; anything else opens on
+   Log In, which stays the default. */
+(function(){
+  if (window.location.hash === '#signup') { showTab('signup'); }
+})();
 
 /* ---- LOG IN ---------------------------------------------------------- */
 async function handleLogin() {
