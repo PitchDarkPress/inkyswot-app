@@ -3328,6 +3328,70 @@ updateAICounter();
   guard('saveTrash');
 
 })();
+/* ===================================================================
+   LOG OUT — added 24 September 2026.
+   Self-contained. Delete the whole block and the corridor is exactly
+   as it was. Goes at the END of the script, just before </script>.
+   Adds one item to the foot of the sidebar, under Trash, built to
+   match Trash exactly.
+   =================================================================== */
+(function () {
+
+  var SUPABASE_URL = 'https://gyosezfmsbhyyyrtxwws.supabase.co';
+  var SUPABASE_KEY = 'sb_publishable_xPn4WUR7_ray22TdrPEqJQ_0Ig9oX7T';
+  var FRONT_DOOR   = '/login.html';
+
+  /* Supabase's own library, fetched quietly. If it does not arrive,
+     the button still works — it just goes to the front door without
+     telling Supabase first. */
+  var sb = null;
+  var lib = document.createElement('script');
+  lib.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  lib.onload = function () {
+    try { sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }
+    catch (e) { sb = null; }
+  };
+  document.head.appendChild(lib);
+
+  function addLogOut() {
+    if (document.getElementById('nav-logout')) return;
+    var trash = document.getElementById('nav-trash');
+    if (!trash) return;                    /* no Trash, no Log Out */
+    var trashSection = trash.parentNode;
+
+    var section = document.createElement('div');
+    section.className = 'sidebar-section';
+
+    var item = document.createElement('div');
+    item.className = 'sidebar-item';
+    item.id = 'nav-logout';
+    item.innerHTML = '<span class="sidebar-icon">⏻</span> Log Out';
+    item.onclick = logOut;
+
+    section.appendChild(item);
+    trashSection.parentNode.insertBefore(section, trashSection.nextSibling);
+  }
+
+  function logOut() {
+    if (!confirm('Log out of InkySwot?')) return;
+    try {
+      if (sb) {
+        sb.auth.signOut()
+          .then(function () { window.location.href = FRONT_DOOR; })
+          .catch(function () { window.location.href = FRONT_DOOR; });
+        return;
+      }
+    } catch (e) { /* fall through */ }
+    window.location.href = FRONT_DOOR;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addLogOut);
+  } else {
+    addLogOut();
+  }
+
+})();
 </script>
 </body>
 </html>
