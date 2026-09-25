@@ -3329,11 +3329,16 @@ updateAICounter();
 
 })();
 /* ===================================================================
-   LOG OUT — added 24 September 2026.
-   Self-contained. Delete the whole block and the corridor is exactly
-     as it was. Goes at the END of the script, at the very bottom.
-   Adds one item to the foot of the sidebar, under Trash, built to
-   match Trash exactly.
+   LOG OUT — version two, 25 September 2026.
+   Replaces the first version. Self-contained: delete the whole block
+   and the corridor is exactly as it was. Goes at the very bottom of
+   the script.
+   Adds one CENTRED item to the foot of the sidebar, under Trash, and
+   its own confirmation panel built from the platform's own modal
+   classes, so it inherits the house look with no new styling.
+   NOTE: nothing in this block may contain the closing script tag,
+   even inside a comment. The first version did, and it stopped the
+   whole page dead.
    =================================================================== */
 (function () {
 
@@ -3341,8 +3346,8 @@ updateAICounter();
   var SUPABASE_KEY = 'sb_publishable_xPn4WUR7_ray22TdrPEqJQ_0Ig9oX7T';
   var FRONT_DOOR   = '/login.html';
 
-  /* Supabase's own library, fetched quietly. If it does not arrive,
-     the button still works — it just goes to the front door without
+  /* Supabase's own library, fetched quietly. If it does not arrive the
+     button still works — it just goes to the front door without
      telling Supabase first. */
   var sb = null;
   var lib = document.createElement('script');
@@ -3353,6 +3358,7 @@ updateAICounter();
   };
   document.head.appendChild(lib);
 
+  /* ---- the sidebar item ---- */
   function addLogOut() {
     if (document.getElementById('nav-logout')) return;
     var trash = document.getElementById('nav-trash');
@@ -3365,15 +3371,58 @@ updateAICounter();
     var item = document.createElement('div');
     item.className = 'sidebar-item';
     item.id = 'nav-logout';
-    item.innerHTML = '<span class="sidebar-icon">⏻</span> Log Out';
-    item.onclick = logOut;
+    item.style.textAlign = 'center';       /* the one thing that sets
+                                              it apart from the rest */
+    item.innerHTML = '<span class="sidebar-icon">&#9096;</span> Log Out';
+    item.onclick = askFirst;
 
     section.appendChild(item);
     trashSection.parentNode.insertBefore(section, trashSection.nextSibling);
+
+    buildPanel();
   }
 
-  function logOut() {
-    if (!confirm('Log out of InkySwot?')) return;
+  /* ---- the confirmation panel, in the platform's own clothes ---- */
+  function buildPanel() {
+    if (document.getElementById('logOutModal')) return;
+
+    var overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.id = 'logOutModal';
+
+    overlay.innerHTML =
+      '<div class="modal">' +
+        '<div class="modal-title">Log Out</div>' +
+        '<div class="modal-sub">Your work is saved as you type.</div>' +
+        '<div class="modal-btns">' +
+          '<button class="modal-cancel" id="logOutNo">Cancel</button>' +
+          '<button class="modal-create" id="logOutYes">Log Out</button>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+
+    document.getElementById('logOutNo').onclick = closePanel;
+    document.getElementById('logOutYes').onclick = doLogOut;
+
+    /* clicking the dark surround closes it, as a modal should */
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closePanel();
+    });
+  }
+
+  function askFirst() {
+    var m = document.getElementById('logOutModal');
+    if (!m) { doLogOut(); return; }        /* panel missing — do not trap */
+    m.classList.add('active');
+  }
+
+  function closePanel() {
+    var m = document.getElementById('logOutModal');
+    if (m) m.classList.remove('active');
+  }
+
+  function doLogOut() {
     try {
       if (sb) {
         sb.auth.signOut()
