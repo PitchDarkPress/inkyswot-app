@@ -3329,16 +3329,19 @@ updateAICounter();
 
 })();
 /* ===================================================================
-   LOG OUT — version two, 25 September 2026.
-   Replaces the first version. Self-contained: delete the whole block
-   and the corridor is exactly as it was. Goes at the very bottom of
-   the script.
-   Adds one CENTRED item to the foot of the sidebar, under Trash, and
-   its own confirmation panel built from the platform's own modal
-   classes, so it inherits the house look with no new styling.
+   LOG OUT — version three, 25 September 2026.
+   Replaces version two. Self-contained: delete the whole block and
+   the corridor is exactly as it was. Goes at the very bottom of the
+   script.
+   TWO CORRECTIONS FROM VERSION TWO:
+   · The platform opens a modal with the class "open", not "active".
+     Claude assumed "active" and the panel never showed. Read from
+     line 117 of the corridor: .modal-overlay.open{display:flex}
+   · The centring is forced, because .sidebar-item sets its own
+     alignment and the plain style was being overruled.
    NOTE: nothing in this block may contain the closing script tag,
-   even inside a comment. The first version did, and it stopped the
-   whole page dead.
+   even inside a comment. Version one did, and it stopped the whole
+   page dead.
    =================================================================== */
 (function () {
 
@@ -3371,8 +3374,9 @@ updateAICounter();
     var item = document.createElement('div');
     item.className = 'sidebar-item';
     item.id = 'nav-logout';
-    item.style.textAlign = 'center';       /* the one thing that sets
-                                              it apart from the rest */
+    /* forced, because .sidebar-item sets its own alignment */
+    item.style.setProperty('justify-content', 'center', 'important');
+    item.style.setProperty('text-align', 'center', 'important');
     item.innerHTML = '<span class="sidebar-icon">&#9096;</span> Log Out';
     item.onclick = askFirst;
 
@@ -3414,12 +3418,12 @@ updateAICounter();
   function askFirst() {
     var m = document.getElementById('logOutModal');
     if (!m) { doLogOut(); return; }        /* panel missing — do not trap */
-    m.classList.add('active');
+    m.classList.add('open');
   }
 
   function closePanel() {
     var m = document.getElementById('logOutModal');
-    if (m) m.classList.remove('active');
+    if (m) m.classList.remove('open');
   }
 
   function doLogOut() {
