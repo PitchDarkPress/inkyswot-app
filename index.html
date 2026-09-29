@@ -3446,21 +3446,24 @@ updateAICounter();
 
 })();
 /* ===================================================================
-   THE LIBRARY ROOM — version three, 28 September 2026. A STATIC STILL.
-   Replaces versions one and two. Research & Reference opens the
-   Library: three libraries down the left, in Kev's own words —
-     My Library (Private) · Reference Library (Private) ·
-     Public Domain Library (Open to all)
-   — and on the right the chosen book in its own order: The Book ·
-   Front Matter · Chapters · Back Matter. Front and back matter are
-   shown a page at a time, split where the book's own pages began
-   (form feed = a page break; vertical tab = a quieter page start).
-   Only My Library holds anything yet; the other two say so.
-   NOTHING IN THE ROOM IS CLICKABLE YET.
+   THE LIBRARY ROOM — version four, 29 September 2026.
+   Replaces version three. What is NEW and WORKS:
+   · + ADD beside My Library and Reference Library opens the panel:
+     title, genre (read from the Basics Genre list on this page), an
+     optional project link, and the book itself — a Word file, or a
+     paste (Google Docs and anything else). The Word and paste readers
+     keep where each page began (form feed / vertical tab), as the
+     test page did. PUT IT ON THE SHELF saves it, reads it straight
+     back, checks every character, and shows it. Cancel goes back.
+   · Books in the list can be clicked to open.
+   · The LIBRARY ? pill opens a window that moves, resizes and closes
+     (x or Escape). No scrim; the page stays live.
+   SHOWN BUT NOT YET EDITABLE: a book's project links. Separator
+   controls and descriptions are not in this version.
+   Public Domain's + Add is shown quiet: it waits on Kev's decision
+   about approving additions.
    Self-contained: delete the whole block and the corridor is exactly
    as it was. Goes at the very bottom of the script, after LOG OUT.
-   It builds its own screen and rewires nav-research itself, so no
-   pocket and no change to the Enclosure are needed.
    NOTE: nothing in this block may contain the closing script tag,
    even inside a comment.
    =================================================================== */
@@ -3516,6 +3519,63 @@ updateAICounter();
     '.lib-shelf-empty{padding:4px 16px 18px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.06em;color:var(--ink3)}' +
     '.lib-shelf-empty.fail{color:var(--danger)}';
 
+  /* ---- version four: + Add, the panel, links, the guide ---- */
+  var css4 =
+    '#screen-library .lib-shelf-head{position:relative}' +
+    '#screen-library .lib-shelf-name{padding-right:66px}' +
+    '.lib-add{position:absolute;right:16px;top:20px;padding:4px 10px;background:var(--gold);color:var(--btn-text);border:none;border-radius:3px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.08em;cursor:pointer}' +
+    '.lib-add:hover{background:var(--gold2)}' +
+    '.lib-add.quiet{background:transparent;border:1px solid var(--rule2);color:var(--ink3);cursor:default}' +
+    '#screen-library .lib-list-item{cursor:pointer}' +
+    '#screen-library .lib-list-item:hover{background:var(--bg3)}' +
+    '.lib-links{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}' +
+    '.lib-links-k{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);margin-right:4px}' +
+    '.lib-link-tag{display:inline-flex;align-items:center;padding:4px 14px;border:1px solid var(--gold);border-radius:20px;font-family:"Crimson Pro",serif;font-size:17px;color:var(--gold);background:var(--bg3)}' +
+    '.lib-link-none{font-family:"Crimson Pro",serif;font-size:17px;font-style:italic;color:var(--ink3)}' +
+    '.lib-f-label{font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2);margin:18px 0 6px}' +
+    '.lib-f-opt{font-size:11px;letter-spacing:0.1em;color:var(--ink3);margin-left:8px}' +
+    '.lib-f-input,.lib-f-select{width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--rule2);border-radius:3px;font-family:"Crimson Pro",serif;font-size:21px;color:var(--ink);outline:none}' +
+    '.lib-f-input:focus,.lib-f-select:focus{border-color:var(--gold)}' +
+    '.lib-f-input::placeholder{color:var(--ink3);font-style:italic}' +
+    '.lib-f-select option{background:var(--bg2);color:var(--ink)}' +
+    '.lib-f-sub{font-family:"Crimson Pro",serif;font-size:16px;font-style:italic;color:var(--ink3);margin-top:4px}' +
+    '.lib-ways{display:grid;grid-template-columns:1fr 1fr;gap:14px}' +
+    '.lib-way{padding:18px 18px 20px;background:var(--bg2);border:1px solid var(--rule2);border-radius:3px;min-height:130px}' +
+    '.lib-way.paste{border-style:dashed;outline:none;cursor:text}' +
+    '.lib-way.paste:focus{border-color:var(--gold)}' +
+    '.lib-way.done{border-color:var(--gold)}' +
+    '.lib-way-title{font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}' +
+    '.lib-way-text{font-family:"Crimson Pro",serif;font-size:17px;color:var(--ink2);line-height:1.4}' +
+    '.lib-way-btn{display:inline-block;margin-top:12px;padding:6px 14px;border:1px solid var(--gold);border-radius:3px;background:transparent;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.08em;color:var(--gold);cursor:pointer}' +
+    '.lib-way-btn:hover{background:var(--gold);color:var(--btn-text)}' +
+    '.lib-reminder{margin-top:22px;padding:14px 18px;border:1px solid var(--gold);border-radius:3px;background:rgba(201,146,58,.06)}' +
+    '.lib-reminder b{display:block;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:6px}' +
+    '.lib-reminder span{font-family:"Crimson Pro",serif;font-size:17px;color:var(--ink2);line-height:1.45}' +
+    '.lib-read{margin-top:14px;font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.04em;line-height:1.5;color:var(--gold);min-height:20px}' +
+    '.lib-read.fail{color:var(--danger)}' +
+    '.lib-foot{display:flex;gap:14px;margin-top:24px}' +
+    '.lib-foot button{width:230px;padding:12px 0;text-align:center;font-family:"JetBrains Mono",monospace;font-size:14px;letter-spacing:0.12em;text-transform:uppercase;border-radius:3px;cursor:pointer}' +
+    '.lib-go{background:var(--gold);color:var(--btn-text);border:1px solid var(--gold)}' +
+    '.lib-go:hover{background:var(--gold2)}' +
+    '.lib-go:disabled{opacity:0.35;cursor:not-allowed}' +
+    '.lib-no{background:transparent;color:var(--ink2);border:1px solid var(--rule2)}' +
+    '.lib-no:hover{border-color:var(--gold);color:var(--gold)}' +
+    '.lib-pill{position:absolute;top:28px;right:40px;padding:5px 12px;border:1px solid var(--gold);border-radius:14px;background:var(--bg);font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);cursor:pointer;z-index:3}' +
+    '.lib-pill:hover{background:var(--bg3)}' +
+    '.lib-win{position:fixed;width:440px;background:var(--bg2);border:1px solid var(--gold);border-radius:6px;box-shadow:0 16px 44px rgba(0,0,0,.55);z-index:90;display:none;overflow:hidden}' +
+    '.lib-win.open{display:flex;flex-direction:column}' +
+    '.lib-win-head{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--rule2);cursor:move;user-select:none;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold)}' +
+    '.lib-win-x{background:none;border:none;color:var(--ink3);font-size:18px;cursor:pointer;line-height:1}' +
+    '.lib-win-x:hover{color:var(--gold)}' +
+    '.lib-win-body{padding:10px 16px 14px;overflow-y:auto;flex:1}' +
+    '.lib-win-row{padding:7px 0;border-bottom:1px solid var(--rule)}' +
+    '.lib-win-row:last-child{border-bottom:none}' +
+    '.lib-win-row b{display:block;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:2px}' +
+    '.lib-win-row span{font-family:"Crimson Pro",serif;font-size:17px;color:var(--ink2);line-height:1.35}' +
+    '.lib-win-grip{position:absolute;right:2px;bottom:2px;width:14px;height:14px;cursor:nwse-resize;border-right:2px solid var(--rule2);border-bottom:2px solid var(--rule2)}' +
+    '.lib-page + .lib-page{margin-top:0;padding-top:0;border-top:none}' +
+    '.lib-sep{height:1px;background:var(--rule2);margin:20px 0}';
+
   function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function words(t) { var m = (t || '').match(/\S+/g); return m ? m.length : 0; }
 
@@ -3524,7 +3584,7 @@ updateAICounter();
   var NUM = /^([0-9]{1,3}|[ivxlc]{1,7})\.?$/i;
   function isHeading(line) {
     if (line.length > 60) return null;
-    if (/[,;:!?"\u201c\u201d]$/.test(line) || /[a-z]\.$/.test(line)) return null;
+    if (/[,;:!?"“”]$/.test(line) || /[a-z]\.$/.test(line)) return null;
     if (KEY.test(line)) return 'sure';
     if (NUM.test(line)) return 'unsure';
     var letters = line.replace(/[^A-Za-z]/g, '');
@@ -3537,13 +3597,13 @@ updateAICounter();
     var lines = (text || '').split(/\r?\n/).map(function (s) { return (s === '\f' || s === '\v') ? s : s.trim(); }).filter(Boolean);
     var found = [], cur = null;
     for (var i = 0; i < lines.length; i++) {
-      var kind = /^(isbn|copyright|\u00a9)/i.test(lines[i]) ? null : isHeading(lines[i]);
+      var kind = /^(isbn|copyright|©)/i.test(lines[i]) ? null : isHeading(lines[i]);
       if (kind) {
         var start = i;
         var head = lines[i], nxt = lines[i + 1];
         /* a number or "Chapter One" on one line, its title on the next */
-        if (nxt && nxt !== '\f' && nxt !== '\v' && nxt.length <= 60 && !isHeading(nxt) && !/[.,;:!?"\u201d]$/.test(nxt) &&
-            (NUM.test(head) || /^chapter\s+\S+$/i.test(head))) { head += ' \u2014 ' + nxt; i++; }
+        if (nxt && nxt !== '\f' && nxt !== '\v' && nxt.length <= 60 && !isHeading(nxt) && !/[.,;:!?"”]$/.test(nxt) &&
+            (NUM.test(head) || /^chapter\s+\S+$/i.test(head))) { head += ' — ' + nxt; i++; }
         cur = { head: head, kind: kind, words: 0, at: start };
         found.push(cur);
       } else if (cur) {
@@ -3559,7 +3619,7 @@ updateAICounter();
     var story = real.slice(first, last + 1);
     /* front matter: everything before the first chapter heading.
        back matter: everything from the first heading after the last
-       chapter \u2014 including headings with nothing under them, like THE END */
+       chapter — including headings with nothing under them, like THE END */
     var lastAt = story[story.length - 1].at, backAt = lines.length;
     found.forEach(function (x) { if (x.at > lastAt && x.at < backAt) backAt = x.at; });
     return { chapters: story,
@@ -3567,40 +3627,287 @@ updateAICounter();
              back: lines.slice(backAt).join('\n') };
   }
   function rowHtml(x, kind) {
-    return '<div class="lib-row"><div class="lib-mark ' + kind + '">' + (kind === 'sure' ? '\u2713' : '?') + '</div>' +
+    return '<div class="lib-row"><div class="lib-mark ' + kind + '">' + (kind === 'sure' ? '✓' : '?') + '</div>' +
       '<div class="lib-head ' + kind + '">' + esc(x.head) + '</div>' +
       '<div class="lib-words">' + x.words.toLocaleString('en-GB') + ' words</div></div>';
-  }
-  function matterHtml(text) {
-    if (!text) return '<div class="lib-note">None found.</div>';
-    return '<div class="lib-summary">' + words(text).toLocaleString('en-GB') + ' words</div>' +
-      '<div class="lib-opening">' + (function () {
-        /* one block per page of the book, lines kept together inside it */
-        return text.split(/\n?[\f\v]\n?/).map(function (pg) {
-          var ls = pg.split('\n').filter(function (l) { return l.trim(); });
-          if (!ls.length) return '';
-          return '<div class="lib-page">' + ls.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('') + '</div>';
-        }).join('');
-      })() + '</div>';
   }
   function chaptersHtml(r) {
     var c = r.chapters;
     if (!c.length) return '<div class="lib-note">No headings found. The book may mark its chapters in a way the finder does not yet know.</div>';
     var sure = c.filter(function (x) { return x.kind === 'sure'; }).length;
-    var html = '<div class="lib-summary">Found ' + c.length + ' chapters \u00b7 ' + sure + ' certain \u00b7 ' + (c.length - sure) + ' to confirm</div>';
+    var html = '<div class="lib-summary">Found ' + c.length + ' chapters · ' + sure + ' certain · ' + (c.length - sure) + ' to confirm</div>';
     html += c.map(function (x) { return rowHtml(x, x.kind); }).join('');
     return html;
   }
 
 
+  /* ================================================================
+     THE WORD READER — reads a .docx here, in the browser, with no
+     outside library. A .docx is a zip; Chrome unpacks it itself.
+     It keeps the words AND where each new page begins, marking every
+     page break with a form-feed character on a line of its own.
+     Word's own page breaks, "page break before" (set on the paragraph
+     OR on its style, such as a chapter heading style) and section
+     breaks that start a new page are all kept, marked with a form feed.
+     AND, MORE QUIETLY: where Word, when it last saved the file, found a
+     page beginning — including a page that began only because the one
+     before was full, like a title page filled by a picture — the reader
+     marks that too, with a vertical tab on a line of its own. Only where
+     the page begins at the start of a paragraph; it never splits one.
+     In the story these move with every change of font and mean little;
+     in front and back matter, where pages are short and deliberate,
+     they are where one section ends and the next begins.
+     AND ONE MORE: SIX OR MORE EMPTY LINES IN A ROW count as a new page
+     too, marked the same quiet way — the writer pressing Enter until
+     the text reaches the next page. Nobody does that inside a story.
+     ================================================================ */
+  var PAGE = '\f', SOFT = '\v';
+
+  function unzip(buf, wanted) {
+    var v = new DataView(buf), n = buf.byteLength, eocd = -1;
+    for (var i = n - 22; i >= Math.max(0, n - 65557); i--) {
+      if (v.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+    }
+    if (eocd < 0) return Promise.reject(new Error('This does not look like a Word file.'));
+    var count = v.getUint16(eocd + 10, true), p = v.getUint32(eocd + 16, true), jobs = {};
+    for (var k = 0; k < count; k++) {
+      if (v.getUint32(p, true) !== 0x02014b50) break;
+      var method = v.getUint16(p + 10, true), size = v.getUint32(p + 20, true);
+      var nameLen = v.getUint16(p + 28, true), extraLen = v.getUint16(p + 30, true), commLen = v.getUint16(p + 32, true);
+      var local = v.getUint32(p + 42, true);
+      var name = new TextDecoder().decode(new Uint8Array(buf, p + 46, nameLen));
+      if (wanted.indexOf(name) > -1) {
+        var start = local + 30 + v.getUint16(local + 26, true) + v.getUint16(local + 28, true);
+        var data = new Uint8Array(buf, start, size);
+        jobs[name] = method === 0 ? Promise.resolve(new TextDecoder().decode(data))
+          : new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text();
+      }
+      p += 46 + nameLen + extraLen + commLen;
+    }
+    var names = Object.keys(jobs);
+    return Promise.all(names.map(function (nm) { return jobs[nm]; })).then(function (texts) {
+      var out = {}; names.forEach(function (nm, i) { out[nm] = texts[i]; }); return out;
+    });
+  }
+
+  function readDocx(buf) {
+    return unzip(buf, ['word/document.xml', 'docProps/app.xml', 'word/styles.xml']).then(function (files) {
+      /* ---- which paragraph styles start a new page ----
+         read from styles.xml, following each style's "based on" chain */
+      var styleInfo = {}, defaultStyle = null;
+      if (files['word/styles.xml']) {
+        var sd = new DOMParser().parseFromString(files['word/styles.xml'], 'application/xml');
+        var sts = sd.getElementsByTagName('w:style');
+        for (var s = 0; s < sts.length; s++) {
+          var st = sts[s];
+          if (st.getAttribute('w:type') !== 'paragraph') continue;
+          var id = st.getAttribute('w:styleId'), info = { pbb: null, basedOn: null };
+          var bo = st.getElementsByTagName('w:basedOn')[0];
+          if (bo) info.basedOn = bo.getAttribute('w:val');
+          var spPr = st.getElementsByTagName('w:pPr')[0];
+          var spb = spPr && spPr.getElementsByTagName('w:pageBreakBefore')[0];
+          if (spb) { var sv = spb.getAttribute('w:val'); info.pbb = !(sv === '0' || sv === 'false'); }
+          styleInfo[id] = info;
+          if (st.getAttribute('w:default') === '1') defaultStyle = id;
+        }
+      }
+      function styleBreaks(id) {
+        for (var hops = 0; id && styleInfo[id] && hops < 20; hops++) {
+          if (styleInfo[id].pbb !== null) return styleInfo[id].pbb;
+          id = styleInfo[id].basedOn;
+        }
+        return false;
+      }
+      if (!files['word/document.xml']) throw new Error('This does not look like a Word file.');
+      var doc = new DOMParser().parseFromString(files['word/document.xml'], 'application/xml');
+      var body = doc.getElementsByTagName('w:body')[0];
+      if (!body) throw new Error('Could not find the text inside this Word file.');
+      var out = [], line = '', breaks = 0, softs = 0, softPending = false, emptyRun = 0;
+      var EMPTY_LINES = 6;
+      function isMark(x) { return x === PAGE || x === SOFT; }
+      function endLine() {
+        if (line.trim()) {
+          if (softPending) {             /* Word began a page here */
+            if (out.length && !isMark(out[out.length - 1])) { out.push(SOFT); softs++; }
+            softPending = false;
+          }
+          out.push(line);
+        }
+        line = '';
+      }
+      function pageBreak() {
+        endLine();
+        softPending = false;             /* a real break covers it */
+        if (out.length && out[out.length - 1] !== PAGE) {
+          if (out[out.length - 1] === SOFT) { out.pop(); softs--; }
+          out.push(PAGE); breaks++;
+        }
+      }
+      function insideOther(el, p) {           /* inside a nested paragraph or a fallback copy */
+        for (var a = el.parentNode; a && a !== p; a = a.parentNode) {
+          if (a.nodeName === 'w:p' || a.nodeName === 'mc:Fallback') return true;
+        }
+        return false;
+      }
+      var paras = body.getElementsByTagName('w:p');
+      for (var i = 0; i < paras.length; i++) {
+        var p = paras[i];
+        if (insideOther(p, body)) continue;   /* text boxes: skipped, see note */
+        if (emptyRun >= EMPTY_LINES) softPending = true;   /* the writer's own new page */
+        var before = out.length;
+        var pPr = null, c;
+        for (c = p.firstElementChild; c; c = c.nextElementSibling) if (c.nodeName === 'w:pPr') pPr = c;
+        /* a new page if the paragraph says so; if it says nothing, ask its style */
+        var pb = pPr && pPr.getElementsByTagName('w:pageBreakBefore')[0];
+        if (pb) {
+          if (pb.getAttribute('w:val') !== '0' && pb.getAttribute('w:val') !== 'false') pageBreak();
+        } else {
+          var ps = pPr && pPr.getElementsByTagName('w:pStyle')[0];
+          if (styleBreaks(ps ? ps.getAttribute('w:val') : defaultStyle)) pageBreak();
+        }
+        var all = p.getElementsByTagName('*');
+        for (var j = 0; j < all.length; j++) {
+          var e = all[j], nm = e.nodeName;
+          if (nm === 'w:lastRenderedPageBreak') {
+            /* only counts if no words of this paragraph have come yet */
+            if (!line.trim() && !insideOther(e, p)) softPending = true;
+            continue;
+          }
+          if (nm !== 'w:t' && nm !== 'w:tab' && nm !== 'w:br' && nm !== 'w:cr' && nm !== 'w:noBreakHyphen') continue;
+          if (insideOther(e, p)) continue;
+          if (nm === 'w:t') line += e.textContent;
+          else if (nm === 'w:tab') line += '\t';
+          else if (nm === 'w:noBreakHyphen') line += '-';
+          else if (nm === 'w:br' && e.getAttribute('w:type') === 'page') pageBreak();
+          else if (nm === 'w:br' && e.getAttribute('w:type') === 'column') { /* ignore */ }
+          else { endLine(); }
+        }
+        endLine();
+        emptyRun = (out.length === before) ? emptyRun + 1 : 0;
+        var sect = pPr && pPr.getElementsByTagName('w:sectPr')[0];
+        if (sect) {
+          var ty = sect.getElementsByTagName('w:type')[0];
+          var val = ty ? ty.getAttribute('w:val') : 'nextPage';
+          if (val !== 'continuous') pageBreak();
+        }
+      }
+      while (out.length && isMark(out[out.length - 1])) {
+        if (out.pop() === PAGE) breaks--; else softs--;
+      }
+      var wordsCount = null, app = files['docProps/app.xml'];
+      if (app) { var m = app.match(/<Words>(\d+)<\/Words>/); if (m) wordsCount = +m[1]; }
+      return { text: out.join('\n'), breaks: breaks, softs: softs, wordsInWord: wordsCount };
+    });
+  }
+
+  /* ================================================================
+     THE PASTE READER — for Google Docs and anything else that is not
+     a Word file. The clipboard carries a formatted copy as well as the
+     plain words; this reads the formatted one so paragraphs and page
+     breaks survive. Same marks as the Word reader: a form feed for a
+     page break, a vertical tab for six or more empty lines in a row.
+     ================================================================ */
+  function readPasted(html, plain) {
+    if (!html) {                     /* plain text only: paragraphs, no page breaks */
+      var ls = plain.split(/\r?\n/), o = [], empty = 0, soft = 0;
+      ls.forEach(function (l) {
+        if (!l.trim()) { empty++; return; }
+        if (empty >= 6 && o.length && o[o.length - 1] !== '\v') { o.push('\v'); soft++; }
+        empty = 0; o.push(l);
+      });
+      return { text: o.join('\n'), breaks: 0, softs: soft, formatted: false };
+    }
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    var out = [], line = '', breaks = 0, softs = 0, empty = 0;
+    function isMark(x) { return x === '\f' || x === '\v'; }
+    function endLine() {
+      if (line.trim()) {
+        if (empty >= 6 && out.length && !isMark(out[out.length - 1])) { out.push('\v'); softs++; }
+        empty = 0; out.push(line.replace(/\u00a0/g, ' '));
+      } else { empty++; }
+      line = '';
+    }
+    function pageBreak() {
+      if (line.trim()) endLine();
+      line = ''; empty = 0;
+      if (out.length && out[out.length - 1] !== '\f') {
+        if (out[out.length - 1] === '\v') { out.pop(); softs--; }
+        out.push('\f'); breaks++;
+      }
+    }
+    function breaksPage(el, which) {
+      var s = (el.getAttribute && el.getAttribute('style') || '').toLowerCase().replace(/\s/g, '');
+      return s.indexOf('page-break-' + which + ':always') > -1 || s.indexOf('break-' + which + ':page') > -1;
+    }
+    var BLOCK = /^(P|DIV|H[1-6]|LI|BLOCKQUOTE|TR|PRE)$/;
+    function walk(node) {
+      for (var n = node.firstChild; n; n = n.nextSibling) {
+        if (n.nodeType === 3) { line += n.nodeValue; continue; }
+        if (n.nodeType !== 1) continue;
+        var tag = n.tagName;
+        if (tag === 'STYLE' || tag === 'SCRIPT' || tag === 'META' || tag === 'TITLE') continue;
+        if (tag === 'HR') { if (breaksPage(n, 'before') || breaksPage(n, 'after')) pageBreak(); continue; }
+        if (tag === 'BR') { endLine(); continue; }
+        var block = BLOCK.test(tag);
+        if (block) { if (breaksPage(n, 'before')) pageBreak(); else endLine(); }
+        walk(n);
+        if (block) { endLine(); if (breaksPage(n, 'after')) pageBreak(); }
+      }
+    }
+    walk(doc.body);
+    endLine();
+    while (out.length && isMark(out[out.length - 1])) { if (out.pop() === '\f') breaks--; else softs--; }
+    return { text: out.join('\n'), breaks: breaks, softs: softs, formatted: true,
+             google: /docs-internal-guid/.test(html) };
+  }
+
+  /* ---- front and back matter, a page at a time, a rule between ---- */
+  function matterHtml(text) {
+    if (!text) return '<div class="lib-note">None found.</div>';
+    var pages = text.split(/\n?[\f\v]\n?/).map(function (pg) {
+      return pg.split('\n').filter(function (l) { return l.trim(); });
+    }).filter(function (ls) { return ls.length; });
+    return '<div class="lib-summary">' + words(text).toLocaleString('en-GB') + ' words</div>' +
+      '<div class="lib-opening">' + pages.map(function (ls, i) {
+        return (i ? '<div class="lib-sep"></div>' : '') +
+          '<div class="lib-page">' + ls.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('') + '</div>';
+      }).join('') + '</div>';
+  }
+
+  /* ---- the project a book may be linked to: a project's created stamp ---- */
+  function projectList() {
+    try { return (typeof getProjects === 'function' ? getProjects() : []).filter(function (p) { return p && p.created; }); }
+    catch (e) { return []; }
+  }
+  function projectTitle(stamp) {
+    var p = projectList().filter(function (x) { return x.created === stamp; })[0];
+    return p ? (p.title || 'Untitled Project') : null;
+  }
+  function openProjectStamp() {
+    try { return (typeof currentProject !== 'undefined' && currentProject && currentProject.created) || null; }
+    catch (e) { return null; }
+  }
+
+  /* ---- the Genre list, read from the Basics screen on this page ---- */
+  function genreNames() {
+    var opts = document.querySelectorAll('#ph-genre-menu .is-opt');
+    var names = Array.prototype.map.call(opts, function (o) { return o.getAttribute('data-name'); }).filter(Boolean);
+    return names.length ? names : ['Other'];
+  }
+
+  var LIBS = {
+    mine: { name: 'My Library', line: 'Your own books — finished, unfinished and everything in between.' },
+    reference: { name: 'Reference Library', line: 'Books by other writers, kept for reading and research.' }
+  };
 
   /* ---- the screen ---- */
+  var rows = [], chosenId = null;
   function buildScreen() {
     if (document.getElementById('screen-library')) return;
     var soon = document.getElementById('screen-coming-soon');
     if (!soon) return;                     /* no main area, no room */
     var st = document.createElement('style');
-    st.textContent = css;
+    st.textContent = css + css4;
     document.head.appendChild(st);
     var scr = document.createElement('div');
     scr.className = 'screen';
@@ -3612,37 +3919,52 @@ updateAICounter();
           '<div class="lib-shelf">' +
             '<div class="lib-shelf-head">' +
               '<div class="lib-shelf-name">My Library <span class="lib-shelf-tag">Private</span></div>' +
-              '<div class="lib-shelf-line">Your books \u2014 finished, unfinished and everything in between.<br>InkySwot uses these for reference and continuity.</div>' +
+              '<button class="lib-add" data-lib="mine">+ Add</button>' +
+              '<div class="lib-shelf-line">Your books — finished, unfinished and everything in between.<br>InkySwot uses these for reference and continuity.</div>' +
             '</div>' +
             '<div id="libMine"></div>' +
           '</div>' +
           '<div class="lib-shelf">' +
             '<div class="lib-shelf-head">' +
               '<div class="lib-shelf-name">Reference Library <span class="lib-shelf-tag">Private</span></div>' +
+              '<button class="lib-add" data-lib="reference">+ Add</button>' +
               '<div class="lib-shelf-line">Books by other writers, kept for reading and research.</div>' +
               '<div class="lib-shelf-note"><b>Please note:</b> these are never used to shape or influence your writing.</div>' +
             '</div>' +
-            '<div class="lib-shelf-empty">Nothing here yet.</div>' +
+            '<div id="libRef"></div>' +
           '</div>' +
           '<div class="lib-shelf">' +
             '<div class="lib-shelf-head">' +
-              '<div class="lib-shelf-name">Public Domain Library <span class="lib-shelf-tag open">Open to all</span></div>' +
+              '<div class="lib-shelf-name">Public Domain Library</div>' +
+              '<button class="lib-add quiet" title="Not yet: waiting on how additions here are approved">+ Add</button>' +
+              '<div class="lib-shelf-tag open" style="margin-top:6px">Open to all</div>' +
               '<div class="lib-shelf-line">Copyright-free classics, available to every InkySwot writer.<br>Read them, study them, or create your own editions.</div>' +
             '</div>' +
             '<div class="lib-shelf-empty">Nothing here yet.</div>' +
           '</div>' +
         '</div></div>' +
-        '<div class="lib-detail" id="libDetail"></div>' +
+        '<div class="lib-detail" style="position:relative">' +
+          '<button class="lib-pill" id="libPill">Library ?</button>' +
+          '<div id="libDetail"></div>' +
+        '</div>' +
       '</div>';
     soon.parentNode.insertBefore(scr, soon.nextSibling);
 
+    Array.prototype.forEach.call(scr.querySelectorAll('.lib-add[data-lib]'), function (b) {
+      b.onclick = function () { openPanel(b.getAttribute('data-lib')); };
+    });
+    buildGuide();
     var nav = document.getElementById('nav-research');
     if (nav) nav.onclick = openRoom;
   }
 
-  function say(text, fail) {
-    document.getElementById('libMine').innerHTML =
+  function sayIn(id, text, fail) {
+    document.getElementById(id).innerHTML =
       '<div class="lib-shelf-empty' + (fail ? ' fail' : '') + '">' + esc(text) + '</div>';
+  }
+  function say(text, fail) {
+    sayIn('libMine', text, fail);
+    document.getElementById('libRef').innerHTML = '';
     document.getElementById('libDetail').innerHTML = '';
   }
 
@@ -3651,7 +3973,7 @@ updateAICounter();
     document.querySelectorAll('.sidebar-item').forEach(function (i) { i.classList.remove('active'); });
     document.getElementById('screen-library').classList.add('active');
     document.getElementById('nav-research').classList.add('active');
-    say('Reading your library\u2026');
+    say('Reading your library…');
     withClient(readShelf);
   }
 
@@ -3671,41 +3993,228 @@ updateAICounter();
     })();
   }
 
-  function readShelf() {
+  function readShelf(then) {
     sb.auth.getSession().then(function (r) {
       if (!r.data || !r.data.session) { say('You are not signed in, so your library cannot be shown. Log Out and sign in again at the front door.', true); return; }
-      return sb.from('shelf').select('id,title,project_id,body,added_at')
+      return sb.from('shelf').select('id,title,library,genre,project_ids,body,added_at')
         .is('deleted_at', null).order('added_at', { ascending: true })
         .then(function (res) {
           if (res.error) { say('Could not read your library: ' + res.error.message, true); return; }
-          draw(res.data || []);
+          rows = res.data || [];
+          drawList();
+          if (typeof then === 'function') then();
+          else showBook(chosenId && rows.some(function (x) { return x.id === chosenId; }) ? chosenId : (rows[0] && rows[0].id));
         });
     }).catch(function (e) { say('Could not read your library: ' + (e && e.message ? e.message : e), true); });
   }
 
-  function draw(rows) {
-    if (!rows.length) { say('Nothing here yet.'); return; }
-    document.getElementById('libMine').innerHTML = rows.map(function (r, i) {
-      return '<div class="lib-list-item' + (i === 0 ? ' active' : '') + '">' +
-        '<div class="lib-list-item-name">' + esc(r.title) + '</div>' +
-        '<div class="lib-list-item-role">' + words(r.body).toLocaleString('en-GB') + ' words</div></div>';
-    }).join('');
-    var b = rows[0], parts = findChapters(b.body);
+  function drawList() {
+    function list(lib, id) {
+      var mine = rows.filter(function (r) { return (r.library || 'mine') === lib; });
+      if (!mine.length) { sayIn(id, 'Nothing here yet.'); return; }
+      var box = document.getElementById(id);
+      box.innerHTML = mine.map(function (r) {
+        return '<div class="lib-list-item' + (r.id === chosenId ? ' active' : '') + '" data-id="' + esc(r.id) + '">' +
+          '<div class="lib-list-item-name">' + esc(r.title) + '</div>' +
+          '<div class="lib-list-item-role">' + words(r.body).toLocaleString('en-GB') + ' words' + (r.genre ? ' · ' + esc(r.genre) : '') + '</div></div>';
+      }).join('');
+      Array.prototype.forEach.call(box.querySelectorAll('.lib-list-item'), function (el) {
+        el.onclick = function () { showBook(el.getAttribute('data-id')); };
+      });
+    }
+    list('mine', 'libMine');
+    list('reference', 'libRef');
+  }
+
+  function showBook(id) {
+    var b = rows.filter(function (x) { return x.id === id; })[0];
+    chosenId = b ? b.id : null;
+    drawList();
+    if (!b) { document.getElementById('libDetail').innerHTML = ''; return; }
+    var parts = findChapters(b.body);
+    var lib = LIBS[b.library || 'mine'] || LIBS.mine;
     var since = new Date(b.added_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    var links = (b.project_ids || []).map(function (s) {
+      var t = projectTitle(s);
+      return '<span class="lib-link-tag">' + esc(t || 'A project not in this browser') + '</span>';
+    }).join('');
     document.getElementById('libDetail').innerHTML =
       '<div class="lib-form">' +
         '<div class="screen-title">' + esc(b.title) + '</div>' +
-        '<div class="screen-subtitle">In My Library since ' + esc(since) + '.</div>' +
-        '<div class="lib-group"><div class="field-group-title">The Book</div><div class="lib-facts">' +
+        '<div class="screen-subtitle">In ' + esc(lib.name) + ' since ' + esc(since) + (b.genre ? ' · ' + esc(b.genre) : '') + '.</div>' +
+        '<div class="lib-group"><div class="field-group-title">The Book</div><div class="lib-facts" style="grid-template-columns:repeat(3,1fr)">' +
           '<div class="lib-fact"><div class="lib-fact-k">Words</div><div class="lib-fact-v gold">' + words(b.body).toLocaleString('en-GB') + '</div></div>' +
           '<div class="lib-fact"><div class="lib-fact-k">Characters</div><div class="lib-fact-v">' + (b.body || '').length.toLocaleString('en-GB') + '</div></div>' +
           '<div class="lib-fact"><div class="lib-fact-k">Added</div><div class="lib-fact-v">' + esc(new Date(b.added_at).toLocaleDateString('en-GB')) + '</div></div>' +
-          '<div class="lib-fact"><div class="lib-fact-k">Project</div><div class="lib-fact-v">' + esc(b.project_id || '\u2014') + '</div></div>' +
-        '</div></div>' +
+        '</div>' +
+        '<div class="lib-links"><span class="lib-links-k">Linked to</span>' + (links || '<span class="lib-link-none">Not linked to a project</span>') + '</div>' +
+        '</div>' +
         '<div class="lib-group"><div class="field-group-title">Front Matter</div>' + matterHtml(parts.front) + '</div>' +
         '<div class="lib-group"><div class="field-group-title">Chapters</div>' + chaptersHtml(parts) + '</div>' +
         '<div class="lib-group"><div class="field-group-title">Back Matter</div>' + matterHtml(parts.back) + '</div>' +
       '</div>';
+    document.getElementById('libDetail').parentNode.scrollTop = 0;
+  }
+
+  /* ---- + ADD: the panel ---- */
+  var pending = null;                     /* the book read so far, not yet saved */
+  function openPanel(lib) {
+    var L = LIBS[lib];
+    pending = null;
+    chosenId = null; drawList();
+    var open = openProjectStamp();
+    var projOpts = '<option value="">Not linked</option>' + projectList().map(function (p) {
+      return '<option value="' + esc(p.created) + '"' + '>' + esc(p.title || 'Untitled Project') + (p.created === open ? ' (open now)' : '') + '</option>';
+    }).join('');
+    var genreOpts = '<option value="">— Select genre —</option>' + genreNames().map(function (g) {
+      return '<option>' + esc(g) + '</option>';
+    }).join('');
+    document.getElementById('libDetail').innerHTML =
+      '<div class="lib-form">' +
+        '<div class="screen-title">Add to ' + esc(L.name) + '</div>' +
+        '<div class="screen-subtitle">' + esc(L.line) + '</div>' +
+        '<div class="lib-f-label">Title</div><input class="lib-f-input" id="libAddTitle" placeholder="The title of the book…">' +
+        '<div class="lib-f-label">Genre</div><select class="lib-f-select" id="libAddGenre">' + genreOpts + '</select>' +
+        '<div class="lib-f-label">Link to a project <span class="lib-f-opt">optional</span></div>' +
+        '<select class="lib-f-select" id="libAddProject">' + projOpts + '</select>' +
+        '<div class="lib-f-sub">You can link it, or add more projects, later from the book.</div>' +
+        '<div class="lib-f-label">The book</div>' +
+        '<div class="lib-ways">' +
+          '<div class="lib-way" id="libWayWord"><div class="lib-way-title">From Word</div><div class="lib-way-text">Choose the .docx file.</div>' +
+            '<button class="lib-way-btn" id="libChoose">Choose file</button><input type="file" id="libFile" accept=".docx" style="display:none"></div>' +
+          '<div class="lib-way paste" id="libPaste" contenteditable="true" spellcheck="false"><div class="lib-way-title">Paste it in</div>' +
+            '<div class="lib-way-text">From Google Docs or anywhere else: select all, copy, then click here and paste.</div></div>' +
+        '</div>' +
+        '<div class="lib-read" id="libRead"></div>' +
+        (lib === 'reference' ? '<div class="lib-reminder"><b>Please note</b><span>Books by other writers are kept for your own reading and research only. They are never used to shape or influence your writing. Only add work you have the right to keep.</span></div>' : '') +
+        '<div class="lib-foot"><button class="lib-go" id="libGo" disabled>Put it on the shelf</button><button class="lib-no" id="libCancel">Cancel</button></div>' +
+      '</div>';
+    document.getElementById('libChoose').onclick = function () { document.getElementById('libFile').click(); };
+    document.getElementById('libFile').onchange = function () { readFile(this.files && this.files[0]); };
+    document.getElementById('libPaste').addEventListener('paste', onPaste);
+    document.getElementById('libCancel').onclick = function () { showBook(rows[0] && rows[0].id); };
+    document.getElementById('libGo').onclick = function () { putOnShelf(lib, this); };
+    document.getElementById('libAddTitle').focus();
+  }
+
+  function readSay(text, fail) {
+    var el = document.getElementById('libRead');
+    el.textContent = text;
+    el.className = 'lib-read' + (fail ? ' fail' : '');
+  }
+  function gotBook(res, from) {
+    pending = res.text;
+    var n = words(pending);
+    if (!n) { pending = null; readSay('No words came through from ' + from + '.', true); document.getElementById('libGo').disabled = true; return; }
+    readSay('Read ' + n.toLocaleString('en-GB') + ' words from ' + from + ', with ' + res.breaks + (res.breaks === 1 ? ' page break' : ' page breaks') + ' and ' + res.softs +
+      (res.softs === 1 ? ' other place' : ' other places') + ' where a new page began' +
+      (res.formatted === false ? ' (plain words only — no page breaks came through)' : '') + '. Ready to put it on the shelf.');
+    document.getElementById('libGo').disabled = false;
+  }
+  function readFile(f) {
+    if (!f) return;
+    if (!/\.docx$/i.test(f.name)) { readSay('That is not a .docx file. Older .doc files need saving as .docx first.', true); return; }
+    readSay('Reading ' + f.name + '…');
+    f.arrayBuffer().then(readDocx).then(function (res) {
+      document.getElementById('libWayWord').classList.add('done');
+      document.getElementById('libPaste').classList.remove('done');
+      var t = document.getElementById('libAddTitle');
+      if (!t.value.trim()) t.value = f.name.replace(/\.docx$/i, '');
+      gotBook(res, f.name);
+    }).catch(function (e) { readSay('Could not read the Word file: ' + (e && e.message ? e.message : e), true); });
+  }
+  function onPaste(e) {
+    e.preventDefault();
+    var cd = e.clipboardData || window.clipboardData;
+    var html = cd.getData('text/html'), plain = cd.getData('text/plain');
+    if (!html && !plain) { readSay('Nothing came through on the paste.', true); return; }
+    var res = readPasted(html, plain);
+    var box = document.getElementById('libPaste');
+    box.classList.add('done');
+    document.getElementById('libWayWord').classList.remove('done');
+    box.innerHTML = '<div class="lib-way-title">Pasted</div><div class="lib-way-text">' + words(res.text).toLocaleString('en-GB') +
+      ' words. Paste again to replace it.</div>';
+    gotBook(res, 'the paste');
+  }
+
+  /* ---- up, straight back, and checked ---- */
+  function putOnShelf(lib, btn) {
+    var title = document.getElementById('libAddTitle').value.trim();
+    if (!title) { readSay('The book needs a title.', true); document.getElementById('libAddTitle').focus(); return; }
+    if (!pending) { readSay('Choose a Word file or paste the book first.', true); return; }
+    var genre = document.getElementById('libAddGenre').value || null;
+    var proj = document.getElementById('libAddProject').value;
+    var sent = pending;
+    btn.disabled = true;
+    readSay('Putting it on the shelf…');
+    sb.from('shelf').insert({ title: title, body: sent, library: lib, genre: genre, project_ids: proj ? [proj] : [] })
+      .select('id').single()
+      .then(function (r) {
+        if (r.error) throw new Error('Putting it on the shelf failed: ' + r.error.message);
+        readSay('On the shelf. Reading it back to check…');
+        return sb.from('shelf').select('id,body').eq('id', r.data.id).single();
+      })
+      .then(function (r) {
+        if (r.error) throw new Error('Reading it back failed: ' + r.error.message);
+        if ((r.data.body || '') !== sent) throw new Error('What came back is not exactly what went up. The book is on the shelf but should be checked.');
+        chosenId = r.data.id;
+        pending = null;
+        readShelf();
+      })
+      .catch(function (e) { readSay(e.message, true); btn.disabled = false; });
+  }
+
+  /* ---- the LIBRARY ? window: moves, resizes, closes; no scrim ---- */
+  function buildGuide() {
+    if (document.getElementById('libWin')) return;
+    var w = document.createElement('div');
+    w.className = 'lib-win';
+    w.id = 'libWin';
+    w.innerHTML =
+      '<div class="lib-win-head" id="libWinHead"><span>Library</span><button class="lib-win-x" id="libWinX" title="Close">×</button></div>' +
+      '<div class="lib-win-body">' +
+        '<div class="lib-win-row"><b>My Library</b><span>Your own books. InkySwot checks your new writing against these.</span></div>' +
+        '<div class="lib-win-row"><b>Reference Library</b><span>Other writers’ books, for your own reading. Never used to shape your writing.</span></div>' +
+        '<div class="lib-win-row"><b>Public Domain Library</b><span>Classics free of copyright, shared by every InkySwot writer.</span></div>' +
+        '<div class="lib-win-row"><b>+ Add</b><span>Puts a book on that shelf, from a Word file or by pasting it in.</span></div>' +
+        '<div class="lib-win-row"><b>Linked to</b><span>The projects a book is used for.</span></div>' +
+        '<div class="lib-win-row"><b>Front and Back Matter</b><span>Everything before the first chapter and after the last, a page at a time.</span></div>' +
+        '<div class="lib-win-row"><b>Chapters</b><span>Found by reading the headings. ✓ is certain; ? asks you to confirm.</span></div>' +
+      '</div>' +
+      '<div class="lib-win-grip" id="libWinGrip"></div>';
+    document.body.appendChild(w);
+    var placed = false;
+    document.getElementById('libPill').onclick = function () {
+      if (!placed) {
+        var r = this.getBoundingClientRect();
+        w.style.left = Math.round(Math.max(8, r.right - 440)) + 'px';
+        w.style.top = Math.round(r.bottom + 8) + 'px';
+        w.style.height = '480px';
+        placed = true;
+      }
+      w.classList.toggle('open');
+    };
+    document.getElementById('libWinX').onclick = function () { w.classList.remove('open'); };
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') w.classList.remove('open'); });
+    function drag(handle, move) {
+      handle.addEventListener('mousedown', function (e) {
+        if (e.target.id === 'libWinX') return;
+        e.preventDefault();
+        var sx = e.clientX, sy = e.clientY, r = w.getBoundingClientRect();
+        function mm(ev) { move(r, Math.round(ev.clientX - sx), Math.round(ev.clientY - sy)); }
+        function mu() { document.removeEventListener('mousemove', mm); document.removeEventListener('mouseup', mu); }
+        document.addEventListener('mousemove', mm);
+        document.addEventListener('mouseup', mu);
+      });
+    }
+    drag(document.getElementById('libWinHead'), function (r, dx, dy) {
+      w.style.left = Math.round(r.left + dx) + 'px';
+      w.style.top = Math.round(Math.max(0, r.top + dy)) + 'px';
+    });
+    drag(document.getElementById('libWinGrip'), function (r, dx, dy) {
+      w.style.width = Math.round(Math.max(300, r.width + dx)) + 'px';
+      w.style.height = Math.round(Math.max(200, r.height + dy)) + 'px';
+    });
   }
 
   if (document.readyState === 'loading') {
