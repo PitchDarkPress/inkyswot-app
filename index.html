@@ -3446,7 +3446,8 @@ updateAICounter();
 
 })();
 /* ===================================================================
-   THE LIBRARY ROOM — version four, 29 September 2026.
+   THE LIBRARY ROOM — version four (b), 29 September 2026.
+   (b): a short heading line with a full stop, like "Chapter One.", now counts.
    Replaces version three. What is NEW and WORKS:
    · + ADD beside My Library and Reference Library opens the panel:
      title, genre (read from the Basics Genre list on this page), an
@@ -3582,8 +3583,15 @@ updateAICounter();
   /* ---- chapter finder: no AI. Short line, alone, no full stop. ---- */
   var KEY = /^(chapter|part|book|prologue|epilogue|interlude|stave|act)\b/i;
   var NUM = /^([0-9]{1,3}|[ivxlc]{1,7})\.?$/i;
+  var NUMBERED = /^(chapter|part|book|act|stave)\s+([0-9]{1,3}|[ivxlc]{1,7}|(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred)([-\s](one|two|three|four|five|six|seven|eight|nine))?)\.$/i;
+
   function isHeading(line) {
     if (line.length > 60) return null;
+    /* "Chapter One." — a short line starting with a heading word counts even
+       with a full stop, but only when the heading word is followed by a
+       number (one, 2, twenty-one, III) or stands alone (Prologue.).
+       "Part of the reason was..." and "Book it." do not. */
+    if (/\.$/.test(line) && (NUMBERED.test(line) || /^(prologue|epilogue|interlude)\.$/i.test(line))) return 'sure';
     if (/[,;:!?"“”]$/.test(line) || /[a-z]\.$/.test(line)) return null;
     if (KEY.test(line)) return 'sure';
     if (NUM.test(line)) return 'unsure';
