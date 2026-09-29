@@ -3454,7 +3454,12 @@ updateAICounter();
      page-mark line itself (form feed or vertical tab, then the words),
      so they travel with the text; they are never counted as words and
      the chapter finder never reads them.
-   · DELETE A SECTION — a block between separators.
+   · HIDE A SECTION (was "delete"; Kev: "perhaps it just colapsises").
+     It asks first, then folds the section to one slim line with Show.
+     NOTHING IS REMOVED: the section's page mark carries an invisible
+     flag (U+2063 straight after the form feed or vertical tab), and
+     Show simply takes the flag away. Removing a separator asks first too.
+   · INKYSWOT TOOLTIPS in place of the browser's own white box.
    · UNDO: every change to a book's text keeps the version before it in
      prev_body, so Undo survives a refresh. Undo swaps the two back.
    · MAKE A COPY of a book (My Library and Reference Library).
@@ -3465,6 +3470,10 @@ updateAICounter();
      need an empty TRASH OR a permanently delete this work"). Delete
      Forever asks first in the platform's own panel, and the database
      itself only allows deleting a book that is already in Trash.
+   · LIBRARY UNDER NAVIGATE, beside My Projects and The Press, so it can
+     be reached from anywhere — Trash, My Projects, or inside a project.
+     A book belongs to the writer, not to one project. Research &
+     Reference inside a project still opens the same room.
    (Carried from four (b): "Chapter One." with a full stop counts.)
    Replaces version three. What is NEW and WORKS:
    · + ADD beside My Library and Reference Library opens the panel:
@@ -3579,7 +3588,7 @@ updateAICounter();
     '.lib-go:disabled{opacity:0.35;cursor:not-allowed}' +
     '.lib-no{background:transparent;color:var(--ink2);border:1px solid var(--rule2)}' +
     '.lib-no:hover{border-color:var(--gold);color:var(--gold)}' +
-    '.lib-pill{position:absolute;top:28px;right:40px;padding:5px 12px;border:1px solid var(--gold);border-radius:14px;background:var(--bg);font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);cursor:pointer;z-index:3}' +
+    '.lib-pill{position:absolute;top:8px;right:40px;padding:5px 12px;border:1px solid var(--gold);border-radius:14px;background:var(--bg);font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);cursor:pointer;z-index:6}' +
     '.lib-pill:hover{background:var(--bg3)}' +
     '.lib-win{position:fixed;width:440px;background:var(--bg2);border:1px solid var(--gold);border-radius:6px;box-shadow:0 16px 44px rgba(0,0,0,.55);z-index:90;display:none;overflow:hidden}' +
     '.lib-win.open{display:flex;flex-direction:column}' +
@@ -3598,7 +3607,7 @@ updateAICounter();
     '.lib-sep2{position:relative;height:1px;background:var(--rule2);margin:24px 0 20px}' +
     '.lib-sep2::before{content:"";position:absolute;left:0;right:0;top:-14px;height:29px}' +
     '.lib-sep-x{position:absolute;right:-8px;top:-11px;width:22px;height:22px;border-radius:50%;background:var(--bg2);border:1px solid var(--rule2);color:var(--ink3);font-family:"JetBrains Mono",monospace;font-size:13px;line-height:20px;text-align:center;cursor:pointer;padding:0}' +
-    '.lib-sep-x:hover{border-color:var(--danger);color:var(--danger)}' +
+    '.lib-sep-x:hover{border-color:var(--gold);color:var(--gold)}' +
     '.lib-label{position:absolute;left:0;top:-9px;padding-right:10px;background:var(--bg2);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);cursor:text;z-index:1}' +
     '.lib-top{min-height:14px;margin-bottom:10px}' +
     '.lib-top .lib-label{position:static;display:inline-block;padding:0}' +
@@ -3615,21 +3624,26 @@ updateAICounter();
     '.lib-page{position:relative}' +
     '.lib-del-sec{position:absolute;right:0;top:-2px;background:none;border:none;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);cursor:pointer;opacity:0;transition:opacity .12s;padding:0}' +
     '.lib-page:hover .lib-del-sec{opacity:1}' +
-    '.lib-del-sec:hover{color:var(--danger)}' +
+    '.lib-del-sec:hover{color:var(--gold)}' +
     '.lib-actions{display:flex;gap:10px;margin:-18px 0 26px}' +
     '.lib-act{padding:5px 12px;background:transparent;border:1px solid var(--rule2);border-radius:3px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.08em;color:var(--ink2);cursor:pointer}' +
     '.lib-act:hover{border-color:var(--gold);color:var(--gold)}' +
-    '.lib-act.danger:hover{border-color:var(--danger);color:var(--danger)}' +
-    '.lib-undo{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0;padding:10px 40px;background:var(--bg3);border-bottom:1px solid var(--gold);font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.04em;color:var(--gold)}' +
+    '.lib-act.danger:hover{border-color:var(--gold);color:var(--gold)}' +
+    '.lib-undo{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0;padding:10px 200px 10px 40px;background:var(--bg3);border-bottom:1px solid var(--gold);font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.04em;color:var(--gold)}' +
     '.lib-undo.fail{color:var(--danger);border-bottom-color:var(--danger)}' +
     '.lib-undo button{padding:4px 14px;background:var(--gold);color:var(--btn-text);border:none;border-radius:3px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.08em;cursor:pointer}' +
     '.lib-busy{opacity:.55;pointer-events:none}' +
+    '.lib-hidden{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 12px;border:1px dashed var(--rule2);border-radius:3px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.08em;color:var(--ink3)}' +
+    '.lib-show{padding:3px 12px;background:transparent;border:1px solid var(--gold);border-radius:3px;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);cursor:pointer}' +
+    '.lib-show:hover{background:var(--gold);color:var(--btn-text)}' +
+    '.lib-tip{position:fixed;z-index:600;display:none;pointer-events:none;padding:5px 10px;background:var(--bg2);border:1px solid var(--gold);border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.5);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);white-space:nowrap}' +
     '.lib-trash-head{font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin:36px 0 8px;padding-bottom:8px;border-bottom:1px solid var(--rule)}' +
     '.lib-trash-note{font-family:"Crimson Pro",serif;font-size:16px;font-style:italic;color:var(--ink3);margin-bottom:16px}' +
     '.lib-trash-note.fail{color:var(--danger);font-style:normal}';
 
   function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function words(t) { var m = (t || '').replace(/^[\f\v].*$/gm, '').match(/\S+/g); return m ? m.length : 0; }
+  var HIDE = '\u2063';                       /* invisible: "this section is folded away" */
   function isMarkLine(s) { var c = s.charAt(0); return c === '\f' || c === '\v'; }
   /* the book as numbered lines: each keeps its place (i) in the stored text,
      so an edit touches exactly that line and nothing else */
@@ -3637,7 +3651,10 @@ updateAICounter();
     var out = [];
     (text || '').split('\n').forEach(function (s, i) {
       s = s.replace(/\r$/, '');
-      if (isMarkLine(s)) out.push({ i: i, mark: s.charAt(0), label: s.slice(1).trim(), text: '' });
+      if (isMarkLine(s)) {
+        var rest = s.slice(1), hidden = rest.charAt(0) === HIDE;
+        out.push({ i: i, mark: s.charAt(0), hidden: hidden, label: (hidden ? rest.slice(1) : rest).trim(), text: '' });
+      }
       else if (s.trim()) out.push({ i: i, mark: null, text: s.trim() });
     });
     return out;
@@ -3958,17 +3975,22 @@ updateAICounter();
         } else {
           head = '<div class="lib-sep2"><span class="lib-label' + (p.mark.label ? '' : ' empty') + '" data-act="label" data-i="' + p.mark.i + '">' +
                    esc(p.mark.label || 'Add a description') + '<span class="lib-pen">\u270E</span></span>' +
-                 '<button class="lib-sep-x" data-act="unsep" data-i="' + p.mark.i + '" title="Remove this separator">\u00d7</button></div>';
+                 '<button class="lib-sep-x" data-act="unsep" data-i="' + p.mark.i + '" data-tip="Remove this separator">\u00d7</button></div>';
         }
-        var del = [p.mark ? p.mark.i : null].concat(p.items.map(function (x) { return x.i; }));
-        if (!p.mark && pages[n + 1] && pages[n + 1].mark) del.push(pages[n + 1].mark.i);
+        /* a hidden section: one slim line, with Show */
+        if (p.mark && p.mark.hidden) {
+          var name = p.mark.label || (p.items[0].text.length > 48 ? p.items[0].text.slice(0, 48) + '\u2026' : p.items[0].text);
+          return (n === 0 ? '' : head) +
+            '<div class="lib-hidden"><span>Hidden section: ' + esc(name) + '</span>' +
+            '<button class="lib-show" data-act="show" data-i="' + p.mark.i + '">Show</button></div>';
+        }
         var lines = p.items.map(function (it, k) {
           var gap = k ? '<div class="lib-gap" data-act="sep" data-i="' + it.i + '"><div class="lib-gap-line"></div>' +
             '<div class="lib-gap-plus">+</div><div class="lib-gap-hint">Add a separator here</div></div>' : '';
           return gap + '<p>' + esc(it.text) + '</p>';
         }).join('');
         return head + '<div class="lib-page">' +
-          '<button class="lib-del-sec" data-act="delsec" data-is="' + del.filter(function (x) { return x !== null; }).join(',') + '">Delete this section</button>' +
+          '<button class="lib-del-sec" data-act="hide" data-i="' + (p.mark ? p.mark.i : p.items[0].i) + '" data-top="' + (p.mark ? '' : '1') + '">Hide this section</button>' +
           lines + '</div>';
       }).join('') + '</div>';
   }
@@ -4035,7 +4057,7 @@ updateAICounter();
           '<div class="lib-shelf">' +
             '<div class="lib-shelf-head">' +
               '<div class="lib-shelf-name">Public Domain Library</div>' +
-              '<button class="lib-add quiet" title="Not yet: waiting on how additions here are approved">+ Add</button>' +
+              '<button class="lib-add quiet" data-tip="Not yet: waiting on how additions here are approved">+ Add</button>' +
               '<div class="lib-shelf-tag open" style="margin-top:6px">Open to all</div>' +
               '<div class="lib-shelf-line">Copyright-free classics, available to every InkySwot writer.<br>Read them, study them, or create your own editions.</div>' +
             '</div>' +
@@ -4054,7 +4076,18 @@ updateAICounter();
     });
     buildGuide();
     var nav = document.getElementById('nav-research');
-    if (nav) nav.onclick = openRoom;
+    if (nav) nav.onclick = function () { openRoom(false); };
+
+    /* the Library under NAVIGATE: reachable with or without a project open */
+    var press = document.getElementById('nav-thepress');
+    if (press && !document.getElementById('nav-library')) {
+      var item = document.createElement('div');
+      item.className = 'sidebar-item';
+      item.id = 'nav-library';
+      item.innerHTML = '<span class="sidebar-icon">\u25A3</span> Library';
+      item.onclick = function () { openRoom(true); };
+      press.parentNode.insertBefore(item, press.nextSibling);
+    }
   }
 
   function sayIn(id, text, fail) {
@@ -4067,11 +4100,18 @@ updateAICounter();
     document.getElementById('libDetail').innerHTML = '';
   }
 
-  function openRoom() {
+  function openRoom(fromNavigate) {
     document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
     document.querySelectorAll('.sidebar-item').forEach(function (i) { i.classList.remove('active'); });
     document.getElementById('screen-library').classList.add('active');
-    document.getElementById('nav-research').classList.add('active');
+    var inProject = false;
+    try { inProject = !!(typeof currentProject !== 'undefined' && currentProject); } catch (e) {}
+    var lit = document.getElementById(fromNavigate || !inProject ? 'nav-library' : 'nav-research');
+    if (lit) lit.classList.add('active');
+    if (!inProject) {
+      var hn = document.getElementById('headerProjectName');
+      if (hn) hn.textContent = 'Library';
+    }
     say('Reading your library…');
     withClient(readShelf);
   }
@@ -4225,17 +4265,50 @@ updateAICounter();
         e.stopPropagation();
         var raw = b.body.split('\n'), i = +el.getAttribute('data-i');
         if (act === 'sep') { raw.splice(i, 0, '\v'); saveBody(b, raw.join('\n'), 'Separator added.'); }
-        else if (act === 'unsep') { raw.splice(i, 1); saveBody(b, raw.join('\n'), 'Separator removed.'); }
-        else if (act === 'delsec') {
-          var idx = el.getAttribute('data-is').split(',').map(Number).sort(function (x, y) { return y - x; });
-          idx.forEach(function (k) { raw.splice(k, 1); });
-          saveBody(b, raw.join('\n'), 'Section deleted.');
+        else if (act === 'unsep') {
+          confirmPanel('Remove this separator?', 'The two sections either side of it will join into one. You can undo this.', 'Remove', function () {
+            raw.splice(i, 1); saveBody(b, raw.join('\n'), 'Separator removed.');
+          });
+        }
+        else if (act === 'hide') {
+          confirmPanel('Hide this section?', 'It folds away to a single line. Nothing is removed, and you can show it again at any time.', 'Hide', function () {
+            if (el.getAttribute('data-top')) raw.splice(i, 0, '\v' + HIDE);          /* first section: give it a mark to carry the flag */
+            else raw[i] = raw[i].charAt(0) + HIDE + raw[i].slice(1).replace(HIDE, '');
+            saveBody(b, raw.join('\n'), 'Section hidden.');
+          });
+        }
+        else if (act === 'show') {
+          raw[i] = raw[i].replace(HIDE, '');
+          saveBody(b, raw.join('\n'), 'Section shown.');
         }
         else if (act === 'undo') { undoFn = null; swapBack(b); }
         else if (act === 'copy') copyBook(b);
         else if (act === 'delbook') deleteBook(b);
       };
     });
+  }
+
+  /* ---- "are you sure": the platform's own panel, never the browser's box ---- */
+  function confirmPanel(title, sub, yes, onYes) {
+    var m = document.getElementById('libAskModal');
+    if (!m) {
+      m = document.createElement('div');
+      m.className = 'modal-overlay';
+      m.id = 'libAskModal';
+      m.innerHTML = '<div class="modal"><div class="modal-title" id="libAskTitle"></div>' +
+        '<div class="modal-sub" id="libAskSub"></div>' +
+        '<div class="modal-btns"><button class="modal-cancel" id="libAskNo">Cancel</button>' +
+        '<button class="modal-create" id="libAskYes"></button></div></div>';
+      document.body.appendChild(m);
+      m.addEventListener('click', function (e) { if (e.target === m) m.classList.remove('open'); });
+      document.getElementById('libAskNo').onclick = function () { m.classList.remove('open'); };
+    }
+    document.getElementById('libAskTitle').textContent = title;
+    document.getElementById('libAskSub').textContent = sub;
+    var y = document.getElementById('libAskYes');
+    y.textContent = yes;
+    y.onclick = function () { m.classList.remove('open'); onYes(); };
+    m.classList.add('open');
   }
 
   /* ---- a description: written in place; Enter keeps it, Escape leaves it ---- */
@@ -4254,7 +4327,7 @@ updateAICounter();
       if (!keep || v === was) { showBook(b.id); return; }
       var raw = b.body.split('\n');
       if (act === 'toplabel') raw.splice(i, 0, '\v' + v);
-      else raw[i] = raw[i].charAt(0) + v;
+      else raw[i] = raw[i].charAt(0) + (raw[i].charAt(1) === HIDE ? HIDE : '') + v;
       saveBody(b, raw.join('\n'), v ? 'Description saved.' : 'Description removed.');
     }
     inp.onkeydown = function (e) { if (e.key === 'Enter') finish(true); else if (e.key === 'Escape') finish(false); };
@@ -4420,7 +4493,7 @@ updateAICounter();
     w.className = 'lib-win';
     w.id = 'libWin';
     w.innerHTML =
-      '<div class="lib-win-head" id="libWinHead"><span>Library</span><button class="lib-win-x" id="libWinX" title="Close">×</button></div>' +
+      '<div class="lib-win-head" id="libWinHead"><span>Library</span><button class="lib-win-x" id="libWinX" data-tip="Close">×</button></div>' +
       '<div class="lib-win-body">' +
         '<div class="lib-win-row"><b>My Library</b><span>Your own books. InkySwot checks your new writing against these.</span></div>' +
         '<div class="lib-win-row"><b>Reference Library</b><span>Other writers’ books, for your own reading. Never used to shape your writing.</span></div>' +
@@ -4430,7 +4503,7 @@ updateAICounter();
         '<div class="lib-win-row"><b>Front and Back Matter</b><span>Everything before the first chapter and after the last, a page at a time.</span></div>' +
         '<div class="lib-win-row"><b>Separators</b><span>The lines between sections. Hover between two lines to add one; press \u00d7 on a line to remove it.</span></div>' +
         '<div class="lib-win-row"><b>Descriptions</b><span>An optional name for a section, such as Contents. Press it to write or change it.</span></div>' +
-        '<div class="lib-win-row"><b>Delete this section</b><span>Takes that block out of the book. Undo puts it back.</span></div>' +
+        '<div class="lib-win-row"><b>Hide this section</b><span>Folds a section away to one line. Show opens it again; nothing is removed.</span></div>' +
         '<div class="lib-win-row"><b>Make a copy</b><span>A separate copy of the book to work on. The original stays as it was.</span></div>' +
         '<div class="lib-win-row"><b>Move to Trash</b><span>Takes the book off its shelf. Restore it from Trash whenever you like.</span></div>' +
         '<div class="lib-win-row"><b>Undo last change</b><span>Puts the book back as it was before the last change, even after a refresh.</span></div>' +
@@ -4471,6 +4544,25 @@ updateAICounter();
       w.style.height = Math.round(Math.max(200, r.height + dy)) + 'px';
     });
   }
+
+  /* ---- tooltips: an InkySwot panel, not the browser's white box ---- */
+  (function () {
+    var tip = null;
+    function place(el) {
+      if (!tip) { tip = document.createElement('div'); tip.className = 'lib-tip'; document.body.appendChild(tip); }
+      tip.textContent = el.getAttribute('data-tip');
+      tip.style.display = 'block';
+      var r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+      var x = Math.round(Math.min(window.innerWidth - w - 8, Math.max(8, r.left + r.width / 2 - w / 2)));
+      var y = Math.round(r.top - h - 8 < 4 ? r.bottom + 8 : r.top - h - 8);
+      tip.style.left = x + 'px'; tip.style.top = y + 'px';
+    }
+    document.addEventListener('mouseover', function (e) {
+      var el = e.target.closest && e.target.closest('[data-tip]');
+      if (el) place(el); else if (tip) tip.style.display = 'none';
+    });
+    document.addEventListener('scroll', function () { if (tip) tip.style.display = 'none'; }, true);
+  })();
 
   /* ---- TRASH: deleted books, each with Restore ---- */
   function libLabel(lib) { return (LIBS[lib || 'mine'] || LIBS.mine).name; }
