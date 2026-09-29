@@ -3461,8 +3461,10 @@ updateAICounter();
    · MOVE A BOOK TO TRASH (Kev: "just add it to the TRASH. It already
      exists and this allows the users to retrieve it later"). Undo
      straight afterwards; and the Trash screen gains a BOOKS part with
-     Restore for each. A book is only ever marked deleted, so books have
-     no Delete Forever, and Empty Trash leaves them alone.
+     Restore and DELETE FOREVER for each (Kev, 29 September: "We will
+     need an empty TRASH OR a permanently delete this work"). Delete
+     Forever asks first in the platform's own panel, and the database
+     itself only allows deleting a book that is already in Trash.
    (Carried from four (b): "Chapter One." with a full stop counts.)
    Replaces version three. What is NEW and WORKS:
    · + ADD beside My Library and Reference Library opens the panel:
@@ -4496,13 +4498,17 @@ updateAICounter();
             if (empty && list.length) empty.remove();
             if (!list.length) { box.remove(); return; }
             box.innerHTML = '<div class="lib-trash-head">Books</div>' +
-              '<div class="lib-trash-note">Restore puts a book back on its shelf. Books are kept here until you restore them; Empty Trash does not touch them.</div>' +
+              '<div class="lib-trash-note">Restore puts a book back on its shelf. Delete Forever removes it for good.</div>' +
               list.map(function (bk) {
                 return '<div class="trash-item"><div class="trash-item-info"><div class="trash-item-title">' + esc(bk.title) + '</div>' +
                   '<div class="trash-item-meta">' + esc(libLabel(bk.library)) + (bk.genre ? ' \u00b7 ' + esc(bk.genre) : '') +
                   ' \u00b7 Trashed ' + esc(new Date(bk.deleted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })) + '</div></div>' +
-                  '<div class="trash-item-actions"><button class="restore-btn" data-id="' + esc(bk.id) + '">Restore</button></div></div>';
+                  '<div class="trash-item-actions"><button class="restore-btn" data-id="' + esc(bk.id) + '">Restore</button>' +
+                  '<button class="perm-delete-btn lib-forever" data-id="' + esc(bk.id) + '" data-title="' + esc(bk.title) + '">Delete Forever</button></div></div>';
               }).join('');
+            Array.prototype.forEach.call(box.querySelectorAll('.lib-forever'), function (btn) {
+              btn.onclick = function () { askForever(btn.getAttribute('data-id'), btn.getAttribute('data-title'), box); };
+            });
             Array.prototype.forEach.call(box.querySelectorAll('.restore-btn'), function (btn) {
               btn.onclick = function () {
                 btn.disabled = true;
@@ -4518,6 +4524,39 @@ updateAICounter();
       }).catch(function () {});
     });
   }
+  /* ---- Delete Forever: the platform's own panel first, because it cannot be undone ---- */
+  function askForever(id, title, box) {
+    var m = document.getElementById('libForeverModal');
+    if (!m) {
+      m = document.createElement('div');
+      m.className = 'modal-overlay';
+      m.id = 'libForeverModal';
+      m.innerHTML = '<div class="modal"><div class="modal-title">Delete this book forever?</div>' +
+        '<div class="modal-sub" id="libForeverSub"></div>' +
+        '<div class="modal-btns"><button class="modal-cancel" id="libForeverNo">Cancel</button>' +
+        '<button class="modal-create" id="libForeverYes">Delete Forever</button></div></div>';
+      document.body.appendChild(m);
+      m.addEventListener('click', function (e) { if (e.target === m) m.classList.remove('open'); });
+      document.getElementById('libForeverNo').onclick = function () { m.classList.remove('open'); };
+    }
+    document.getElementById('libForeverSub').textContent = '\u201c' + title + '\u201d will be removed for good. This cannot be undone.';
+    document.getElementById('libForeverYes').onclick = function () {
+      m.classList.remove('open');
+      /* only a book already in Trash; the database refuses anything else */
+      sb.from('shelf').delete().eq('id', id).not('deleted_at', 'is', null).select('id')
+        .then(function (r) {
+          if (r.error) throw new Error(r.error.message);
+          if (!r.data || !r.data.length) throw new Error('Nothing was deleted. The shelf may not yet allow it.');
+          trashBooks();
+        })
+        .catch(function (e) {
+          var note = box.querySelector('.lib-trash-note');
+          if (note) { note.textContent = 'Could not delete it: ' + e.message; note.classList.add('fail'); }
+        });
+    };
+    m.classList.add('open');
+  }
+
   /* the corridor draws its Trash; the books are added beneath, every time */
   if (typeof renderTrash === 'function' && !renderTrash._books) {
     var corridorTrash = renderTrash;
