@@ -3633,9 +3633,11 @@ updateAICounter();
     '.lib-undo.fail{color:var(--danger);border-bottom-color:var(--danger)}' +
     '.lib-undo button{padding:4px 14px;background:var(--gold);color:var(--btn-text);border:none;border-radius:3px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.08em;cursor:pointer}' +
     '.lib-busy{opacity:.55;pointer-events:none}' +
-    '.lib-hidden{display:flex;align-items:baseline;gap:14px;padding:0;line-height:1.2;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3)}' +
-    '.lib-show{padding:0;background:none;border:none;border-bottom:1px dashed var(--gold);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);cursor:pointer;line-height:1.2}' +
-    '.lib-show:hover{color:var(--gold2);border-bottom-style:solid}' +
+    '.lib-hid{display:flex;justify-content:flex-end;margin:-12px 0 -10px}' +
+    '.lib-hid.first{margin:0 0 -10px}' +
+    '.lib-hid-box{display:inline-flex;align-items:center;gap:10px;padding:2px 8px;border:1px solid var(--rule2);border-radius:3px;background:var(--bg2);font-family:"JetBrains Mono",monospace;font-size:9px;line-height:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3)}' +
+    '.lib-show{padding:0;background:none;border:none;font-family:"JetBrains Mono",monospace;font-size:9px;line-height:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);cursor:pointer;text-decoration:underline dashed;text-underline-offset:2px}' +
+    '.lib-show:hover{color:var(--gold2);text-decoration-style:solid}' +
     '.lib-tip{position:fixed;z-index:600;display:none;pointer-events:none;padding:5px 10px;background:var(--bg2);border:1px solid var(--gold);border-radius:4px;box-shadow:0 6px 18px rgba(0,0,0,.5);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);white-space:nowrap}' +
     '.lib-trash-head{font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin:36px 0 8px;padding-bottom:8px;border-bottom:1px solid var(--rule)}' +
     '.lib-trash-note{font-family:"Crimson Pro",serif;font-size:16px;font-style:italic;color:var(--ink3);margin-bottom:16px}' +
@@ -3977,12 +3979,12 @@ updateAICounter();
                    esc(p.mark.label || 'Add a description') + '<span class="lib-pen">\u270E</span></span>' +
                  '<button class="lib-sep-x" data-act="unsep" data-i="' + p.mark.i + '" data-tip="Remove this separator">\u00d7</button></div>';
         }
-        /* a hidden section: one slim line, with Show */
+        /* a hidden section: a small box on the right, between its two lines */
         if (p.mark && p.mark.hidden) {
           var name = p.mark.label || (p.items[0].text.length > 48 ? p.items[0].text.slice(0, 48) + '\u2026' : p.items[0].text);
-          return (n === 0 ? '' : head) +
-            '<div class="lib-hidden"><span>Hidden section: ' + esc(name) + '</span>' +
-            '<button class="lib-show" data-act="show" data-i="' + p.mark.i + '">Show</button></div>';
+          var bare = n === 0 ? '' : '<div class="lib-sep2"><button class="lib-sep-x" data-act="unsep" data-i="' + p.mark.i + '" data-tip="Remove this separator">\u00d7</button></div>';
+          return bare + '<div class="lib-hid' + (n === 0 ? ' first' : '') + '"><span class="lib-hid-box"><span>' + esc(name) + '</span>' +
+            '<button class="lib-show" data-act="show" data-i="' + p.mark.i + '">Show</button></span></div>';
         }
         var lines = p.items.map(function (it, k) {
           var gap = k ? '<div class="lib-gap" data-act="sep" data-i="' + it.i + '"><div class="lib-gap-line"></div>' +
