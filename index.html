@@ -3446,8 +3446,24 @@ updateAICounter();
 
 })();
 /* ===================================================================
-   THE LIBRARY ROOM — version four (b), 29 September 2026.
-   (b): a short heading line with a full stop, like "Chapter One.", now counts.
+   THE LIBRARY ROOM — version five, 29 September 2026.
+   Replaces version four (b). NEW AND WORKING:
+   · SEPARATORS in front and back matter: hover between two lines to
+     add one; x on a rule to remove it; an optional DESCRIPTION on each,
+     written by pressing it. A separator and its description live on the
+     page-mark line itself (form feed or vertical tab, then the words),
+     so they travel with the text; they are never counted as words and
+     the chapter finder never reads them.
+   · DELETE A SECTION — a block between separators.
+   · UNDO: every change to a book's text keeps the version before it in
+     prev_body, so Undo survives a refresh. Undo swaps the two back.
+   · MAKE A COPY of a book (My Library and Reference Library).
+   · MOVE A BOOK TO TRASH (Kev: "just add it to the TRASH. It already
+     exists and this allows the users to retrieve it later"). Undo
+     straight afterwards; and the Trash screen gains a BOOKS part with
+     Restore for each. A book is only ever marked deleted, so books have
+     no Delete Forever, and Empty Trash leaves them alone.
+   (Carried from four (b): "Chapter One." with a full stop counts.)
    Replaces version three. What is NEW and WORKS:
    · + ADD beside My Library and Reference Library opens the panel:
      title, genre (read from the Basics Genre list on this page), an
@@ -3575,10 +3591,55 @@ updateAICounter();
     '.lib-win-row span{font-family:"Crimson Pro",serif;font-size:17px;color:var(--ink2);line-height:1.35}' +
     '.lib-win-grip{position:absolute;right:2px;bottom:2px;width:14px;height:14px;cursor:nwse-resize;border-right:2px solid var(--rule2);border-bottom:2px solid var(--rule2)}' +
     '.lib-page + .lib-page{margin-top:0;padding-top:0;border-top:none}' +
-    '.lib-sep{height:1px;background:var(--rule2);margin:20px 0}';
+    '.lib-sep{height:1px;background:var(--rule2);margin:20px 0}' +
+    /* version five */
+    '.lib-sep2{position:relative;height:1px;background:var(--rule2);margin:24px 0 20px}' +
+    '.lib-sep2::before{content:"";position:absolute;left:0;right:0;top:-14px;height:29px}' +
+    '.lib-sep-x{position:absolute;right:-8px;top:-11px;width:22px;height:22px;border-radius:50%;background:var(--bg2);border:1px solid var(--rule2);color:var(--ink3);font-family:"JetBrains Mono",monospace;font-size:13px;line-height:20px;text-align:center;cursor:pointer;padding:0}' +
+    '.lib-sep-x:hover{border-color:var(--danger);color:var(--danger)}' +
+    '.lib-label{position:absolute;left:0;top:-9px;padding-right:10px;background:var(--bg2);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold);cursor:text;z-index:1}' +
+    '.lib-top{min-height:14px;margin-bottom:10px}' +
+    '.lib-top .lib-label{position:static;display:inline-block;padding:0}' +
+    '.lib-pen{opacity:.55;margin-left:6px;letter-spacing:0}' +
+    '.lib-label.empty{color:var(--ink3);opacity:0;transition:opacity .12s}' +
+    '.lib-sep2:hover .lib-label.empty,.lib-label.empty:hover,.lib-opening:hover .lib-top .lib-label.empty{opacity:1}' +
+    '.lib-label.empty:hover{color:var(--gold)}' +
+    '.lib-label-in{background:var(--bg);border:1px solid var(--gold);border-radius:3px;color:var(--gold);font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;padding:3px 8px;width:260px;outline:none}' +
+    '.lib-gap{position:relative;height:8px;margin:-3px 0;cursor:pointer}' +
+    '.lib-gap-line{display:none;position:absolute;left:0;right:0;top:3px;border-top:1px dashed rgba(201,146,58,.45)}' +
+    '.lib-gap-plus{display:none;position:absolute;left:-34px;top:-8px;width:22px;height:22px;border-radius:50%;border:1px dashed var(--gold);color:var(--gold);font-family:"JetBrains Mono",monospace;font-size:14px;line-height:20px;text-align:center}' +
+    '.lib-gap-hint{display:none;position:absolute;left:40%;top:-10px;padding:0 8px;background:var(--bg2);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold)}' +
+    '.lib-gap:hover .lib-gap-line,.lib-gap:hover .lib-gap-plus,.lib-gap:hover .lib-gap-hint{display:block}' +
+    '.lib-page{position:relative}' +
+    '.lib-del-sec{position:absolute;right:0;top:-2px;background:none;border:none;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);cursor:pointer;opacity:0;transition:opacity .12s;padding:0}' +
+    '.lib-page:hover .lib-del-sec{opacity:1}' +
+    '.lib-del-sec:hover{color:var(--danger)}' +
+    '.lib-actions{display:flex;gap:10px;margin:-18px 0 26px}' +
+    '.lib-act{padding:5px 12px;background:transparent;border:1px solid var(--rule2);border-radius:3px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.08em;color:var(--ink2);cursor:pointer}' +
+    '.lib-act:hover{border-color:var(--gold);color:var(--gold)}' +
+    '.lib-act.danger:hover{border-color:var(--danger);color:var(--danger)}' +
+    '.lib-undo{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0;padding:10px 40px;background:var(--bg3);border-bottom:1px solid var(--gold);font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.04em;color:var(--gold)}' +
+    '.lib-undo.fail{color:var(--danger);border-bottom-color:var(--danger)}' +
+    '.lib-undo button{padding:4px 14px;background:var(--gold);color:var(--btn-text);border:none;border-radius:3px;font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:0.08em;cursor:pointer}' +
+    '.lib-busy{opacity:.55;pointer-events:none}' +
+    '.lib-trash-head{font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin:36px 0 8px;padding-bottom:8px;border-bottom:1px solid var(--rule)}' +
+    '.lib-trash-note{font-family:"Crimson Pro",serif;font-size:16px;font-style:italic;color:var(--ink3);margin-bottom:16px}' +
+    '.lib-trash-note.fail{color:var(--danger);font-style:normal}';
 
   function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
-  function words(t) { var m = (t || '').match(/\S+/g); return m ? m.length : 0; }
+  function words(t) { var m = (t || '').replace(/^[\f\v].*$/gm, '').match(/\S+/g); return m ? m.length : 0; }
+  function isMarkLine(s) { var c = s.charAt(0); return c === '\f' || c === '\v'; }
+  /* the book as numbered lines: each keeps its place (i) in the stored text,
+     so an edit touches exactly that line and nothing else */
+  function bookLines(text) {
+    var out = [];
+    (text || '').split('\n').forEach(function (s, i) {
+      s = s.replace(/\r$/, '');
+      if (isMarkLine(s)) out.push({ i: i, mark: s.charAt(0), label: s.slice(1).trim(), text: '' });
+      else if (s.trim()) out.push({ i: i, mark: null, text: s.trim() });
+    });
+    return out;
+  }
 
   /* ---- chapter finder: no AI. Short line, alone, no full stop. ---- */
   var KEY = /^(chapter|part|book|prologue|epilogue|interlude|stave|act)\b/i;
@@ -3600,22 +3661,20 @@ updateAICounter();
     return null;
   }
   function findChapters(text) {
-    /* a line holding only the page mark is kept, so front and back matter
-       know where each new page began */
-    var lines = (text || '').split(/\r?\n/).map(function (s) { return (s === '\f' || s === '\v') ? s : s.trim(); }).filter(Boolean);
-    var found = [], cur = null;
-    for (var i = 0; i < lines.length; i++) {
-      var kind = /^(isbn|copyright|©)/i.test(lines[i]) ? null : isHeading(lines[i]);
+    var L = bookLines(text), found = [], cur = null;
+    for (var k = 0; k < L.length; k++) {
+      var it = L[k];
+      if (it.mark) continue;                /* a page mark is never a heading */
+      var kind = /^(isbn|copyright|\u00a9)/i.test(it.text) ? null : isHeading(it.text);
       if (kind) {
-        var start = i;
-        var head = lines[i], nxt = lines[i + 1];
+        var start = k, head = it.text, nx = L[k + 1];
         /* a number or "Chapter One" on one line, its title on the next */
-        if (nxt && nxt !== '\f' && nxt !== '\v' && nxt.length <= 60 && !isHeading(nxt) && !/[.,;:!?"”]$/.test(nxt) &&
-            (NUM.test(head) || /^chapter\s+\S+$/i.test(head))) { head += ' — ' + nxt; i++; }
+        if (nx && !nx.mark && nx.text.length <= 60 && !isHeading(nx.text) && !/[.,;:!?"\u201d]$/.test(nx.text) &&
+            (NUM.test(head) || /^chapter\s+\S+$/i.test(head))) { head += ' \u2014 ' + nx.text; k++; }
         cur = { head: head, kind: kind, words: 0, at: start };
         found.push(cur);
       } else if (cur) {
-        cur.words += words(lines[i]);
+        cur.words += words(it.text);
       }
     }
     /* a heading with nothing under it is a contents entry, not a chapter */
@@ -3623,16 +3682,18 @@ updateAICounter();
     /* the story runs from the first certain heading to the last one */
     var first = -1, last = -1;
     real.forEach(function (x, n) { if (x.kind === 'sure') { if (first < 0) first = n; last = n; } });
-    if (first < 0) return { chapters: real, front: '', back: '' };
+    if (first < 0) return { chapters: real, front: [], back: [] };
     var story = real.slice(first, last + 1);
     /* front matter: everything before the first chapter heading.
-       back matter: everything from the first heading after the last
-       chapter — including headings with nothing under them, like THE END */
-    var lastAt = story[story.length - 1].at, backAt = lines.length;
+       back matter: from the first heading after the last chapter —
+       including headings with nothing under them, like THE END — and
+       taking with it the page mark just before, which may carry the
+       back matter's first description */
+    var lastAt = story[story.length - 1].at, backAt = L.length;
     found.forEach(function (x) { if (x.at > lastAt && x.at < backAt) backAt = x.at; });
-    return { chapters: story,
-             front: lines.slice(0, story[0].at).join('\n'),
-             back: lines.slice(backAt).join('\n') };
+    var b = backAt;
+    while (b - 1 > lastAt && L[b - 1].mark) b--;
+    return { chapters: story, front: L.slice(0, story[0].at), back: backAt < L.length ? L.slice(b) : [] };
   }
   function rowHtml(x, kind) {
     return '<div class="lib-row"><div class="lib-mark ' + kind + '">' + (kind === 'sure' ? '✓' : '?') + '</div>' +
@@ -3869,16 +3930,44 @@ updateAICounter();
              google: /docs-internal-guid/.test(html) };
   }
 
-  /* ---- front and back matter, a page at a time, a rule between ---- */
-  function matterHtml(text) {
-    if (!text) return '<div class="lib-note">None found.</div>';
-    var pages = text.split(/\n?[\f\v]\n?/).map(function (pg) {
-      return pg.split('\n').filter(function (l) { return l.trim(); });
-    }).filter(function (ls) { return ls.length; });
+  /* ---- front and back matter, a page at a time, each separator editable ---- */
+  function matterPages(items) {
+    var pages = [], cur = { mark: null, items: [] };
+    items.forEach(function (it) {
+      if (it.mark) { pages.push(cur); cur = { mark: it, items: [] }; }
+      else cur.items.push(it);
+    });
+    pages.push(cur);
+    return pages.filter(function (p) { return p.items.length; });
+  }
+  function matterHtml(items) {
+    if (!items || !items.some(function (x) { return !x.mark; })) return '<div class="lib-note">None found.</div>';
+    var pages = matterPages(items);
+    var text = items.filter(function (x) { return !x.mark; }).map(function (x) { return x.text; }).join('\n');
     return '<div class="lib-summary">' + words(text).toLocaleString('en-GB') + ' words</div>' +
-      '<div class="lib-opening">' + pages.map(function (ls, i) {
-        return (i ? '<div class="lib-sep"></div>' : '') +
-          '<div class="lib-page">' + ls.map(function (l) { return '<p>' + esc(l) + '</p>'; }).join('') + '</div>';
+      '<div class="lib-opening">' + pages.map(function (p, n) {
+        var head;
+        if (n === 0) {
+          /* the first section has no rule above it; its description sits at the top */
+          head = p.mark
+            ? '<div class="lib-top"><span class="lib-label' + (p.mark.label ? '' : ' empty') + '" data-act="label" data-i="' + p.mark.i + '">' +
+                esc(p.mark.label || 'Add a description') + '<span class="lib-pen">\u270E</span></span></div>'
+            : '<div class="lib-top"><span class="lib-label empty" data-act="toplabel" data-i="' + p.items[0].i + '">Add a description<span class="lib-pen">\u270E</span></span></div>';
+        } else {
+          head = '<div class="lib-sep2"><span class="lib-label' + (p.mark.label ? '' : ' empty') + '" data-act="label" data-i="' + p.mark.i + '">' +
+                   esc(p.mark.label || 'Add a description') + '<span class="lib-pen">\u270E</span></span>' +
+                 '<button class="lib-sep-x" data-act="unsep" data-i="' + p.mark.i + '" title="Remove this separator">\u00d7</button></div>';
+        }
+        var del = [p.mark ? p.mark.i : null].concat(p.items.map(function (x) { return x.i; }));
+        if (!p.mark && pages[n + 1] && pages[n + 1].mark) del.push(pages[n + 1].mark.i);
+        var lines = p.items.map(function (it, k) {
+          var gap = k ? '<div class="lib-gap" data-act="sep" data-i="' + it.i + '"><div class="lib-gap-line"></div>' +
+            '<div class="lib-gap-plus">+</div><div class="lib-gap-hint">Add a separator here</div></div>' : '';
+          return gap + '<p>' + esc(it.text) + '</p>';
+        }).join('');
+        return head + '<div class="lib-page">' +
+          '<button class="lib-del-sec" data-act="delsec" data-is="' + del.filter(function (x) { return x !== null; }).join(',') + '">Delete this section</button>' +
+          lines + '</div>';
       }).join('') + '</div>';
   }
 
@@ -4004,7 +4093,7 @@ updateAICounter();
   function readShelf(then) {
     sb.auth.getSession().then(function (r) {
       if (!r.data || !r.data.session) { say('You are not signed in, so your library cannot be shown. Log Out and sign in again at the front door.', true); return; }
-      return sb.from('shelf').select('id,title,library,genre,project_ids,body,added_at')
+      return sb.from('shelf').select('id,title,library,genre,project_ids,body,prev_body,added_at')
         .is('deleted_at', null).order('added_at', { ascending: true })
         .then(function (res) {
           if (res.error) { say('Could not read your library: ' + res.error.message, true); return; }
@@ -4034,11 +4123,11 @@ updateAICounter();
     list('reference', 'libRef');
   }
 
-  function showBook(id) {
+  function showBook(id, note) {
     var b = rows.filter(function (x) { return x.id === id; })[0];
     chosenId = b ? b.id : null;
     drawList();
-    if (!b) { document.getElementById('libDetail').innerHTML = ''; return; }
+    if (!b) { document.getElementById('libDetail').innerHTML = note ? undoBarHtml(note) : ''; wireUndoBar(); return; }
     var parts = findChapters(b.body);
     var lib = LIBS[b.library || 'mine'] || LIBS.mine;
     var since = new Date(b.added_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -4047,9 +4136,15 @@ updateAICounter();
       return '<span class="lib-link-tag">' + esc(t || 'A project not in this browser') + '</span>';
     }).join('');
     document.getElementById('libDetail').innerHTML =
+      (note ? undoBarHtml(note) : '') +
       '<div class="lib-form">' +
         '<div class="screen-title">' + esc(b.title) + '</div>' +
-        '<div class="screen-subtitle">In ' + esc(lib.name) + ' since ' + esc(since) + (b.genre ? ' · ' + esc(b.genre) : '') + '.</div>' +
+        '<div class="screen-subtitle">In ' + esc(lib.name) + ' since ' + esc(since) + (b.genre ? ' \u00b7 ' + esc(b.genre) : '') + '.</div>' +
+        '<div class="lib-actions">' +
+          (b.prev_body != null ? '<button class="lib-act" data-act="undo">Undo last change</button>' : '') +
+          '<button class="lib-act" data-act="copy">Make a copy</button>' +
+          '<button class="lib-act danger" data-act="delbook">Move to Trash</button>' +
+        '</div>' +
         '<div class="lib-group"><div class="field-group-title">The Book</div><div class="lib-facts" style="grid-template-columns:repeat(3,1fr)">' +
           '<div class="lib-fact"><div class="lib-fact-k">Words</div><div class="lib-fact-v gold">' + words(b.body).toLocaleString('en-GB') + '</div></div>' +
           '<div class="lib-fact"><div class="lib-fact-k">Characters</div><div class="lib-fact-v">' + (b.body || '').length.toLocaleString('en-GB') + '</div></div>' +
@@ -4061,7 +4156,151 @@ updateAICounter();
         '<div class="lib-group"><div class="field-group-title">Chapters</div>' + chaptersHtml(parts) + '</div>' +
         '<div class="lib-group"><div class="field-group-title">Back Matter</div>' + matterHtml(parts.back) + '</div>' +
       '</div>';
-    document.getElementById('libDetail').parentNode.scrollTop = 0;
+    wireUndoBar();
+    wireBook(b);
+  }
+
+  /* ---- the bar that follows a change, with its Undo ---- */
+  var undoFn = null;
+  function undoBarHtml(note) {
+    return '<div class="lib-undo" id="libUndo"><span>' + esc(note.text) + '</span>' +
+      (note.undo ? '<button id="libUndoBtn">Undo</button>' : '') + '</div>';
+  }
+  function wireUndoBar() {
+    var btn = document.getElementById('libUndoBtn');
+    if (btn) btn.onclick = function () { btn.disabled = true; if (undoFn) undoFn(); };
+  }
+  function busy(on) {
+    var d = document.getElementById('libDetail');
+    if (d) d.classList.toggle('lib-busy', !!on);
+  }
+  function failBar(msg) {
+    busy(false);
+    var d = document.getElementById('libDetail');
+    var bar = document.getElementById('libUndo');
+    if (bar) bar.remove();
+    d.insertAdjacentHTML('afterbegin', '<div class="lib-undo fail" id="libUndo"><span>' + esc(msg) + '</span></div>');
+  }
+
+  /* ---- every change to a book's text goes through here ---- */
+  function saveBody(b, newBody, what) {
+    var old = b.body;
+    busy(true);
+    sb.from('shelf').update({ body: newBody, prev_body: old }).eq('id', b.id).select('id,body').single()
+      .then(function (r) {
+        if (r.error) throw new Error('Could not save that: ' + r.error.message);
+        if (!r.data || r.data.body !== newBody) throw new Error('The change did not save exactly. Nothing has been lost; please refresh the page.');
+        b.body = newBody; b.prev_body = old;
+        busy(false);
+        undoFn = function () { swapBack(b); };
+        showBook(b.id, { text: what, undo: true });
+      })
+      .catch(function (e) { failBar(e.message); });
+  }
+  function swapBack(b) {
+    if (b.prev_body == null) return;
+    var cur = b.body, prev = b.prev_body;
+    busy(true);
+    sb.from('shelf').update({ body: prev, prev_body: cur }).eq('id', b.id).select('id,body').single()
+      .then(function (r) {
+        if (r.error) throw new Error('Could not undo: ' + r.error.message);
+        if (!r.data || r.data.body !== prev) throw new Error('The undo did not save exactly. Please refresh the page.');
+        b.body = prev; b.prev_body = cur;
+        busy(false);
+        undoFn = function () { swapBack(b); };
+        showBook(b.id, { text: 'Undone. Press Undo again to put the change back.', undo: true });
+      })
+      .catch(function (e) { failBar(e.message); });
+  }
+
+  /* ---- the book's controls ---- */
+  function wireBook(b) {
+    var d = document.getElementById('libDetail');
+    Array.prototype.forEach.call(d.querySelectorAll('[data-act]'), function (el) {
+      var act = el.getAttribute('data-act');
+      if (act === 'label' || act === 'toplabel') { el.onclick = function () { editLabel(b, el, act); }; return; }
+      el.onclick = function (e) {
+        e.stopPropagation();
+        var raw = b.body.split('\n'), i = +el.getAttribute('data-i');
+        if (act === 'sep') { raw.splice(i, 0, '\v'); saveBody(b, raw.join('\n'), 'Separator added.'); }
+        else if (act === 'unsep') { raw.splice(i, 1); saveBody(b, raw.join('\n'), 'Separator removed.'); }
+        else if (act === 'delsec') {
+          var idx = el.getAttribute('data-is').split(',').map(Number).sort(function (x, y) { return y - x; });
+          idx.forEach(function (k) { raw.splice(k, 1); });
+          saveBody(b, raw.join('\n'), 'Section deleted.');
+        }
+        else if (act === 'undo') { undoFn = null; swapBack(b); }
+        else if (act === 'copy') copyBook(b);
+        else if (act === 'delbook') deleteBook(b);
+      };
+    });
+  }
+
+  /* ---- a description: written in place; Enter keeps it, Escape leaves it ---- */
+  function editLabel(b, el, act) {
+    if (el.querySelector('input')) return;
+    var i = +el.getAttribute('data-i');
+    var was = el.classList.contains('empty') ? '' : el.textContent.replace('\u270E', '').trim();
+    el.classList.remove('empty');
+    el.innerHTML = '<input class="lib-label-in" maxlength="60" placeholder="A short description\u2026">';
+    var inp = el.querySelector('input');
+    inp.value = was; inp.focus();
+    var done = false;
+    function finish(keep) {
+      if (done) return; done = true;
+      var v = inp.value.replace(/[\f\v\n\r]/g, ' ').trim();
+      if (!keep || v === was) { showBook(b.id); return; }
+      var raw = b.body.split('\n');
+      if (act === 'toplabel') raw.splice(i, 0, '\v' + v);
+      else raw[i] = raw[i].charAt(0) + v;
+      saveBody(b, raw.join('\n'), v ? 'Description saved.' : 'Description removed.');
+    }
+    inp.onkeydown = function (e) { if (e.key === 'Enter') finish(true); else if (e.key === 'Escape') finish(false); };
+    inp.onblur = function () { finish(true); };
+    inp.onclick = function (e) { e.stopPropagation(); };
+  }
+
+  /* ---- make a copy: a new, separate book with the same words ---- */
+  function copyBook(b) {
+    busy(true);
+    sb.from('shelf').insert({ title: b.title + ' (copy)', body: b.body, library: b.library || 'mine',
+                              genre: b.genre || null, project_ids: b.project_ids || [] })
+      .select('id,body').single()
+      .then(function (r) {
+        if (r.error) throw new Error('Could not make the copy: ' + r.error.message);
+        if (r.data.body !== b.body) throw new Error('The copy is not exactly the same as the book. Please check it.');
+        busy(false);
+        chosenId = r.data.id;
+        readShelf(function () { showBook(r.data.id, { text: 'Copy made: \u201c' + b.title + ' (copy)\u201d. The original is untouched.' }); });
+      })
+      .catch(function (e) { failBar(e.message); });
+  }
+
+  /* ---- move a book to Trash: Undo straight after, Restore from Trash later ---- */
+  function setDeleted(b, when, then) {
+    busy(true);
+    sb.from('shelf').update({ deleted_at: when }).eq('id', b.id).select('id,deleted_at').single()
+      .then(function (r) {
+        if (r.error || !r.data) throw new Error('Could not ' + (when ? 'delete' : 'bring back') + ' the book' + (r.error ? ': ' + r.error.message : '.'));
+        busy(false);
+        then();
+      })
+      .catch(function (e) { failBar(e.message); });
+  }
+  function deleteBook(b) {
+    setDeleted(b, new Date().toISOString(), function () {
+      undoFn = function () {
+        setDeleted(b, null, function () {
+          chosenId = b.id;
+          readShelf(function () { showBook(b.id, { text: '\u201c' + b.title + '\u201d is back on the shelf.' }); });
+        });
+      };
+      chosenId = null;
+      readShelf(function () {
+        var next = rows[0] ? rows[0].id : null;
+        showBook(next, { text: '\u201c' + b.title + '\u201d moved to Trash.', undo: true });
+      });
+    });
   }
 
   /* ---- + ADD: the panel ---- */
@@ -4187,6 +4426,12 @@ updateAICounter();
         '<div class="lib-win-row"><b>+ Add</b><span>Puts a book on that shelf, from a Word file or by pasting it in.</span></div>' +
         '<div class="lib-win-row"><b>Linked to</b><span>The projects a book is used for.</span></div>' +
         '<div class="lib-win-row"><b>Front and Back Matter</b><span>Everything before the first chapter and after the last, a page at a time.</span></div>' +
+        '<div class="lib-win-row"><b>Separators</b><span>The lines between sections. Hover between two lines to add one; press \u00d7 on a line to remove it.</span></div>' +
+        '<div class="lib-win-row"><b>Descriptions</b><span>An optional name for a section, such as Contents. Press it to write or change it.</span></div>' +
+        '<div class="lib-win-row"><b>Delete this section</b><span>Takes that block out of the book. Undo puts it back.</span></div>' +
+        '<div class="lib-win-row"><b>Make a copy</b><span>A separate copy of the book to work on. The original stays as it was.</span></div>' +
+        '<div class="lib-win-row"><b>Move to Trash</b><span>Takes the book off its shelf. Restore it from Trash whenever you like.</span></div>' +
+        '<div class="lib-win-row"><b>Undo last change</b><span>Puts the book back as it was before the last change, even after a refresh.</span></div>' +
         '<div class="lib-win-row"><b>Chapters</b><span>Found by reading the headings. ✓ is certain; ? asks you to confirm.</span></div>' +
       '</div>' +
       '<div class="lib-win-grip" id="libWinGrip"></div>';
@@ -4223,6 +4468,61 @@ updateAICounter();
       w.style.width = Math.round(Math.max(300, r.width + dx)) + 'px';
       w.style.height = Math.round(Math.max(200, r.height + dy)) + 'px';
     });
+  }
+
+  /* ---- TRASH: deleted books, each with Restore ---- */
+  function libLabel(lib) { return (LIBS[lib || 'mine'] || LIBS.mine).name; }
+  function trashBooks() {
+    var el = document.getElementById('trashContent');
+    if (!el) return;
+    var sub = document.querySelector('#screen-trash .screen-subtitle');
+    if (sub) sub.textContent = 'Deleted projects and books. Nothing here is gone yet.';
+    var box = document.getElementById('libTrashBooks');
+    if (box) box.remove();
+    box = document.createElement('div');
+    box.id = 'libTrashBooks';
+    box.innerHTML = '<div class="lib-trash-head">Books</div><div class="lib-trash-note">Reading your deleted books\u2026</div>';
+    el.appendChild(box);
+    withClient(function () {
+      sb.auth.getSession().then(function (r) {
+        if (!r.data || !r.data.session) { box.querySelector('.lib-trash-note').textContent = 'Sign in to see your deleted books.'; return; }
+        return sb.from('shelf').select('id,title,library,genre,deleted_at')
+          .not('deleted_at', 'is', null).order('deleted_at', { ascending: false })
+          .then(function (res) {
+            if (res.error) { box.querySelector('.lib-trash-note').textContent = 'Could not read your deleted books: ' + res.error.message; box.querySelector('.lib-trash-note').classList.add('fail'); return; }
+            var list = res.data || [];
+            /* the corridor says "Trash is empty" when there are no projects; not true if there are books */
+            var empty = el.querySelector('.trash-empty-state');
+            if (empty && list.length) empty.remove();
+            if (!list.length) { box.remove(); return; }
+            box.innerHTML = '<div class="lib-trash-head">Books</div>' +
+              '<div class="lib-trash-note">Restore puts a book back on its shelf. Books are kept here until you restore them; Empty Trash does not touch them.</div>' +
+              list.map(function (bk) {
+                return '<div class="trash-item"><div class="trash-item-info"><div class="trash-item-title">' + esc(bk.title) + '</div>' +
+                  '<div class="trash-item-meta">' + esc(libLabel(bk.library)) + (bk.genre ? ' \u00b7 ' + esc(bk.genre) : '') +
+                  ' \u00b7 Trashed ' + esc(new Date(bk.deleted_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })) + '</div></div>' +
+                  '<div class="trash-item-actions"><button class="restore-btn" data-id="' + esc(bk.id) + '">Restore</button></div></div>';
+              }).join('');
+            Array.prototype.forEach.call(box.querySelectorAll('.restore-btn'), function (btn) {
+              btn.onclick = function () {
+                btn.disabled = true;
+                sb.from('shelf').update({ deleted_at: null }).eq('id', btn.getAttribute('data-id')).select('id').single()
+                  .then(function (u) {
+                    if (u.error || !u.data) throw new Error(u.error ? u.error.message : 'nothing came back');
+                    trashBooks();
+                  })
+                  .catch(function (e2) { btn.disabled = false; btn.textContent = 'Could not restore'; btn.title = e2.message; });
+              };
+            });
+          });
+      }).catch(function () {});
+    });
+  }
+  /* the corridor draws its Trash; the books are added beneath, every time */
+  if (typeof renderTrash === 'function' && !renderTrash._books) {
+    var corridorTrash = renderTrash;
+    renderTrash = function () { corridorTrash.apply(this, arguments); trashBooks(); };
+    renderTrash._books = true;
   }
 
   if (document.readyState === 'loading') {
