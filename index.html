@@ -3446,8 +3446,14 @@ updateAICounter();
 
 })();
 /* ===================================================================
-   THE LIBRARY ROOM — version five, 29 September 2026.
-   Replaces version four (b). NEW AND WORKING:
+   THE LIBRARY ROOM — version six, 30 September 2026.
+   Replaces version five. NEW: A BOOK'S PROJECT LINKS CAN BE CHANGED.
+   Point at a "Linked to" tag and a small x appears; pressing it asks
+   first, then removes that link. "+ Link to a project" opens a plain
+   list of the projects not yet linked; choosing one saves at once.
+   Both offer Undo. Only project_ids changes; the book's text is never
+   touched. (Kev: "add/change/remove that link".)
+   Version five, 29 September 2026, replaced version four (b):
    · SEPARATORS in front and back matter: hover between two lines to
      add one; x on a rule to remove it; an optional DESCRIPTION on each,
      written by pressing it. A separator and its description live on the
@@ -3559,6 +3565,17 @@ updateAICounter();
     '.lib-links{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}' +
     '.lib-links-k{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink3);margin-right:4px}' +
     '.lib-link-tag{display:inline-flex;align-items:center;padding:4px 14px;border:1px solid var(--gold);border-radius:20px;font-family:"Crimson Pro",serif;font-size:17px;color:var(--gold);background:var(--bg3)}' +
+    '.lib-links{position:relative}' +
+    '.lib-link-x{display:none;margin-left:10px;padding:0;background:none;border:none;font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1;color:var(--gold);cursor:pointer}' +
+    '.lib-link-tag:hover .lib-link-x{display:inline}' +
+    '.lib-link-x:hover{color:var(--gold2)}' +
+    '.lib-link-add{padding:0 0 1px;background:none;border:none;border-bottom:1px dashed transparent;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink3);cursor:pointer}' +
+    '.lib-link-add:hover,.lib-link-add.on{color:var(--gold);border-bottom-color:var(--gold)}' +
+    '.lib-link-menu{position:absolute;z-index:7;min-width:300px;padding:4px 0;background:var(--bg2);border:1px solid var(--gold);border-radius:4px;box-shadow:0 8px 22px rgba(0,0,0,.5)}' +
+    '.lib-link-opt{padding:8px 14px;font-family:"Crimson Pro",serif;font-size:18px;color:var(--ink2);cursor:pointer}' +
+    '.lib-link-opt:hover{background:var(--bg3);color:var(--gold)}' +
+    '.lib-link-opt.none{font-style:italic;color:var(--ink3);cursor:default}' +
+    '.lib-link-opt.none:hover{background:none;color:var(--ink3)}' +
     '.lib-link-none{font-family:"Crimson Pro",serif;font-size:17px;font-style:italic;color:var(--ink3)}' +
     '.lib-f-label{font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink2);margin:18px 0 6px}' +
     '.lib-f-opt{font-size:11px;letter-spacing:0.1em;color:var(--ink3);margin-left:8px}' +
@@ -4177,7 +4194,8 @@ updateAICounter();
     var since = new Date(b.added_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     var links = (b.project_ids || []).map(function (s) {
       var t = projectTitle(s);
-      return '<span class="lib-link-tag">' + esc(t || 'A project not in this browser') + '</span>';
+      return '<span class="lib-link-tag">' + esc(t || 'A project not in this browser') +
+        '<button class="lib-link-x" data-act="unlink" data-link="' + esc(s) + '" data-tip="Remove this link">\u00d7</button></span>';
     }).join('');
     document.getElementById('libDetail').innerHTML =
       (note ? undoBarHtml(note) : '') +
@@ -4194,7 +4212,8 @@ updateAICounter();
           '<div class="lib-fact"><div class="lib-fact-k">Characters</div><div class="lib-fact-v">' + (b.body || '').length.toLocaleString('en-GB') + '</div></div>' +
           '<div class="lib-fact"><div class="lib-fact-k">Added</div><div class="lib-fact-v">' + esc(new Date(b.added_at).toLocaleDateString('en-GB')) + '</div></div>' +
         '</div>' +
-        '<div class="lib-links"><span class="lib-links-k">Linked to</span>' + (links || '<span class="lib-link-none">Not linked to a project</span>') + '</div>' +
+        '<div class="lib-links"><span class="lib-links-k">Linked to</span>' + (links || '<span class="lib-link-none">Not linked to a project</span>') +
+          '<button class="lib-link-add" data-act="addlink">+ Link to a project</button></div>' +
         '</div>' +
         '<div class="lib-group"><div class="field-group-title">Front Matter</div>' + matterHtml(parts.front) + '</div>' +
         '<div class="lib-group"><div class="field-group-title">Chapters</div>' + chaptersHtml(parts) + '</div>' +
@@ -4283,11 +4302,76 @@ updateAICounter();
           raw[i] = raw[i].replace(HIDE, '');
           saveBody(b, raw.join('\n'), 'Section shown.');
         }
+        else if (act === 'unlink') {
+          var stamp = el.getAttribute('data-link');
+          var pname = projectTitle(stamp) || 'a project not in this browser';
+          confirmPanel('Remove this link?', '\u201c' + b.title + '\u201d will no longer be linked to \u201c' + pname + '\u201d. The book and the project are both untouched.', 'Remove', function () {
+            saveLinks(b, (b.project_ids || []).filter(function (x) { return x !== stamp; }), 'Link to \u201c' + pname + '\u201d removed.');
+          });
+        }
+        else if (act === 'addlink') linkMenu(b, el);
         else if (act === 'undo') { undoFn = null; swapBack(b); }
         else if (act === 'copy') copyBook(b);
         else if (act === 'delbook') deleteBook(b);
       };
     });
+  }
+
+  /* ---- a book's project links: only project_ids changes, never the text ---- */
+  function saveLinks(b, ids, what) {
+    var old = (b.project_ids || []).slice();
+    busy(true);
+    sb.from('shelf').update({ project_ids: ids }).eq('id', b.id).select('id,project_ids').single()
+      .then(function (r) {
+        if (r.error) throw new Error('Could not save the link: ' + r.error.message);
+        if (!r.data || (r.data.project_ids || []).join('|') !== ids.join('|')) throw new Error('The link did not save exactly. Please refresh the page.');
+        b.project_ids = ids;
+        busy(false);
+        undoFn = function () { saveLinks(b, old, 'Undone.'); };
+        showBook(b.id, { text: what, undo: true });
+      })
+      .catch(function (e) { failBar(e.message); });
+  }
+  function linkMenu(b, btn) {
+    var old = document.getElementById('libLinkMenu');
+    if (old) { old.remove(); btn.classList.remove('on'); return; }
+    var have = b.project_ids || [];
+    var open = openProjectStamp();
+    var list = projectList().filter(function (p) { return have.indexOf(p.created) < 0; });
+    var m = document.createElement('div');
+    m.className = 'lib-link-menu';
+    m.id = 'libLinkMenu';
+    m.innerHTML = list.length
+      ? list.map(function (p) {
+          return '<div class="lib-link-opt" data-stamp="' + esc(p.created) + '">' + esc(p.title || 'Untitled Project') +
+            (p.created === open ? ' <span class="lib-f-opt">open now</span>' : '') + '</div>';
+        }).join('')
+      : '<div class="lib-link-opt none">' + (projectList().length ? 'Every project is already linked.' : 'There are no projects in this browser yet.') + '</div>';
+    var row = btn.parentNode;
+    row.appendChild(m);
+    m.style.left = btn.offsetLeft + 'px';
+    m.style.top = (btn.offsetTop + btn.offsetHeight + 8) + 'px';
+    if (m.offsetLeft + m.offsetWidth > row.clientWidth) m.style.left = Math.max(0, row.clientWidth - m.offsetWidth) + 'px';
+    btn.classList.add('on');
+    Array.prototype.forEach.call(m.querySelectorAll('.lib-link-opt[data-stamp]'), function (o) {
+      o.onclick = function (e) {
+        e.stopPropagation();
+        var st = o.getAttribute('data-stamp');
+        m.remove();
+        saveLinks(b, have.concat([st]), 'Linked to \u201c' + (projectTitle(st) || 'the project') + '\u201d.');
+      };
+    });
+    function close(e) {
+      if (e.type === 'keydown' && e.key !== 'Escape') return;
+      if (e.type === 'mousedown' && (m.contains(e.target) || e.target === btn)) return;
+      m.remove(); btn.classList.remove('on');
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', close);
+    }
+    setTimeout(function () {
+      document.addEventListener('mousedown', close);
+      document.addEventListener('keydown', close);
+    }, 0);
   }
 
   /* ---- "are you sure": the platform's own panel, never the browser's box ---- */
@@ -4501,7 +4585,7 @@ updateAICounter();
         '<div class="lib-win-row"><b>Reference Library</b><span>Other writers’ books, for your own reading. Never used to shape your writing.</span></div>' +
         '<div class="lib-win-row"><b>Public Domain Library</b><span>Classics free of copyright, shared by every InkySwot writer.</span></div>' +
         '<div class="lib-win-row"><b>+ Add</b><span>Puts a book on that shelf, from a Word file or by pasting it in.</span></div>' +
-        '<div class="lib-win-row"><b>Linked to</b><span>The projects a book is used for.</span></div>' +
+        '<div class="lib-win-row"><b>Linked to</b><span>The projects a book is used for. Point at one and press \u00d7 to remove it; + Link to a project adds another.</span></div>' +
         '<div class="lib-win-row"><b>Front and Back Matter</b><span>Everything before the first chapter and after the last, a page at a time.</span></div>' +
         '<div class="lib-win-row"><b>Separators</b><span>The lines between sections. Hover between two lines to add one; press \u00d7 on a line to remove it.</span></div>' +
         '<div class="lib-win-row"><b>Descriptions</b><span>An optional name for a section, such as Contents. Press it to write or change it.</span></div>' +
